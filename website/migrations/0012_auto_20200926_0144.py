@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='team',
-            name='is_registered',
+            name='is_finalized',
             field=models.BooleanField(default=False, help_text='The members of a             registered team are finalized and cannot be edited'),
         ),
     ]

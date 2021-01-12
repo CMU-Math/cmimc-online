@@ -4,7 +4,7 @@
 <div class="row justify-content-center">
     <div class="col-md-10">
         <h2 class="mb-3">Team: {{ team.team_name }}</h2>
-        {% if not team.is_registered %}
+        {% if not team.is_finalized %}
         <p>To invite new team members, send them this link: <a href="{{ invite_link }}">{{ invite_link }}</a>. They will need to log in with their own account.</p>
         {% endif %}
         {% if team.coach %}
@@ -28,13 +28,13 @@
         <p>You have too many members!</p>
         {% endif %}
 
-        {% if team.is_registered %}
-            <h2>Registered: <span class="text-success">Yes</span></h2>
+        {% if team.is_finalized %}
+            <h2>Finalized: <span class="text-success">Yes</span></h2>
         {% else %}
-            <h2>Registered: <span class="text-danger">No</span></h2>
+            <h2>Finalized: <span class="text-danger">No</span></h2>
 
             {% if not team.coach or user == team.coach %}
-                <p class="mb-4">Once your team members are finalized, click the register button below. You must register by <span class="font-weight-bold">January 16th, 2021</span>.</p> <!-- hardcoded -->
+                <p class="mb-4">All teams will be finalized by <span class="font-weight-bold">January 16th, 2021</span>.</p> <!-- hardcoded -->
             {% endif %}
 
             <form method="post">
@@ -43,9 +43,6 @@
                     <button type="submit" name="submit" class="btn btn-danger mr-3" value="leaveTeam">Leave Team</button>
                 {% else %}
                     <button type="submit" name="submit" class="btn btn-danger mr-3" value="deleteTeam">Delete Team</button>
-                {% endif %}
-                {% if not team.coach or user == team.coach %}
-                    <button type="submit" name="submit" class="btn btn-success" value="register" {% if too_large %}disabled{% endif %}>Register</button>
                 {% endif %}
             </form>
         {% endif %}

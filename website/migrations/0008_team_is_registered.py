@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='team',
-            name='is_registered',
+            name='is_finalized',
             field=models.BooleanField(default=False),
         ),
     ]

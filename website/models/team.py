@@ -8,7 +8,7 @@ import random
 class Team(models.Model):
     contest = models.ForeignKey(Contest, related_name='teams', on_delete=models.CASCADE)
     mathletes = models.ManyToManyField(Mathlete, related_name='teams')
-    is_registered = models.BooleanField(default=False, help_text=_('The members of a \
+    is_finalized = models.BooleanField(default=False, help_text=_('The members of a \
             registered team are finalized and cannot be edited'))
     coach = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, \
                               related_name='teams', on_delete=models.CASCADE)
@@ -43,7 +43,7 @@ class Team(models.Model):
     def register(self):
         # TODO: check if this is during the contest registration period
         from .competitor import Competitor
-        assert(not self.is_registered)
+        assert(not self.is_finalized)
         size = self.mathletes.count()
         assert(size >= self.contest.min_team_size and size <= self.contest.max_team_size)
         for exam in self.contest.exams.all():
@@ -56,14 +56,14 @@ class Team(models.Model):
                     if not Competitor.objects.filter(exam=exam, team=self, mathlete=m).exists():
                         c = Competitor(exam=exam, team=self, mathlete=m)
                         c.save()
-        self.is_registered = True
+        self.is_finalized = True
         self.save()
 
     def unregister(self):
-        assert(self.is_registered)
+        assert(self.is_finalized)
         for c in self.competitors.all():
             c.delete()
-        self.is_registered = False
+        self.is_finalized = False
         self.save()
 
     def has_member(self, user):

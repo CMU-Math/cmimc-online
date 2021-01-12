@@ -26,8 +26,8 @@ class UserAdmin(DefaultUserAdmin):
 
 
 class TeamAdmin(admin.ModelAdmin):
-    list_display = ('team_name', 'mathlete_list', 'coach', 'is_registered',)
-    list_filter = ('is_registered',)
+    list_display = ('team_name', 'mathlete_list', 'coach', 'is_finalized',)
+    list_filter = ('is_finalized',)
 
 admin.site.register(Contest)
 admin.site.register(Exam)

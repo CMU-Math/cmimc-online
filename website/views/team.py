@@ -41,7 +41,7 @@ def join_team(request, team_id, invite_code):
         if user.has_team(contest):
             real_team = mathlete.get_team(contest)
             return redirect('team_info', team_id=real_team.id)
-        elif team.is_registered:
+        elif team.is_finalized:
             return redirect('contest_list')
         else:
             team.mathletes.add(mathlete)
@@ -56,7 +56,7 @@ def team_info(request, team_id):
         return redirect('contest_list')
 
     if request.method == 'POST':
-        if request.POST['submit'] == 'leaveTeam' and user.is_mathlete and not team.is_registered:
+        if request.POST['submit'] == 'leaveTeam' and user.is_mathlete and not team.is_finalized:
             mathlete = user.mathlete
             team.mathletes.remove(mathlete)
             return redirect('contest_list')
@@ -90,5 +90,11 @@ def coach_teams(request, contest_id):
         'contest': contest,
     }
     return render(request, 'team/coach_teams.html', context)
+
+def finalize_all_teams(request, contest_id):
+    contest = get_object_or_404(Contest, pk=contest_id)
+    teams = Team.objects.filter(contest=contest)
+    for team in teams:
+        team.register()
 
 
