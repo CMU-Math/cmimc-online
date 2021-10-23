@@ -39,10 +39,11 @@ def admin_dashboard(request):
 
         print(c)
 
+        counter = 0
+        team_len = len(teams)
         for team in teams:
-            print(len(teams))
-            print(len(prog_emails))
-            print(prog_emails)
+            counter += 1
+            print(counter, "out of", team_len)
             member_count[min(team.mathletes.all().count(), 9)] += 1
             for m in team.mathletes.all():
                 prog_emails.append(m.user.email)
@@ -56,8 +57,9 @@ def admin_dashboard(request):
 
         c = Contest.objects.get(pk=2) # math contest
         teams = Team.objects.filter(contest=c)
+        counter = 0
         for team in teams:
-            print(team)
+            print(counter, "out of", team_len)
             member_count2[min(team.mathletes.all().count(), 9)] += 1
     
 
