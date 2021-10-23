@@ -13,8 +13,45 @@ def admin_dashboard(request):
     if not user.is_staff:
         raise PermissionDenied("You do not have access to this page")
 
+    all_exams = Exam.objects.all()
+    
+    all_emails = []
+    prog_emails = []
+    small_teams = []
+    member_count = [0]*10
+    member_count2 = [0]*10
+
+    if user.is_staff:
+
+        # Temporary email list (only visible to staff)
+        all_users = User.objects.all()
+        for user in all_users:
+            all_emails.append(user.email)
+
+        c = Contest.objects.get(pk=1) # programming contest
+        teams = Team.objects.filter(contest=c)
+        for team in teams:
+            member_count[min(team.mathletes.all().count(), 9)] += 1
+            for m in team.mathletes.all():
+                prog_emails.append(m.user.email)
+            if team.coach:
+                prog_emails.append(team.coach.email)
+            if team.mathletes.all().count() < 3:
+                for m in team.mathletes.all():
+                    small_teams.append(m.user.email)
+
+        c = Contest.objects.get(pk=2) # programming contest
+        teams = Team.objects.filter(contest=c)
+        for team in teams:
+            member_count2[min(team.mathletes.all().count(), 9)] += 1
+    
+
 
     context = {
-
+        'emaillist': ', '.join(all_emails),
+        'prog_emails': ', '.join(prog_emails),
+        'small_teams': ', '.join(small_teams),
+        'member_count': member_count,
+        'member_count2': member_count2,
     }
     return render(request, 'admin/admin_dashboard.html', context)
