@@ -24,6 +24,7 @@ urlpatterns = [
     path('programming/updates', views.updates, name='updates'),
 
     path('admin', admin.site.urls),
+    path('admin-dashboard', views.admin_dashboard),
     
     path('signup', views.signup, name='signup'),
     path('login', auth_views.LoginView.as_view(template_name='login.html'), name='login'),

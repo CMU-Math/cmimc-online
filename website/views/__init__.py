@@ -9,3 +9,4 @@ from .downloads import match_replay, ai_starter_file, ai_visualizer, mailinglist
 from .signup import signup
 from .leaderboard import leaderboard, problem_leaderboard, contest_leaderboard
 from .results import sweepstakes, indiv_sweepstakes, exam_results
+from .admin import admin_dashboard
