@@ -14,6 +14,12 @@ def admin_dashboard(request):
         raise PermissionDenied("You do not have access to this page")
 
     all_exams = Exam.objects.all()
+    all_contests = Contest.objects.all()
+
+    for contest in all_contests:
+        print(contest.id)
+        print(contest.name)
+
     
     all_emails = []
     prog_emails = []
@@ -25,12 +31,18 @@ def admin_dashboard(request):
 
         # Temporary email list (only visible to staff)
         all_users = User.objects.all()
-        for user in all_users:
-            all_emails.append(user.email)
+        for curr_user in all_users:
+            all_emails.append(curr_user.email)
 
         c = Contest.objects.get(pk=1) # programming contest
         teams = Team.objects.filter(contest=c)
+
+        print(c)
+
         for team in teams:
+            print(len(teams))
+            print(len(prog_emails))
+            print(prog_emails)
             member_count[min(team.mathletes.all().count(), 9)] += 1
             for m in team.mathletes.all():
                 prog_emails.append(m.user.email)
@@ -40,11 +52,15 @@ def admin_dashboard(request):
                 for m in team.mathletes.all():
                     small_teams.append(m.user.email)
 
-        c = Contest.objects.get(pk=2) # programming contest
+        print(c)
+
+        c = Contest.objects.get(pk=2) # math contest
         teams = Team.objects.filter(contest=c)
         for team in teams:
+            print(team)
             member_count2[min(team.mathletes.all().count(), 9)] += 1
     
+
 
 
     context = {
