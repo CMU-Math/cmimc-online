@@ -2,7 +2,206 @@
 
 {% block content %}
 
-<h1>Dashboard</h1>
+{% if user.is_staff %}
+<h1 class="mt-5">Staff Info Only (regular users can't see this)</h1>
+<hr class="red_line mb-4"/>
+<h3>All Emails (students and coaches with an account on this website)</h3>
+<p>{{ emaillist }}</p>
+
+<h3>Programming Contest Emails</h3>
+<p>{{ prog_emails }}</p>
+
+<h3>Programming Contest member count</h3>
+<p>{{ member_count }}</p>
+
+<h3>Math Contest member count</h3>
+<p>{{ member_count2 }}</p>
+
+
+<h3>Small Teams</h3>
+<p>{{ small_teams }}</p>
+
+<h3>Update Contest</h3>
+<hr class="red_line mb-4"/>
+<p>(updates competitors scores, task scores, and miniround scores)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="update_contest">
+      </div>
+      <button type="submit" class="btn btn-primary">Update Contest</button>
+</form>
+
+
+<h3>Reset Contest</h3>
+<hr class="red_line mb-4"/>
+<p>(deletes all competitors, scores, task scores, and miniround scores)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="reset_contest">
+      </div>
+      <button type="submit" class="btn btn-primary">Reset Contest</button>
+</form>
+
+
+<h3>Reset Exam</h3>
+<hr class="red_line mb-4"/>
+<p>(reset single exam)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="reset_exam">
+      </div>
+      <button type="submit" class="btn btn-primary">Reset Exam</button>
+</form>
+
+<h3>Reset Problem</h3>
+<hr class="red_line mb-4"/>
+<p>(reset scores for a single optimization problem)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="reset_problem">
+      </div>
+      <button type="submit" class="btn btn-primary">Reset Problem</button>
+</form>
+
+
+
+<h3>Init all tasks</h3>
+<hr class="red_line mb-4"/>
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary" name="init_all_tasks">Init All Tasks</button>
+</form>
+
+<h3>Regrade Games</h3>
+<hr class="red_line mb-4"/>
+<p>status 3 to 0</p>
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary" name="regrade_games">Regrade Games</button>
+</form>
+
+<h3>Recheck graded games</h3>
+<hr class="red_line mb-4"/>
+<p>status -1 to 2</p>
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary" name="recheck_games">game.status -1 -> 2</button>
+</form>
+
+
+<h3>Scores From CSV</h3>
+<hr class="red_line mb-4"/>
+<form method="post" class="mb-4" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" class="form-control-file mb-3" name="score_file">
+      <button type="submit" class="btn btn-primary">Submit Scores</button>
+</form>
+
+
+<h3>Recompute Leaderboard</h3>
+<hr class="red_line mb-4"/>
+<p>(enter exam id)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="recompute_leaderboard">
+      </div>
+      <button type="submit" class="btn btn-primary">Recompute Leaderboard</button>
+</form>
+
+
+<h3>Final AI Grading</h3>
+<hr class="red_line mb-4"/>
+<p>(enter exam id)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="final_ai_grading">
+      </div>
+      <button type="submit" class="btn btn-primary">Final AI Grading</button>
+</form>
+
+
+<h3>Check finished games</h3>
+<hr class="red_line mb-4"/>
+<p>status 2 to -1 to 4</p>
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary" name="check_finished_games">Check finished games</button>
+</form>
+
+
+<h3>Delete Team</h3>
+<hr class="red_line mb-4"/>
+<p>(enter team id)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="delete_team">
+      </div>
+      <button type="submit" class="btn btn-primary">Delete Team</button>
+</form>
+
+
+<h3>Default Div 1</h3>
+<hr class="red_line mb-4"/>
+<p>(assigns all mathletes to division 1 if they haven't picked yet)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="default_div1">
+      </div>
+      <button type="submit" class="btn btn-primary">Default Div 1</button>
+</form>
+
+<h3>Exam Results From CSV</h3>
+<hr class="red_line mb-4"/>
+<form method="post" class="mb-4" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" class="form-control-file mb-3" name="csv_file">
+      <input type="number" name="exam_results">
+      <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+
+<h3>Calc Indiv Sweepstakes</h3>
+<hr class="red_line mb-4"/>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="calc_indiv_sweepstakes">
+      </div>
+      <button type="submit" class="btn btn-primary">Calc Indiv Sweepstakes</button>
+</form>
+
+
+<h3>Calc Sweepstakes</h3>
+<hr class="red_line mb-4"/>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="calc_sweepstakes">
+      </div>
+      <button type="submit" class="btn btn-primary">Calc Sweepstakes</button>
+</form>
+
+
+
+{% endif %}
 
 
 

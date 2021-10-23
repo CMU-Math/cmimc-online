@@ -10,6 +10,55 @@ from website.utils import update_contest, reset_contest, regrade_games, log, res
 def admin_dashboard(request):
     user = request.user
     
+    if request.method == 'POST':
+        if 'update_contest' in request.POST:
+            contest = Contest.objects.get(pk=request.POST['update_contest'])
+            update_contest(contest)
+        elif 'reset_contest' in request.POST:
+            contest = Contest.objects.get(pk=request.POST['reset_contest'])
+            reset_contest(contest)  
+        elif 'reset_exam' in request.POST:
+            exam = Exam.objects.get(pk=request.POST['reset_exam'])
+            reset_exam(exam)
+        elif 'reset_problem' in request.POST:
+            problem = Problem.objects.get(pk=request.POST['reset_problem'])
+            reset_problem(problem)
+        elif 'init_all_tasks' in request.POST:
+            init_all_tasks()
+        elif 'regrade_games' in request.POST:
+            regrade_games()
+        elif 'recheck_games' in request.POST:
+            recheck_games()
+        elif 'score_file' in request.FILES:
+            text = request.FILES['score_file'].read().decode('utf-8')
+            scores_from_csv(text)
+        elif 'recompute_leaderboard' in request.POST:
+            exam = Exam.objects.get(pk=request.POST['recompute_leaderboard'])
+            recompute_leaderboard(exam)
+        elif 'final_ai_grading' in request.POST:
+            exam = Exam.objects.get(pk=request.POST['final_ai_grading'])
+            final_ai_grading(exam)
+        elif 'check_finished_games' in request.POST:
+            check_finished_games_real()
+        elif 'delete_team' in request.POST:
+            team = Team.objects.get(pk=request.POST['delete_team'])
+            log(deleting_team=team.team_name)
+            team.delete()
+            log(deleted_team='')
+        elif 'default_div1' in request.POST:
+            contest = Contest.objects.get(pk=request.POST['default_div1'])
+            default_div1(contest)
+        elif 'exam_results' in request.POST:
+            exam = Exam.objects.get(pk=request.POST['exam_results'])
+            text = request.FILES['csv_file'].read().decode('utf-8')
+            exam_results_from_csv(exam, text)
+        if 'calc_indiv_sweepstakes' in request.POST:
+            contest = Contest.objects.get(pk=request.POST['calc_indiv_sweepstakes'])
+            calc_indiv_sweepstakes(contest)
+        if 'calc_sweepstakes' in request.POST:
+            contest = Contest.objects.get(pk=request.POST['calc_sweepstakes'])
+            calc_sweepstakes(contest)
+
     if not user.is_staff:
         raise PermissionDenied("You do not have access to this page")
 
@@ -30,20 +79,20 @@ def admin_dashboard(request):
     if user.is_staff:
 
         # Temporary email list (only visible to staff)
-        all_users = User.objects.all()
-        for curr_user in all_users:
-            all_emails.append(curr_user.email)
+        # all_users = User.objects.all()
+        # for curr_user in all_users:
+        #     all_emails.append(curr_user.email)
 
         c = Contest.objects.get(pk=1) # programming contest
         teams = Team.objects.filter(contest=c)
 
-        print(c)
 
         counter = 0
         team_len = len(teams)
         for team in teams:
             counter += 1
-            print(counter, "out of", team_len)
+            if(counter > 10):
+                break
             member_count[min(team.mathletes.all().count(), 9)] += 1
             for m in team.mathletes.all():
                 prog_emails.append(m.user.email)
@@ -53,19 +102,19 @@ def admin_dashboard(request):
                 for m in team.mathletes.all():
                     small_teams.append(m.user.email)
 
-        print(c)
 
         c = Contest.objects.get(pk=2) # math contest
         teams = Team.objects.filter(contest=c)
         counter = 0
+        team_len = len(teams)
         for team in teams:
-            print(counter, "out of", team_len)
+            counter += 1
+            if(counter > 10):
+                break
             member_count2[min(team.mathletes.all().count(), 9)] += 1
     
-
-
-
     context = {
+        'user': user,
         'emaillist': ', '.join(all_emails),
         'prog_emails': ', '.join(prog_emails),
         'small_teams': ', '.join(small_teams),
