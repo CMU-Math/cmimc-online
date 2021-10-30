@@ -5,21 +5,22 @@
 {% if user.is_staff %}
 <h1 class="mt-5">Staff Info Only (regular users can't see this)</h1>
 <hr class="red_line mb-4"/>
-<h3>All Emails (students and coaches with an account on this website)</h3>
-<p>{{ emaillist }}</p>
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="get_contest_info">
+      </div>
+      <button type="submit" class="btn btn-primary">Get Contest Info</button>
+</form>
 
-<h3>Programming Contest Emails</h3>
-<p>{{ prog_emails }}</p>
+<h3>Contest Emails</h3>
+<p>{{ contest_emails }}</p>
 
-<h3>Programming Contest member count</h3>
+<h3>Contest member count</h3>
 <p>{{ member_count }}</p>
 
-<h3>Math Contest member count</h3>
-<p>{{ member_count2 }}</p>
-
-
 <h3>Small Teams</h3>
-<p>{{ small_teams }}</p>
+<p>{{ contest_small_teams }}</p>
 
 <h3>Update Contest</h3>
 <hr class="red_line mb-4"/>

@@ -11,6 +11,32 @@ def admin_dashboard(request):
     user = request.user
     
     if request.method == 'POST':
+        if 'get_contest_info' in request.POST:
+            c = Contest.objects.get(pk=request.POST['get_contest_info'])
+            teams = Team.objects.filter(contest=c)
+
+            contest_emails = []
+            contest_small_teams = []
+            member_count = [0]*10
+
+            
+            for team in teams:
+                member_count[min(team.mathletes.all().count(), 9)] += 1
+                for m in team.mathletes.all():
+                    contest_emails.append(m.user.email)
+                if team.coach:
+                    contest_emails.append(team.coach.email)
+                if team.mathletes.all().count() < 3:
+                    for m in team.mathletes.all():
+                        contest_small_teams.append(m.user.email)
+            context = {
+                'user': user,
+                'contest_emails': ', '.join(contest_emails),
+                'contest_small_teams': ', '.join(contest_small_teams),
+                'member_count': member_count,
+            }    
+            return render(request, 'admin/admin_dashboard.html', context)
+
         if 'update_contest' in request.POST:
             contest = Contest.objects.get(pk=request.POST['update_contest'])
             update_contest(contest)
@@ -71,54 +97,34 @@ def admin_dashboard(request):
 
     
     all_emails = []
-    prog_emails = []
-    small_teams = []
-    member_count = [0]*10
+
     member_count2 = [0]*10
 
-    if user.is_staff:
+    # if user.is_staff:
 
         # Temporary email list (only visible to staff)
         # all_users = User.objects.all()
         # for curr_user in all_users:
         #     all_emails.append(curr_user.email)
 
-        c = Contest.objects.get(pk=1) # programming contest
-        teams = Team.objects.filter(contest=c)
+        
 
 
-        counter = 0
-        team_len = len(teams)
-        for team in teams:
-            counter += 1
-            if(counter > 10):
-                break
-            member_count[min(team.mathletes.all().count(), 9)] += 1
-            for m in team.mathletes.all():
-                prog_emails.append(m.user.email)
-            if team.coach:
-                prog_emails.append(team.coach.email)
-            if team.mathletes.all().count() < 3:
-                for m in team.mathletes.all():
-                    small_teams.append(m.user.email)
-
-
-        c = Contest.objects.get(pk=2) # math contest
-        teams = Team.objects.filter(contest=c)
-        counter = 0
-        team_len = len(teams)
-        for team in teams:
-            counter += 1
-            if(counter > 10):
-                break
-            member_count2[min(team.mathletes.all().count(), 9)] += 1
+        # c = Contest.objects.get(pk=2) # math contest
+        # teams = Team.objects.filter(contest=c)
+        # counter = 0
+        # team_len = len(teams)
+        # for team in teams:
+        #     counter += 1
+        #     if(counter > 10):
+        #         break
+        #     member_count2[min(team.mathletes.all().count(), 9)] += 1
     
     context = {
         'user': user,
-        'emaillist': ', '.join(all_emails),
-        'prog_emails': ', '.join(prog_emails),
-        'small_teams': ', '.join(small_teams),
-        'member_count': member_count,
-        'member_count2': member_count2,
-    }
+        'contest_emails': ', '.join([]),
+        'contest_small_teams': ', '.join([]),
+        'member_count': [],
+    }  
+
     return render(request, 'admin/admin_dashboard.html', context)
