@@ -15,6 +15,7 @@ def admin_dashboard(request):
         if 'get_contest_info' in request.POST:
             c = Contest.objects.get(pk=request.POST['get_contest_info'])
             teams = Team.objects.filter(contest=c)
+
             coach_emails = teams.exclude(coach__isnull=True).values_list('coach__email', flat=True).distinct()
             mathlete_emails = Mathlete.objects.filter(teams__in=teams).values_list('user__email', flat=True).distinct()
 
@@ -34,8 +35,8 @@ def admin_dashboard(request):
 
             context = {
                 'user': user,
-                'contest_emails': ', '.join(sorted(contest_emails)),
-                'contest_small_teams': ', '.join(sorted(contest_small_teams)),
+                'contest_emails': ', '.join(contest_emails),
+                'contest_small_teams': ', '.join(contest_small_teams),
                 'member_count': member_count,
             }    
             return render(request, 'admin/admin_dashboard.html', context)
