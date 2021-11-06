@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<p class="display-4">Terms and Conditions</p>
+<hr class="red_line"/>
+
+<div class="row">
+    <p>
+        TODO: Insert terms and conditions here.
+    </p>
+
+</div>
+{% if user.is_authenticated %}
+{% if user.accepted_tnc %}
+<div class="row"><p><b>You have already accepted and signed these terms.</b></p></div>
+{% endif %}
+<div class="row">
+    <p>
+        TODO: Insert signature instructions here.
+    </p>
+</div>
+<div class="row">
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endif %}
+{% endblock %}

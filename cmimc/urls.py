@@ -28,6 +28,8 @@ urlpatterns = [
     path('signup', views.signup, name='signup'),
     path('accounts/', include('django.contrib.auth.urls')),
 
+    path('terms_and_conditions', views.terms_and_conditions, name='terms_and_conditions'),
+
     path('contest/<int:contest_id>/newteam', views.new_team, name='new_team'),
     path('team/<int:team_id>', views.team_info, name='team_info'),
     path('team/<int:team_id>/join/<str:invite_code>', views.join_team, name='join_team'),

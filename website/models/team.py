@@ -11,8 +11,6 @@ class Team(models.Model):
     coach = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, \
                               related_name='teams', on_delete=models.SET_NULL)
     team_name = models.CharField(max_length=40)
-    MIN_CODE = 100000
-    MAX_CODE = 999999
     invite_code = models.CharField(unique=True, max_length=15)
     wants_merge = models.BooleanField(default=False)
 
@@ -54,5 +52,3 @@ class Team(models.Model):
     @property
     def is_finalized(self):
         return self.contest.locked
-
-

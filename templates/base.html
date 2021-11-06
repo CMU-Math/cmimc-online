@@ -24,10 +24,13 @@
   <body>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	{% include 'includes/navbar.html' %}
-    <div class="w-100" style="background-color: yellow">
+    <div class="w-100" style="background-color: yellow; height:min-content;">
         <div class="container-lg mt-3 mb-3">
-			<p class="mb-1 text-center" style="font-size: 1.3rem; font-weight: 500;">CMIMC 2021 has ended! See the <a href="http://cmimc-official.herokuapp.com/archive">problems</a> and <a href="{% url 'sweepstakes' 2 %}">final results</a>.</p>
-        </div>
+			<p class="mb-1 text-center" style="font-size: 1.3rem; font-weight: 500; height: min-content;">CMIMC 2021 has ended! See the <a href="http://cmimc-official.herokuapp.com/archive">problems</a> and <a href="{% url 'sweepstakes' 2 %}">final results</a>.</p>
+      {% if user.accepted_tnc %} {% elif user.is_authenticated %}
+			<p class="mb-1 text-center" style="font-size: 1.3rem; font-weight: 500; height: min-content;">The CMIMC terms and conditions have been updated.  Please read them <a href="{% url 'terms_and_conditions' %}">here</a>.</p>
+      {% endif %}
+      </div>
     </div>
     <div class="container-lg mt-4">
       {% block content %}
