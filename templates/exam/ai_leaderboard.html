@@ -1,0 +1,42 @@
+{% extends 'exam/exam_base.html' %}
+
+{% block exam_content %}
+<h1 class="mb-4">{{ exam.name }} Leaderboard</h1>
+
+{% if exam.is_optimization %}
+<ul class="nav nav-tabs mb-4">
+  <li class="nav-item">
+      <a class="nav-link no-color active" href="{% url 'leaderboard' exam.id %}">Overall</a>
+  </li>
+  {% for p in problems %}
+  <li class="nav-item">
+      <a class="nav-link no-color" href="{% url 'problem_leaderboard' exam.id p.problem_number %}">{{ p.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<table class="table table-striped">
+    <thead class="table-dark">
+    <tr>
+        <th scope="col">Team</th>
+        {% for p in problems %}
+        <th scope="col" style="white-space: nowrap">{{ p.name }}</th>
+        {% endfor %}
+        <th scope="col">Total</th>
+        <th scope="col">Rank</th>
+    </tr>
+    </thead>
+    {% for r in rows %}
+        <tr {% if r.highlight %}class="table-success"{% endif %}>
+            <td style="word-wrap: break-word; max-width: 10rem">{{ r.name }}</td>
+            {% for score in r.scores %}
+                <td>{{ score }}</td>
+            {% endfor %}
+            <td>{{ r.total_score }}</td>
+            <td>{{ r.rank }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+

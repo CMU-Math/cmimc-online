@@ -8,114 +8,50 @@
 
 <div class="row">
     <div class="col">
-<h2>Programming Contest FAQ</h2>
-<div class="myaccordion">
-    <div class="myaccordion-item">
-        <button aria-expanded="false" data-target="content-1">
-            When is the programming contest?
-        </button>
-        <div class="myaccordion-content" id="content-1">
-            <p>CMIMC Programming 2021 will be on January 30th, 2021, from 10AM to 7PM Eastern Time.</p>
+
+        <h2>General FAQ</h2>
+        <div class="myaccordion mb-5">
+            {% for item in glist %}
+            <div class="myaccordion-item">
+                <button aria-expanded="false" data-target="{{ item.id }}">
+                    {{ item.question|safe }}
+                </button>
+                <div class="myaccordion-content" id="{{ item.id }}">
+                    <p>{{ item.answer|safe }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <h2>Math Contest FAQ</h2>
+        <div class="myaccordion mb-5">
+            {% for item in mlist %}
+            <div class="myaccordion-item">
+                <button aria-expanded="false" data-target="{{ item.id }}">
+                    {{ item.question|safe }}
+                </button>
+                <div class="myaccordion-content" id="{{ item.id }}">
+                    <p>{{ item.answer|safe }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <h2>Programming Contest FAQ</h2>
+        <div class="myaccordion mb-5">
+            {% for item in plist %}
+            <div class="myaccordion-item">
+                <button aria-expanded="false" data-target="{{ item.id }}">
+                    {{ item.question|safe }}
+                </button>
+                <div class="myaccordion-content" id="{{ item.id }}">
+                    <p>{{ item.answer|safe }}</p>
+                </div>
+            </div>
+            {% endfor %}
         </div>
     </div>
-    <div class="myaccordion-item">
-        <button aria-expanded="false" data-target="content-2">
-            How do I register?
-        </button>
-        <div class="myaccordion-content" id="content-2">
-            <p>Follow the registration instructions <a href="{% url 'reg_info' %}">here</a>.</p>
-        </div>
-    </div>
-    <div class="myaccordion-item">
-        <button aria-expanded="false" data-target="content-3">
-            Who can participate?
-        </button>
-        <div class="myaccordion-content" id="content-3">
-            <p>All high school students (and younger grades) can participate in the contest.</p>
-        </div>
-    </div>
-    <div class="myaccordion-item">
-        <button aria-expanded="false" data-target="content-4">
-            How many people per team?
-        </button>
-        <div class="myaccordion-content" id="content-4">
-            <p>Teams consist of 1-3 students.</p>
-        </div>
-    </div>
-    <div class="myaccordion-item">
-        <button aria-expanded="false" data-target="content-5">
-            Can I participate individually?
-        </button>
-        <div class="myaccordion-content" id="content-5">
-            <p>You can form a 1-person team, but you may be at a disadvantage compared to full teams.</p>
-        </div>
-    </div>
-    <div class="myaccordion-item">
-        <button aria-expanded="false" data-target="content-6">
-            Is there a registration fee?
-        </button>
-        <div class="myaccordion-content" id="content-6">
-            <p>No, the contest is free!</p>
-        </div>
-    </div>
-    <div class="myaccordion-item">
-        <button aria-expanded="false" data-target="content-7">
-            Are there any prizes for winning?
-        </button>
-        <div class="myaccordion-content" id="content-7">
-            <p>Yes! We will give trophies to the top teams.</p>
-        </div>
-    </div>
-    <div class="myaccordion-item">
-        <button aria-expanded="false" data-target="content-8">
-            What if I don't know Python?
-        </button>
-        <div class="myaccordion-content" id="content-8">
-            <p>Python is only necessary for the AI Round. You can use any language for the Optimization Round, since we won't be running your code, only checking its output. If your other team members know Python, you should be fine!</p>
-        </div>
-    </div>
-    <div class="myaccordion-item">
-        <button aria-expanded="false" data-target="content-9">
-            What's the difference between early and late registration?
-        </button>
-        <div class="myaccordion-content" id="content-9">
-            <p>If you want to buy a CMIMC tshirt, teams who register early will get a discount!</p>
-        </div>
-    </div>
-    <div class="myaccordion-item">
-        <button aria-expanded="false" data-target="content-10">
-            My team is already registered, but we need to change our team members!
-        </button>
-        <div class="myaccordion-content" id="content-10">
-            <p>Contact us at <a href="mailto:contact@cmimc.info">contact@cmimc.info</a>, and we can fix it for you.</p>
-        </div>
-    </div>
-    <div class="myaccordion-item">
-        <button aria-expanded="false" data-target="content-11">
-            I forgot my login password.
-        </button>
-        <div class="myaccordion-content" id="content-11">
-            <p>Contact us at <a href="mailto:contact@cmimc.info">contact@cmimc.info</a>, and we'll reset your password.</p>
-        </div>
-    </div>
-    <div class="myaccordion-item">
-        <button aria-expanded="false" data-target="content-12">
-            How will the contest be proctored?
-        </button>
-        <div class="myaccordion-content" id="content-12">
-            <p>It will be proctored via Slack. Students will be added to a Slack channel and will have a designated proctor who will answer questions as they come up.</p>
-        </div>
-    </div>
-    <div class="myaccordion-item">
-        <button aria-expanded="false" data-target="content-13">
-            Who runs the CMIMC?
-        </button>
-        <div class="myaccordion-content" id="content-13">
-            <p>CMIMC is run by Carnegie Mellon students.</p>
-        </div>
-    </div>
-</div>
-    </div>
+
     <div class="col-12 col-md-auto">
         {% include 'includes/important_dates.html' %}
     </div>

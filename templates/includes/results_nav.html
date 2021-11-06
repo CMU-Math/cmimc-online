@@ -1,0 +1,19 @@
+{% with path=request.get_full_path %}
+<div class="sidebar ml-3">
+    <ul class="nav-list">
+        {% if contest.show_sweepstakes %}
+            {% url 'sweepstakes' contest.id as ss %}
+            <li><a href="{{ ss }}" class="no-color {% if path == ss %}active{% endif %}">Sweepstakes</a></li>
+            {% url 'indiv_sweepstakes' contest.id as iss %}
+            <li><a href="{{ iss }}" class="no-color {% if path == iss %}active{% endif %}">Indiv Sweepstakes</a></li>
+        {% endif %}
+        {% for exam in contest.exams.all %}
+            {% if exam.show_results %}
+                {% url 'exam_results' exam.id as er %}
+                <li><a href="{{ er }}" class="no-color {% if path == er %}active{% endif %}">{{ exam.name }}</a></li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+</div>
+{% endwith %}
+

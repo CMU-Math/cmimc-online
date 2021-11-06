@@ -3,23 +3,44 @@
 {% block exam_content %}
 <h1 class="mb-4">{{ exam.name }} Leaderboard</h1>
 
+{% if exam.is_optimization %}
+<ul class="nav nav-tabs mb-4">
+  <li class="nav-item">
+      <a class="nav-link no-color active" href="{% url 'leaderboard' exam.id %}">Overall</a>
+  </li>
+  {% for p in problems %}
+  <li class="nav-item">
+      <a class="nav-link no-color" href="{% url 'problem_leaderboard' exam.id p.problem_number %}">{{ p.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+
+<div class="btn-group mb-4" role="group" aria-label="Leaderboard Pages">
+  {% for p in all_pages %}
+    <a href="?page={{ p.number }}" class="btn btn-outline-dark {% if p.number == page_obj.number %}active{% endif %}">{{ p.start_index }} - {{ p.end_index }}</a>
+  {% endfor %}
+</div>
+
 <table class="table table-striped">
-    <thead class="thead-light">
+    <thead class="table-dark">
     <tr>
+        <th scope="col" class="text-center">Rank</th>
         <th scope="col">Team</th>
         {% for p in problems %}
-        <th scope="col"><a href="{% url 'view_problem' exam.id p.problem_number %}">{{ p.name }}</a></th>
+        <th scope="col" class="text-center" style="white-space: nowrap">{{ p.name }}</th>
         {% endfor %}
-        <th scope="col">Total Score</th>
+        <th scope="col" class="text-center">Total</th>
     </tr>
     </thead>
-    {% for comp in comp_info %}
-        <tr>
-            <td>{{ comp.name }}</td>
-            {% for score in comp.scores %}
-                <td>{{ score }}</td>
+    {% for comp in page_obj %}
+        <tr {% if comp in rel_comps %}class="table-success"{% endif %}>
+            <td class="text-center align-middle">{{ comp.rank }}</td>
+            <td style="word-wrap: break-word; max-width: 10rem">{{ comp.name }}</td>
+            {% for score in comp.score_list %}
+                <td class="text-center align-middle">{{ score.display_points }}</td>
             {% endfor %}
-            <td>{{ comp.total_score }}</td>
+            <td class="text-center align-middle">{{ comp.display_score }}</td>
         </tr>
     {% endfor %}
 </table>

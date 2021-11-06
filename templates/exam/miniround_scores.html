@@ -1,0 +1,25 @@
+{% extends 'exam/exam_base.html' %}
+
+{% block exam_content %}
+<h1 class="mb-4">Miniround Scores</h1>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+    <tr>
+        <th scope="col">Miniround</th>
+        {% for p in problems %}
+        <th scope="col" style="white-space: nowrap">{{ p.name }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    {% for r in rows %}
+        <tr>
+            <td>{{ r.miniround }}</td>
+            {% for score in r.scores %}
+                <td>{{ score }}</td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+

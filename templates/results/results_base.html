@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col" style="min-width: 0">
+        {% block results_content %}
+        {% endblock %}
+    </div>
+
+    <div class="col-auto">
+        {% include 'includes/results_nav.html' with contest=contest %}
+    </div>
+</div>
+{% endblock %}

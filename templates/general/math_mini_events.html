@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<p class="display-4">Mini Events</p>
+<hr class="red_line"/>
+<p style="margin-bottom: 2rem;">We will be hosting fun and interactive mini events before and after the competition! These mini events are a great way to meet new people and interact with competitors from all around the world, as well as learn more about the amazing things that Carnegie Mellon has to offer. We're excited to see you there!</p>
+
+<div class="row">
+    <div class="col text-center">
+        <a class="btn btn-primary mb-4 px-4" href="https://docs.google.com/forms/d/e/1FAIpQLSeK1lKFgZk1tOdl5HpnU5fXjywK4uCU2wVOr1VC4d0PFtPajg/viewform" target="_blank" rel="noopener noreferrer"><span style="font-weight: 500">Register Here!</span></a>
+    </div>
+</div>
+
+{% for event in math_events %}
+<h3 class="mb-0">{{ event.title }}</h3>
+<p style="font-style: italic; margin-bottom: 0.75rem;">{{ event.subtitle }}</p>
+<div style="margin-bottom: 2rem;"><p>{{ event.description|safe }}</p></div>
+{% endfor %}
+
+{% endblock %}
+

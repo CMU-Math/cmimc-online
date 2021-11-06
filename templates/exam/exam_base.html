@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="row">
-    <div class="col">
+    <div class="col" style="min-width: 0">
         {% block exam_content %}
         {% endblock %}
     </div>
@@ -15,6 +15,12 @@
 
 
 {% block js %}
-{% include 'includes/timer.html' with secs_remaining=exam.time_remaining %}
+
+{% if exam.is_math %}
+    {% include 'includes/timer.html' with secs_remaining=exam.time_remaining submit_secs_remaining=exam.time_until_submit_start %}
+{% else %}
+    {% include 'includes/timer.html' with secs_remaining=exam.time_remaining %}
+{% endif %}
+
 {% endblock %}
 

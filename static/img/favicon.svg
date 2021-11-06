@@ -1,0 +1,15 @@
+<svg width="440" height="440" viewBox="-220 -220 440 440" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <clipPath id="clipPath">
+      <circle cx="0" cy="0" r="200"/>
+   </clipPath>
+  </defs>
+  <path d="M-160 120 L-100 0 A 140 160 0 0 0 100 0 L 160 120 A200 200 0 1 0 -160 120" fill="#ee244e"/>
+  <path d="M-160 120 L-100 0 A 140 160 0 0 0 100 0 L 160 120 A200 200 0 0 1 -160 120" fill="#55c1a5"/>
+  <circle cx="0" cy="0" r="200" stroke-width="40" stroke="white" />
+  <path d="M-160 120 L-100 0 A 140 160 0 0 0 100 0 L 160 120" stroke="#000000" stroke-width="40"/>
+  <path d="M0 -200 V 200" stroke-width="40" stroke="#ffffff"/>
+  <path d="M-160 120 L-100 0 A 140 160 0 0 0 100 0 L 160 120" stroke="#000000c0" stroke-width="40"/>
+  <path d="M-56 -192 A200 200 0 0 0 -56 192" stroke-width="40" stroke="black" />
+  <path d="M56 -192 A200 200 0 0 1 56 192" stroke-width="40" stroke="black" />
+</svg>

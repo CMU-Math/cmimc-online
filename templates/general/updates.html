@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<p class="display-4">Updates</p>
+<hr class="red_line"/>
+
+<div class="row mb-4">
+    <div class="col">
+        <p>Some of our emails have been getting marked as spam. In case you missed any, here are the contents of our recent emails.</p>
+
+        <h2>January 26, 2021</h2>
+
+        <h5>Waiver</h5>
+        <p>If you have not done so already, please submit your waiver to <a href="https://docs.google.com/forms/d/e/1FAIpQLSeF1OOI01iq2nxON_xb2BVJDrBG0w2Ibwzh4VeyrzviIE3-dg/viewform">this form</a>. The waiver can be found <a href="https://drive.google.com/uc?export=download&id=1wy1ndIDVC1luACAs0fBDsyghuigln5Gv">here</a>. The deadline for this is January 26, in order to officially participate in the programming contest.</p>
+
+        <h5>Sample Programming Contest</h5>
+        <p>We are running a sample contest right now, with the sample problems <a href="{% url 'prog_sample_problems' %}">here</a>. We are currently running the optimization round, and we will open the AI Round soon for you to try out!</p>
+        <p>You can register for it on the <a href="{% url 'contest_list' %}">contests page</a>. The results are unofficial though there is a leaderboard. The questions do offer helpful practice for our contest as well as familiarity with our UI.</p>
+
+        <h5>T-shirts</h5>
+        <p>If you would like to purchase a $7 CMIMC Programming t-shirt, you must fill out both the <a href="https://forms.gle/VtfdmDA92uqPEZ3k9">shipping and size info form</a> and <a href="https://carnegiemellontickets.universitytickets.com/w/event.aspx?id=2028&p=1">payment link</a>. The deadline for this is 1/29.</p>
+
+        <h5>Slack</h5>
+        <p>Everyone participating in our contest should join our <a href="https://join.slack.com/t/cmimcprogramming2021/shared_invite/zt-ktvwevrk-WJ1bGylCpxU8LtPg2HOYjw">Slack</a>. We are primarily using this as the means for you to communicate amongst each other and with us. In particular, we post announcements and answer any questions in the Slack channels.</p>
+
+        <h5>Mini-Events</h5>
+        <p>You can read about all of our mini-events <a href="https://cmimconline.org/programming/mini-events">here</a>, and <a href="https://forms.gle/XMmxK1MensZx1vcG7">sign up</a> for the ones you want to participate in. The deadline for registering for mini events is 12:00 pm ET on 1/29 (Friday) with the exception of the Jane Street Estimathon. The registration deadline for the Estimathon is 11:59 pm ET 1/26 (Tuesday), and the form is <a href="https://forms.gle/YJ9sdNCYkE5L4pCY7">here</a>.</p>
+    </div>
+
+
+    <div class="col-12 col-md-auto">
+        {% include 'includes/important_dates.html' %}
+    </div>
+</div>
+
+{% endblock %}
+

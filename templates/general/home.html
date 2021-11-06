@@ -3,6 +3,7 @@
 
 {% block content %}
 
+
 <div class="row justify-content-center mt-5 mb-5">
     <div class="col-sm-10 col-md-8 col-lg-6">
         <img src="{% static 'img/cmimc_logo.png' %}" alt="CMIMC logo" width="100%" height="auto" class="center">
@@ -37,19 +38,18 @@
                 The CMIMC 2021 Math Contest will be held entirely online due to COVID-19. Make sure to <a href="{% url 'reg_info' %}">register</a> by <span class="font-weight-bold">February 13th!</span>
             </li>
             <li style="font-size: 1.1rem; padding-left: 1rem; padding-top: 0.5rem">
-                CMIMC is starting a brand-new programming contest this year! This is an online team contest, with up to 3 people per team. It consists of an AI Round and an Optimization Round, see <a href="{% url 'prog_info' %}">here</a> for more details. Make sure to <a href="{% url 'reg_info' %}">register</a> by <span class="font-weight-bold">January 16th!</span>
+                All math contest participants (and coaches) should join our <a href="https://join.slack.com/t/cmimcmath2021/shared_invite/zt-mcuveank-ThG8a0fEou5otCWjqxpvXQ" target="_blank" rel="noopener noreferrer">Slack</a>. We'll be using it to answer questions and send out announcements.
+            </li>
+            <li style="font-size: 1.1rem; padding-left: 1rem; padding-top: 0.5rem">
+                Some of our emails are being marked as spam. If you haven't received any emails from {{ 'contact@cmimc.info'|urlize }} recently, please check your spam folder!
             </li>
         </ul>
     </div>
 </div>
 
-<div class="row justify-content-center mb-3">
-    <div class="col-auto">
-        <h2>Sponsors</h2>
-    </div>
-</div>
 
-
+<h2>Sponsors</h2>
+<hr class="red_line"/>
 
 <div class="row logos">
     <div class="col d-flex mb-5">

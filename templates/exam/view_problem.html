@@ -2,9 +2,14 @@
 
 {% block exam_content %}
 <h1>{{ problem.name }}</h1>
-<div class="problem-text mb-5 language-none">
+<div class="problem-text {% if exam.is_optimization %}mb-5{% endif %} language-none">
 {{ problem.problem_text|safe }}
 </div>
+
+{% if exam.is_ai %}
+<p>Download the starter file for {{ problem.name }} <a href="{% url 'ai_starter_file' aiprob.id %}">here</a></p>
+<a href="{% url 'submit' exam.id problem.problem_number %}" class="btn btn-primary">Submit</a>
+{% endif %}
 
 {% if exam.is_optimization %}
 <table class="table table-striped">
@@ -21,14 +26,12 @@
     <tr>
       <th scope="row">{{ ts.task.task_number }}</th>
       <td><a href="{{ ts.task.input_file }}">Input {{ ts.task.task_number }}</a></td>
-      <td>{{ ts.display_raw_points }}</td>
+      <td>{{ ts.display_raw }}</td>
       <td><a href="{% url 'submit' exam.id problem.problem_number ts.task.task_number %}">Submit Task {{ ts.task.task_number }}</a></td>
     </tr>
   {% endfor %}
   </tbody>
 </table>
-{% elif exam.is_ai %}
-<a href="{% url 'submit' exam.id problem.problem_number %}">Submit</a>
 {% endif %}
 
 

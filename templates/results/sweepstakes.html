@@ -1,0 +1,61 @@
+{% extends 'results/results_base.html' %}
+
+{% block results_content %}
+<h1>{{ contest.name }} Sweepstakes</h1>
+<hr class="red_line mb-4"/>
+
+{% if user.is_authenticated %}
+    {% if rel_sweeps %}
+    <h3 class="mb-3">Your Scores</h3>
+    <table class="table table-striped mb-4">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col" class="text-center">Rank</th>
+            <th scope="col">Team</th>
+            <th scope="col" class="text-center" style="white-space: nowrap">TCS Round</th>
+            <th scope="col" class="text-center" style="white-space: nowrap">Team Round</th>
+            <th scope="col" class="text-center" style="white-space: nowrap">Individual Total</th>
+            <th scope="col" class="text-center" style="white-space: nowrap">Total Score</th>
+        </tr>
+        </thead>
+        {% for s in rel_sweeps %}
+            <tr>
+                <td class="text-center align-middle">{{ s.rank }}</td>
+                <td>{{ s.team.team_name }}</td>
+                <td class="text-center align-middle">{{ s.norm_power|floatformat:1 }}</td>
+                <td class="text-center align-middle">{{ s.norm_team|floatformat:1 }}</td>
+                <td class="text-center align-middle">{{ s.norm_indiv|floatformat:1 }}</td>
+                <td class="text-center align-middle">{{ s.total_score|floatformat:1 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+{% else %}
+    <div class="mb-4">Log in to view your results!</div>
+{% endif %}
+
+<h3 class="mb-3">Top {{ all_sweeps|length }} Teams</h3>
+<table class="table table-striped mb-4">
+    <thead class="table-dark">
+    <tr>
+        <th scope="col" class="text-center">Rank</th>
+        <th scope="col">Team</th>
+        <th scope="col" class="text-center" style="white-space: nowrap">TCS Round</th>
+        <th scope="col" class="text-center" style="white-space: nowrap">Team Round</th>
+        <th scope="col" class="text-center" style="white-space: nowrap">Individual Total</th>
+        <th scope="col" class="text-center" style="white-space: nowrap">Total Score</th>
+    </tr>
+    </thead>
+    {% for s in all_sweeps %}
+        <tr>
+            <td class="text-center align-middle">{{ s.rank }}</td>
+            <td>{{ s.team.team_name }}</td>
+            <td class="text-center align-middle">{{ s.norm_power|floatformat:1 }}</td>
+            <td class="text-center align-middle">{{ s.norm_team|floatformat:1 }}</td>
+            <td class="text-center align-middle">{{ s.norm_indiv|floatformat:1 }}</td>
+            <td class="text-center align-middle">{{ s.total_score|floatformat:1 }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+

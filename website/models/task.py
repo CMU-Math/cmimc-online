@@ -16,6 +16,7 @@ class Task(models.Model):
     best_raw_points = models.FloatField(null=True, blank=True)
     grader_data = models.JSONField(null=True, blank=True, help_text=_("Data for the \
             problem's grader to use. The format depends on the type of grader"))
+    raw_grader_data = models.TextField(blank=True)
     grader_data_file = models.FileField(null=True, blank=True)
 
     def __str__(self):

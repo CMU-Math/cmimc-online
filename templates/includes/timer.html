@@ -4,16 +4,38 @@
     const displayVal = num => d => colon =>
         `${pad(Math.floor(num))(d)}${colon ? ":" : ""}`;
     const timer = secs =>
-        displayVal(secs / 86400)(0)(true) +
-        displayVal((secs % 86400) / 3600)(2)(true) +
+    (secs >= 3600) ? 
+        displayVal(secs / 3600)(0)(true) +
         displayVal((secs % 3600) / 60)(2)(true) +
+        displayVal(secs % 60)(2)(false)
+    :
+        displayVal(secs / 60)(0)(true) +
         displayVal(secs % 60)(2)(false);
+        
 
-    let s = {{ secs_remaining }};
+    let s1 = {{ secs_remaining }};
+    let c1 = document.getElementById("countdown");
+    {% if exam.is_math %}
+    let s2 = {{ exam.time_until_submit_start }};
+    let c2 = document.getElementById("submit-countdown");
+    {% endif %}
+
     function update() {
-        if (s <= 0) clearInterval(loop);
-        document.getElementById("countdown").innerHTML = timer(s);
-        s--;
+        {% if exam.is_math %}
+        if (s2 <= 0) {
+            c2.innerHTML = "Finished";
+        } else {
+            c2.innerHTML = timer(s2);
+            s2--;
+        }
+        {% endif %}
+        if (s1 <= 0) {
+            c1.innerHTML = "Finished";
+            clearInterval(loop);
+        } else {
+            c1.innerHTML = timer(s1);
+            s1--;
+        }
     }
 
     update();

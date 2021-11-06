@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{{ exam.name }} Submissions</h1>
+
+<form method="post" class="mb-3">
+    {% csrf_token %}
+    <button type="submit" name="grade" class="btn btn-primary">Grade all submissions</button>
+</form>
+
+<form method="post" class="mb-3">
+    {% csrf_token %}
+    <input type="number" name="reset_problem">
+    <button type="submit" class="btn btn-danger">Reset Problem</button>
+</form>
+
+<h4>Competitors with password: {{ num_comp }}</h4>
+<h4>Solve count: {{ num_solves }}</h4>
+
+<a href="{% url 'download_subs' exam.id %}">Download as csv</a>
+
+<table class="table">
+  <thead class="thead-dark">
+    <tr>
+        <th scope="col">Name</th>
+        {% for p in problems %}
+        <th scope="col">P{{ p.problem_number }}</th>
+        {% endfor %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for r in rows%}
+    <tr>
+        <td scope="row">{{ r.name }}</td>
+        {% for s in r.subs %}
+        <td scope="row" class="{% if s.sub and s.sub.points == 1 %}table-success{% elif s.sub and s.sub.points == 0 %}table-danger{% elif s.sub and s.sub.points == None %}table-warning{% endif %}">
+            {% if s.sub %}
+            <a href="{{ s.url }}" class="no-color text-decoration-none text-reset" target="_blank">${{ s.sub.text }}$</a>
+            {% else %}N/A{% endif %}
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+{% endblock %}

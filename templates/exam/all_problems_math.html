@@ -1,0 +1,126 @@
+{% extends 'exam/exam_base.html' %}
+
+{% block exam_content %}
+
+<h1 {% if not exam.is_team_exam or not can_submit %}style="margin-bottom: 2rem;"{% endif %}>{{ exam.name }}</h1>
+
+{% if exam.is_team_exam and can_submit %}
+<p style="margin-bottom: 2rem;">Refresh this page to see the most recent answers submitted by your teammates.</p>
+{% endif %}
+
+{% for pi in prob_info %}
+<h4>Problem {{ pi.n }}</h4>
+<div class="mb-4">{{ pi.p.problem_text|safe }}</div>
+
+{% if can_submit %}
+<div class="row">
+    <div class="col">
+        <p class="mb-2 font-weight-bold">Answer</p>
+        <p><span id="span-{{ pi.n }}" style="min-width: 10rem; padding: 0.7rem; font-size: 130%"></span></p>
+        <form method="post" id="form-{{ pi.n }}" style="display: none">
+            {% csrf_token %}
+            <input type="hidden" id="input-{{ pi.n }}" name="input-{{ pi.n }}" value="">
+            <button id="save-{{ pi.n }}" class="btn btn-primary" name="save" value="{{ pi.n }}">Save Answer</button>
+        </form>
+    </div>
+    <div class="col">
+        <p class="mb-2 font-weight-bold">Current Answer</p>
+        <p>{% if pi.latest_sub %}$\displaystyle {{ pi.latest_sub }}${% else %}N/A{% endif %}</p>
+    </div>
+</div>
+{% endif %}
+
+<hr style="margin-bottom: 2rem; margin-top: 2rem;">
+{% endfor %}
+
+{% if can_enter_password %}
+<div>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="passwordInput" class="form-label">To submit your answers, enter the password given by your proctor</label>
+
+        <input class="form-control" type="text" name="password" placeholder="Password" style="max-width: 15rem;">
+    </div>
+    <button class="btn btn-primary">Submit Password</button>
+</form>
+</div>
+{% elif can_submit %}
+<h2 class="mb-3">Answer Formatting</h2>
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+            <th>Example</th>
+            <th>What to type</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>$a+b,\ a-b,\ a \cdot b,\ \dfrac{a}{b},\ a^b$</td>
+            <td>Addition: <code>a+b</code>, Subtraction: <code>a-b</code>, Multiplication: <code>a*b</code>, Division: <code>a/b</code>, Exponentiation: <code>a^b</code></td>
+        </tr>
+        <tr>
+            <td>$\sqrt{x},\ \sqrt[n]{x}$</td>
+            <td>Square roots: <code>sqrt x</code>, $n^\text{th}$ roots: <code>nthroot n x</code></td>
+        </tr>
+        <tr>
+            <td>$\ln x,\ \log x,\ \log_n x$</td>
+            <td>Natural (base $e$) logarithm: <code>ln x</code>, Base $10$ logarithm: <code>log x</code>, Base $n$ logarithm: <code>log_n x</code></td>
+        </tr>
+        <tr>
+            <td>$\sin x,\ \cos x,\ \tan x$,<br/>$\csc x,\ \sec x,\ \cot x$</td>
+            <td>Trig functions: <code>sin x</code>, <code>cos x</code>, <code>tan x</code>, <code>csc x</code>, <code>sec x</code>, <code>cot x</code></td>
+        </tr>
+        <tr>
+            <td>$\dbinom{n}{k},\ n!$</td>
+            <td>Binomial coefficients: <code>binom n k</code>, Factorials: <code>n!</code></td>
+        </tr>
+        <tr>
+            <td>$|x|$</td>
+            <td>Absolute value: <code>|x|</code></td>
+        </tr>
+        <tr>
+            <td>$\pi,\ e$</td>
+            <td>Constants: <code>pi</code>, <code>e</code></td>
+        </tr>
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock %}
+
+
+
+{% block js %}
+
+<script>
+var nums = [{% for pi in prob_info %}{{ pi.n }}, {% endfor %}];
+
+var span = new Map();
+var input = new Map();
+var mathfield = new Map();
+var form = new Map();
+for (i in nums) {
+    let n = nums[i];
+    span[n] = document.getElementById('span-'+n);
+    input[n] = document.getElementById('input-'+n);
+    form[n] = document.getElementById('form-'+n);
+    mathfield[n] = MQ.MathField(span[n], {
+        autoCommands: 'pi sqrt binom nthroot',
+        spaceBehavesLikeTab: true,
+        maxDepth: 10,
+        handlers: {
+            edit: function() {
+                var latex = mathfield[n].latex(); // Get entered math in LaTeX format
+                input[n].value = latex;
+                form[n].style.display='inline';
+            }
+        }
+    });
+}
+</script>
+
+{% include 'includes/timer.html' with secs_remaining=exam.time_remaining %}
+{% endblock %}
+
+

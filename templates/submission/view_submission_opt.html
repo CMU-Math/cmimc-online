@@ -5,14 +5,17 @@
 <h1 class="mb-4">Submission to <a href="{% url 'view_problem' exam.id submission.problem.problem_number %}">{{ submission.problem }}</a></h1>
 
 <h4 class="mb-3">
-{% if submission.is_graded %}
+
+{% if submission.status == 0 or submission.status == 1 %}
+    Grading in progress. Refresh page to update.
+{% elif submission.status == 2 or submission.status == 4 %}
     {% if submission.points %}
         Score: {{ submission.display_points }}
     {% else %}
         Invalid Submission! {{ submission.error_msg }}
     {% endif %}
-{% else %}
-    Grading in progress. Refresh page to update.
+{% elif submission.status == 3 %}
+    The optimization grader encountered an error while grading your submission. Please notify the CMIMC organizers about this.
 {% endif %}
 </h4>
 

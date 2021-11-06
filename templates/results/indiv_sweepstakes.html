@@ -1,0 +1,65 @@
+{% extends 'results/results_base.html' %}
+
+{% block results_content %}
+<h1>Individual Sweepstakes</h1>
+<hr class="red_line mb-4"/>
+
+{% if user.is_authenticated %}
+    {% if rel_rows %}
+    <h3 class="mb-3">Your Scores</h3>
+    <table class="table table-striped mb-4">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col" class="text-center">Rank</th>
+            <th scope="col">Name</th>
+            <th scope="col">Team</th>
+            {% for ep in exampairs %}
+                <th scope="col" class="text-center" style="white-space: nowrap">{{ ep.name }}</th>
+            {% endfor %}
+            <th scope="col" class="text-center" style="white-space: nowrap">Total Score</th>
+        </tr>
+        </thead>
+        {% for r in rel_rows %}
+            <tr>
+                <td class="text-center align-middle">{{ r.rank }}</td>
+                <td class="align-middle" style="word-wrap: break-word; max-width: 11rem">{{ r.name }}</td>
+                <td class="align-middle" style="word-wrap: break-word; max-width: 11rem">{{ r.team.team_name }}</td>
+                {% for score in r.scores %}
+                    <td class="text-center align-middle">{{ score|floatformat:2 }}</td>
+                {% endfor %}
+                <td class="text-center align-middle">{{ r.total_score|floatformat:2 }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+{% else %}
+    <div class="mb-4">Log in to view your results!</div>
+{% endif %}
+
+<h3 class="mb-3">Top {{ all_rows|length }} Individuals</h3>
+<table class="table table-striped mb-4">
+    <thead class="table-dark">
+    <tr>
+        <th scope="col" class="text-center">Rank</th>
+        <th scope="col">Name</th>
+        <th scope="col">Team</th>
+        {% for ep in exampairs %}
+            <th scope="col" class="text-center" style="white-space: nowrap">{{ ep.name }}</th>
+        {% endfor %}
+        <th scope="col" class="text-center" style="white-space: nowrap">Total Score</th>
+    </tr>
+    </thead>
+    {% for r in all_rows %}
+        <tr>
+            <td class="text-center align-middle">{{ r.rank }}</td>
+            <td class="align-middle" style="word-wrap: break-word; max-width: 11rem">{{ r.name }}</td>
+            <td class="align-middle" style="word-wrap: break-word; max-width: 11rem">{{ r.team.team_name }}</td>
+            {% for score in r.scores %}
+                <td class="text-center align-middle">{{ score|floatformat:2 }}</td>
+            {% endfor %}
+            <td class="text-center align-middle">{{ r.total_score|floatformat:2 }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+

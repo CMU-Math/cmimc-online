@@ -4,7 +4,7 @@
 
 <h1 class="mb-4">Submission to <a href="{% url 'view_problem' exam.id submission.problem.problem_number %}">{{ submission.problem }}</a></h1>
 
-<h4 class="mb-4">Score: {{ submission.points }}</h4>
+<h4 class="mb-4">Your Code:</h4>
 
 <pre class="line-numbers mb-3" style="max-height: 30rem"><code class="language-python">{{ submission.text }}</pre></code>
 

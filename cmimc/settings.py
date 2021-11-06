@@ -178,8 +178,11 @@ CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'full',
         'mathJaxLib': 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS_CHTML',
-        'extraPlugins': 'codesnippet, mathjax',
+        'extraPlugins': 'codesnippet, mathjax, basicstyles',
     },
 }
 
-
+# 1-minute max run time for background tasks
+# mainly for autograding
+# doesn't seem to work though
+# MAX_RUN_TIME = 1

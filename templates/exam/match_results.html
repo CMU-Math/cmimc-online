@@ -1,0 +1,62 @@
+{% extends 'exam/exam_base.html' %}
+
+{% block exam_content %}
+<h1 class="mb-3">Match Results</h1>
+
+<ul class="nav nav-tabs mb-3">
+  {% for p in problems %}
+  <li class="nav-item">
+      <a class="nav-link no-color {% if p == problem %}active{% endif %}" href="{% url 'match_results' exam.id p.problem_number %}">{{ p.name }}</a>
+  </li>
+  {% endfor %}
+</ul>
+
+<p class="mb-3">To view the match replays, download and run the <a href="{% url 'ai_visualizer' aiprob.id %}">{{ problem.name }} visualizer</a>.</p>
+
+<div>
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark mb-4">Previous</a>
+    {% endif %}
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-dark float-right mb-4">Next</a>
+    {% endif %}
+</div>
+
+
+<table class="table table-striped">
+    <thead class="table-dark">
+    <tr>
+        <th scope="col">Time</th>
+        <th scope="col">Score</th>
+        <th scope="col">Rating</th>
+        <th scope="col">Opponents</th>
+        <th scope="col">Code</th>
+        <th scope="col">Replay</th>
+    </tr>
+    </thead>
+    {% for mr in page_obj %}
+        <tr>
+            <td>{{ mr.time_played|timesince }} ago</td>
+            <td>{{ mr.aisubmission.score|floatformat:-2 }}</td>
+            <td><span class="{% if mr.new_rating > mr.prev_rating %}text-success{% else %}text-danger{% endif %}">
+                {{ mr.prev_rating|floatformat:2 }} --> {{ mr.new_rating|floatformat:2 }}
+            </span</td>
+            <td>{{ mr.opponent_list }}</td>
+            <td><a href="{% url 'view_submission' mr.aisubmission.submission.id %}">Code</a></td>
+            <td><a href="{% url 'match_replay' mr.aisubmission.id %}">Replay</a></td>
+        </tr>
+    {% endfor %}
+</table>
+
+<div>
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}" class="btn btn-outline-dark mb-4">Previous</a>
+    {% endif %}
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="btn btn-outline-dark float-right mb-4">Next</a>
+    {% endif %}
+</div>
+
+
+{% endblock %}
+

@@ -2,7 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse
-from website.models import Contest, Team, Mathlete
+from website.models import Contest, Team, Mathlete, DivChoice
+from website.utils import update_competitors
 
 # TODO: handle error when user submits a duplicate team name
 # TODO: check registration period to see if new teams can still be made
@@ -24,6 +25,7 @@ def new_team(request, contest_id):
             team = Team.create(contest=contest, team_name=request.POST['teamName'], coach=None)
             team.save()
             team.mathletes.add(mathlete)
+            update_competitors(team)
             return redirect('team_info', team_id=team.id)
     elif user.is_coach:
         if request.method == 'GET':
@@ -31,6 +33,7 @@ def new_team(request, contest_id):
         else:
             team = Team.create(contest=contest, team_name=request.POST['teamName'], coach=user)
             team.save()
+            update_competitors(team)
             return redirect('team_info', team_id=team.id)
 
 
@@ -51,6 +54,7 @@ def join_team(request, team_id, invite_code):
             return redirect('contest_list')
         else:
             team.mathletes.add(mathlete)
+            update_competitors(team)
             return redirect('team_info', team_id=team.id)
     else:
         # temporary fix so that coaches don't see "Server Error 500"
@@ -63,11 +67,28 @@ def team_info(request, team_id):
     team = get_object_or_404(Team, pk=team_id)
     if not user.can_view_team(team):
         return redirect('contest_list')
+
     can_edit = user.can_edit_team(team)
+    exampairs = team.contest.exampairs.all()
 
     if request.method == 'POST':
-        if 'deleteTeam' in request.POST and can_edit:
-            team.delete()
+        if 'save' in request.POST:
+            for m in team.mathletes.all():
+                for pair in exampairs:
+                    dc = DivChoice.objects.get(exampair=pair, mathlete=m)
+                    ID = f'divchoice-{dc.id}'
+                    if ID in request.POST:
+                        dc.division = request.POST[ID]
+                        dc.save()
+            if 'merge' in request.POST:
+                team.wants_merge = True
+                team.save()
+            else:
+                team.wants_merge = False
+                team.save()
+
+        elif 'deleteTeam' in request.POST and can_edit:
+            team.delete() # cascade deletes for comps, scores, taskscores, MRscores
             return redirect('contest_list')
         elif 'removeMember' in request.POST:
             mathlete_id = request.POST['removeMember']
@@ -75,9 +96,24 @@ def team_info(request, team_id):
             team.mathletes.remove(ml)
             if team.mathletes.count() == 0 and team.coach == None:
                 team.delete()
+            update_competitors(team)
             if user == ml.user: # removed yourself from the team
                 return redirect('contest_list')
             return redirect('team_info', team_id=team_id)
+
+    rows = []
+    for m in team.mathletes.all():
+        row = []
+        for pair in exampairs:
+            dc = DivChoice.objects.filter(exampair=pair, mathlete=m).first() # TODO: update comps
+            if dc is None:
+                dc = DivChoice(exampair=pair, mathlete=m)
+                dc.save()
+            row.append(dc)
+        rows.append({
+            'mathlete': m,
+            'divchoices': row,
+        })
 
     context = {
         'team': team,
@@ -85,8 +121,11 @@ def team_info(request, team_id):
             reverse('join_team', args=[team_id, team.invite_code])
         ),
         'too_large': len(team.mathletes.all()) > team.contest.max_team_size,
+        'too_small': len(team.mathletes.all()) < team.contest.max_team_size,
         'reg_permission': user != team.coach,
         'can_edit': can_edit,
+        'exampairs': exampairs,
+        'rows': rows,
     }
     return render(request, 'team/team.html', context)
 

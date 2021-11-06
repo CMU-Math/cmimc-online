@@ -7,55 +7,7 @@
   <hr class="red_line mb-4"/>
   <div class="card-deck-wrapper mb-5">
     {% for t in ongoing %}
-      <div class="card cardlink mb-5">
-        <div class="card-body">
-          <h4 class="card-title">{{ t.contest.name }}</h4>
-          <p>{{ t.contest.description|safe|linebreaks }}</p>
-          {% if user.is_mathlete %}
-            {% if t.has_team %}
-              <a href="{% url 'team_info' t.team.id %}" class="btn btn-primary">
-                My Team
-              </a>
-            {% endif %}
-          {% else %}
-            {% if t.has_team %}
-              <a href="{% url 'coach_teams' t.contest.id %}" class="btn btn-primary">
-                My Teams
-              </a>
-            {% endif %}
-          {% endif %}
-
-          {% if user.is_mathlete %}
-            <table class="table table-bordered mt-4">
-              <thead>
-                <tr>
-                  <th scope="col">Round</th>
-                  <th scope="col">Start Time</th>
-                  <th scope="col">End Time</th> 
-                  <th scope="col">Enter</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for e in t.exams %}
-                  <tr>
-                    <td>{{ e.name }}</td>
-                    <td>{{ e.start_time }}</td>
-                    <td>{{ e.end_time }}</td>
-                    {% if e.ended %}
-                      <td>Ended</td>
-                    {% elif e.ongoing %}
-                      <td><a href="{% url 'all_problems' e.id %}"
-                        class="btn btn-primary">Join</a></td>
-                    {% else %}
-                      <td>Not Started</td>
-                    {% endif %}
-                  </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          {% endif %}
-        </div>
-      </div>
+      {% include 'includes/contest_card.html' %}
     {% endfor %}
   </div>
 {% endif %}
@@ -65,41 +17,7 @@
   <hr class="red_line mb-4"/>
   <div class="card-deck-wrapper mb-5">
     {% for t in upcoming %}
-      <div class="card cardlink mb-5">
-        <div class="card-body">
-          <h4 class="card-title">{{ t.contest.name }}</h4>
-          <p>{{ t.contest.description|safe|linebreaks }}</p>
-          {% if user.is_mathlete %}
-            {% if t.has_team %}
-              <a href="{% url 'team_info' t.team.id %}" class="btn btn-primary stretched-link">
-                My Team
-              </a>
-            {% else %}
-              {% if t.contest.reg_ended %}
-                <p><b>Registration has ended.</b></p>
-              {% else %}
-                <a href="{% url 'new_team' t.contest.id %}" class="btn btn-success stretched-link">
-                  Create Team
-                </a>
-              {% endif %}
-            {% endif %}
-          {% else %}
-            {% if t.has_team %}
-              <a href="{% url 'coach_teams' t.contest.id %}" class="btn btn-primary stretched-link">
-                My Teams
-              </a>
-            {% else %}
-              {% if t.contest.reg_ended %}
-                <p><b>Registration has ended.</b></p>
-              {% else %}
-                <a href="{% url 'new_team' t.contest.id %}" class="btn btn-success stretched-link">
-                  Create Team
-                </a>
-              {% endif %}
-            {% endif %}
-          {% endif %}
-        </div>
-      </div>
+      {% include 'includes/contest_card.html' %}
     {% endfor %}
   </div>
 {% endif %}
@@ -109,12 +27,7 @@
   <hr class="red_line mb-4"/>
   <div class="card-deck-wrapper">
     {% for t in past %}
-      <div class="card cardlink mb-5">
-        <div class="card-body">
-          <h4 class="card-title">{{ t.contest.name }}</h4>
-          <p>{{ t.contest.description|safe|linebreaks }}</p>
-        </div>
-      </div>
+    {% include 'includes/contest_card.html' %}
     {% endfor %}
   </div>
 {% endif %}
@@ -123,37 +36,207 @@
   No contests yet.
 {% endif %}
 
+<!--
 {% if user.is_staff %}
 <h1 class="mt-5">Staff Info Only (regular users can't see this)</h1>
 <hr class="red_line mb-4"/>
 <h3>All Emails (students and coaches with an account on this website)</h3>
 <p>{{ emaillist }}</p>
 
-<h3>Unregistered Emails (students and coaches with an unregistered team)</h3>
-<p>{{ unreg_emails }}</p>
+<h3>Programming Contest Emails</h3>
+<p>{{ prog_emails }}</p>
 
 <h3>Programming Contest member count</h3>
 <p>{{ member_count }}</p>
 
-<h3>Re-register all teams in a contest</h3>
+<h3>Math Contest member count</h3>
+<p>{{ member_count2 }}</p>
+
+
+<h3>Small Teams</h3>
+<p>{{ small_teams }}</p>
+
+<h3>Update Contest</h3>
 <hr class="red_line mb-4"/>
-<p>(resets all competitors, scores and taskscores)</p>
+<p>(updates competitors scores, task scores, and miniround scores)</p>
 
 <form method="post" class="mb-4">
       {% csrf_token %}
       <div class="form-group">
-        <input type="number" class="form-contest-id" name="finalize_all_teams">
+        <input type="number" class="form-contest-id" name="update_contest">
       </div>
-      <button type="submit" class="btn btn-primary">Re-register all teams</button>
+      <button type="submit" class="btn btn-primary">Update Contest</button>
 </form>
+
+
+<h3>Reset Contest</h3>
+<hr class="red_line mb-4"/>
+<p>(deletes all competitors, scores, task scores, and miniround scores)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="reset_contest">
+      </div>
+      <button type="submit" class="btn btn-primary">Reset Contest</button>
+</form>
+
+
+<h3>Reset Exam</h3>
+<hr class="red_line mb-4"/>
+<p>(reset single exam)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="reset_exam">
+      </div>
+      <button type="submit" class="btn btn-primary">Reset Exam</button>
+</form>
+
+<h3>Reset Problem</h3>
+<hr class="red_line mb-4"/>
+<p>(reset scores for a single optimization problem)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="reset_problem">
+      </div>
+      <button type="submit" class="btn btn-primary">Reset Problem</button>
+</form>
+
+
 
 <h3>Init all tasks</h3>
 <hr class="red_line mb-4"/>
-<form method="post">
+<form method="post" class="mb-4">
       {% csrf_token %}
       <button type="submit" class="btn btn-primary" name="init_all_tasks">Init All Tasks</button>
 </form>
 
+<h3>Regrade Games</h3>
+<hr class="red_line mb-4"/>
+<p>status 3 to 0</p>
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary" name="regrade_games">Regrade Games</button>
+</form>
+
+<h3>Recheck graded games</h3>
+<hr class="red_line mb-4"/>
+<p>status -1 to 2</p>
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary" name="recheck_games">game.status -1 -> 2</button>
+</form>
+
+
+<h3>Scores From CSV</h3>
+<hr class="red_line mb-4"/>
+<form method="post" class="mb-4" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" class="form-control-file mb-3" name="score_file">
+      <button type="submit" class="btn btn-primary">Submit Scores</button>
+</form>
+
+
+<h3>Recompute Leaderboard</h3>
+<hr class="red_line mb-4"/>
+<p>(enter exam id)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="recompute_leaderboard">
+      </div>
+      <button type="submit" class="btn btn-primary">Recompute Leaderboard</button>
+</form>
+
+
+<h3>Final AI Grading</h3>
+<hr class="red_line mb-4"/>
+<p>(enter exam id)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="final_ai_grading">
+      </div>
+      <button type="submit" class="btn btn-primary">Final AI Grading</button>
+</form>
+
+
+<h3>Check finished games</h3>
+<hr class="red_line mb-4"/>
+<p>status 2 to -1 to 4</p>
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary" name="check_finished_games">Check finished games</button>
+</form>
+
+
+<h3>Delete Team</h3>
+<hr class="red_line mb-4"/>
+<p>(enter team id)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="delete_team">
+      </div>
+      <button type="submit" class="btn btn-primary">Delete Team</button>
+</form>
+
+
+<h3>Default Div 1</h3>
+<hr class="red_line mb-4"/>
+<p>(assigns all mathletes to division 1 if they haven't picked yet)</p>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="default_div1">
+      </div>
+      <button type="submit" class="btn btn-primary">Default Div 1</button>
+</form>
+
+<h3>Exam Results From CSV</h3>
+<hr class="red_line mb-4"/>
+<form method="post" class="mb-4" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" class="form-control-file mb-3" name="csv_file">
+      <input type="number" name="exam_results">
+      <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+
+<h3>Calc Indiv Sweepstakes</h3>
+<hr class="red_line mb-4"/>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="calc_indiv_sweepstakes">
+      </div>
+      <button type="submit" class="btn btn-primary">Calc Indiv Sweepstakes</button>
+</form>
+
+
+<h3>Calc Sweepstakes</h3>
+<hr class="red_line mb-4"/>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="calc_sweepstakes">
+      </div>
+      <button type="submit" class="btn btn-primary">Calc Sweepstakes</button>
+</form>
+
+
+
 {% endif %}
+-->
 
 {% endblock %}

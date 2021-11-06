@@ -16,8 +16,8 @@ class User(AbstractUser):
     STAFF = 'ST'
     COACH = 'CO'
     role_CHOICES = [
-        (MATHLETE, 'Contestant'),
         (STAFF, 'CMU Student'),
+        (MATHLETE, 'Contestant'),
         (COACH, 'Coach'),
     ]
     role = models.CharField(max_length=2, choices=role_CHOICES, default=MATHLETE)
@@ -31,20 +31,26 @@ class User(AbstractUser):
         return self.name
 
     @property
-    def name(self):
-        if self.alias:
-            return self.alias
-        elif self.full_name:
-            return self.full_name
-        else:
-            return '{0} {1}'.format(self.first_name, self.last_name)
-
-    @property
     def short_name(self):
         if self.first_name:
             return self.first_name
         else:
             return self.name
+
+    @property
+    def long_name(self): # full_name already taken
+        if self.first_name and self.last_name:
+            return '{0} {1}'.format(self.first_name, self.last_name)
+        elif self.full_name:
+            return self.full_name
+        elif self.first_name:
+            return self.first_name
+        else:
+            return self.last_name
+
+    @property
+    def name(self):
+        return self.long_name
 
     @property
     def is_mathlete(self):
@@ -59,7 +65,15 @@ class User(AbstractUser):
             return self.mathlete.teams.filter(contest=contest).exists()
         elif self.is_coach:
             return self.teams.filter(contest=contest).exists()
-        else:
+        else: # staff
+            return False
+
+    def in_team(self, team):
+        if self.is_mathlete:
+            return self.mathlete in team.mathletes.all()
+        elif self.is_coach:
+            return self == team.coach
+        else: # staff
             return False
 
     # TODO: update for coaches
@@ -132,7 +146,7 @@ class User(AbstractUser):
     def can_create_team(self, contest):
         if self.is_staff:
             return False
-        if contest.reg_ended:
+        if contest.locked:
             return False
         if contest.is_private and not self.is_tester:
             return False
@@ -148,3 +162,26 @@ class User(AbstractUser):
             return True
         return False
 
+    # list of teams that this user is part of
+    def rel_teams(self, contest):
+        from website.models import Team
+        if self.is_staff:
+            return Team.objects.none()
+        if self.is_mathlete:
+            return self.mathlete.teams.filter(contest=contest)
+        if self.is_coach:
+            return self.teams.filter(contest=contest)
+
+
+    def rel_comps(self, exam):
+        from website.models import Competitor
+        if self.is_staff:
+            return Competitor.objects.none()
+        teams = self.rel_teams(exam.contest)
+        if self.is_mathlete:
+            if exam.is_team_exam:
+                return Competitor.objects.filter(exam=exam, team__in=teams, mathlete=None)
+            else:
+                return Competitor.objects.filter(exam=exam, team__in=teams, mathlete=self.mathlete)
+        if self.is_coach:
+            return Competitor.objects.filter(exam=exam, team__in=teams)

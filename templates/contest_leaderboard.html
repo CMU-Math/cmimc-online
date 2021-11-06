@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 class="mb-4">{{ contest.name }} Leaderboard</h1>
+
+<table class="table table-striped">
+    <thead class="table-dark">
+    <tr>
+        <th scope="col" class="text-center">Rank</th>
+        <th scope="col">Team</th>
+        {% for e in exams %}
+        <th scope="col" class="text-center" style="white-space: nowrap">{{ e.name }}</th>
+        {% endfor %}
+        <th scope="col" class="text-center">Total Score</th>
+    </tr>
+    </thead>
+    {% for r in rows %}
+        <tr {% if r.highlight %}class="table-success"{% endif %}>
+            <td class="text-center align-middle">{{ r.rank }}</td>
+            <td style="word-wrap: break-word; max-width: 10rem">{{ r.name }}</td>
+            {% for score in r.scores %}
+                <td class="text-center align-middle">{{ score|floatformat:2 }}</td>
+            {% endfor %}
+            <td class="text-center align-middle">{{ r.total|floatformat:2 }}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+

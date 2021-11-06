@@ -7,7 +7,7 @@ from django_ace import AceWidget
 
 class UserCreationForm(DefaultUserCreationForm):
     CHOICES = [
-        (User.MATHLETE, 'Contestant'),
+        (User.MATHLETE, 'Student'),
         (User.COACH, 'Coach'),
     ]
     role = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES, label=' ')

@@ -23,6 +23,7 @@ def view_problem(request, exam_id, problem_number):
             'problem': problem,
             'score': score,
             'exam': exam,
+            'aiprob': problem.aiproblem.first(),
         }
         return render(request, 'exam/view_problem.html', context)
 

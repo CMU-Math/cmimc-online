@@ -1,6 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
+from website.utils import log
 
 
 class UserManager(BaseUserManager):
@@ -28,8 +29,11 @@ class UserManager(BaseUserManager):
 
 class CompetitorManager(models.Manager):
     def getCompetitor(self, exam, mathlete):
-        team = mathlete.teams.filter(contest=exam.contest).first()
-        if exam.is_team_exam:
-            return self.get(exam=exam, team=team, mathlete=None)
-        else:
-            return self.get(exam=exam, team=team, mathlete=mathlete)
+        try:
+            team = mathlete.teams.filter(contest=exam.contest).first()
+            if exam.is_team_exam:
+                return self.get(exam=exam, team=team, mathlete=None)
+            else:
+                return self.get(exam=exam, team=team, mathlete=mathlete)
+        except Exception as e:
+            log(error=str(e), during='getCompetitor', exam=str(exam), mathlete=str(mathlete))

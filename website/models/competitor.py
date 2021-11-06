@@ -13,6 +13,7 @@ class Competitor(models.Model):
             help_text=_('If the exam is an individual exam, this is the \
             corresponding mathlete. If the exam is a team exam, this is null'))
     total_score = models.FloatField(default=0.0, db_index=True)
+    password = models.CharField(max_length=100, blank=True)
 
     objects = CompetitorManager()
 
@@ -42,14 +43,11 @@ class Competitor(models.Model):
         else:
             return self.mathlete.user.name
 
-    def init_scores(self, exam):
-        from .score import Score
-        from .taskscore import TaskScore
-        for problem in exam.problems.all():
-            s = Score(problem=problem, competitor=self)
-            s.save()
-            if exam.is_optimization:
-                for task in problem.tasks.all():
-                    ts = TaskScore(task=task, score=s)
-                    ts.save()
+    @property
+    def display_score(self):
+        return f'{self.total_score:.2f}'
+
+    @property
+    def score_list(self):
+        return self.scores.order_by('problem__problem_number')
 

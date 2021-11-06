@@ -12,15 +12,18 @@
 	<div class="collapse navbar-collapse" id="mainMenu">
       {% url 'contest_list' as url_contests %}
       {% url 'math_info' as mi %}
+      {% url 'math_rules' as mr %}
       {% url 'math_sample_problems' as msp %}
 	  {% url 'math_schedule' as ms %}
+      {% url 'math_mini_events' as mme %}
       {% url 'prog_info' as pi %}
       {% url 'prog_sample_problems' as psp %}
 	  {% url 'prog_schedule' as ps %}
 	  {% url 'reg_info' as url_reg_info %}
 	  {% url 'faq' as url_faq %}
-      {% url 'mini_events' as pme %}
+      {% url 'prog_mini_events' as pme %}
 	  {% url 'resources' as pr %}
+	  {% url 'updates' as pu %}
       {% with path=request.get_full_path %}
 	  <ul class="navbar-nav mr-auto ml-md-3">
       {% if user.is_authenticated %}
@@ -29,17 +32,19 @@
         </li>
       {% endif %}
       <li class="nav-item dropdown">
-          <a class="nav-link no-color dropdown-toggle {% if path == mi or path == msp or path == ms %}active{% endif %}" href="#" id="mathDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link no-color dropdown-toggle {% if path == mi or path == msp or path == ms or path == mme or path == mr %}active{% endif %}" href="#" id="mathDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
         Math
         </a>
         <ul class="dropdown-menu" aria-labelledby="mathDropdown">
         <li><a class="dropdown-item no-color {% if path == mi %}active{% endif %}" href="{{ mi }}">Format</a></li>
+        <li><a class="dropdown-item no-color {% if path == mr %}active{% endif %}" href="{{ mr }}">Rules</a></li>
         <li><a class="dropdown-item no-color {% if path == msp %}active{% endif %}" href="{{ msp }}">Sample Problems</a></li>
         <li><a class="dropdown-item no-color {% if path == ms %}active{% endif %}" href="{{ ms }}">Schedule</a></li>
+        <li><a class="dropdown-item no-color {% if path == mme %}active{% endif %}" href="{{ mme }}">Mini Events</a></li>
         </ul>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link no-color dropdown-toggle {% if path == pi or path == psp or path == ps or path == pme or path == pr %}active{% endif %}" href="#" id="programmingDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link no-color dropdown-toggle {% if path == pi or path == psp or path == ps or path == pme or path == pr or path == pu %}active{% endif %}" href="#" id="programmingDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
           Programming
         </a>
         <ul class="dropdown-menu" aria-labelledby="programmingDropdown">
@@ -48,6 +53,7 @@
           <li><a class="dropdown-item no-color {% if path == ps %}active{% endif %}" href="{{ ps }}">Schedule</a></li>
           <li><a class="dropdown-item no-color {% if path == pme %}active{% endif %}" href="{{ pme }}">Mini Events</a></li>
           <li><a class="dropdown-item no-color {% if path == pr %}active{% endif %}" href="{{ pr }}">Resources</a></li>
+          <li><a class="dropdown-item no-color {% if path == pu %}active{% endif %}" href="{{ pu }}">Updates</a></li>
         </ul>
       </li>
 

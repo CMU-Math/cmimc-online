@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<p class="display-4">Math Contest Rules</p>
+<hr class="red_line"/>
+
+<div class="row mb-4">
+    <div class="col">
+        <h3>How to join the contest</h3>
+
+        <p>On the contest date (February 27th), go to the <a href="{% url 'contest_list' %}">contests page</a> and you should see each round of the math contest, with the divisions that you selected. When a round begins, click the blue 'Join' button. You'll see a list of problems, and can submit answers on the same page.</p>
+
+        <h3>TCS Round</h3>
+
+        <p>This is a 90 minute test with 3 problems to be completed as a team. You can talk to your teammates over zoom, but no external tool is allowed.</p>
+
+        <ul>
+            <li>Communication within the team is permitted.</li>
+            <li>Solutions should be hand-written, and your hands must be visible on the camera during the contest.</li>
+            <li>You can scan or take a picture of your solutions in the last 30 minutes of the 90-minute contest.</li>
+            <li>Submit your scans or pictures via the linked Google form.</li>
+        </ul>
+        <span class="font-weight-bold">Solution format:</span>
+        <ul>
+            <li>Prepare to have some sort of scanning device or camera ready before the contest starts.</li>
+            <li>Make sure your scans/pictures are clear, then submit them to the linked Google form.</li>
+            <li>Number all of the pages of the solution.</li>
+            <li>The bound that is attempted to be proven must be stated clearly before each proof.</li>
+            <li>Multiple bounds may be proven.</li>
+            <li>Full points will be given for the best bound with a correct proof.</li>
+            <li>Partial points will be awarded above that for incomplete proofs on higher bounds.</li>
+            <li>Partial points will be deducted below that for holes in logic or rigor.</li>
+        </ul>
+        <span class="font-weight-bold">Proctoring</span>
+        <ul>
+            <li>Each team will be in their own Zoom breakout room.</li>
+            <li>In Zoom, click on the “Ask for Help” feature to get assistance/clarification from a proctor. You will also be in a slack channel with your assigned proctor and may ask questions there, or ask your proctor to join your breakout room.</li>
+            <li>Computational tools or looking up results is NOT PERMITTED.</li>
+        </ul>
+
+        <h3>Team Round</h3>
+
+        <p>This is a 60 minute test with 15 problems to be completed as a team. You can talk to your teammates over zoom, but no external tool is allowed.</p> 
+
+        <p>During the 5-minute submission window at the end of the contest:</p>
+        <ul>
+            <li>You should submit your answers on the website.</li>
+            <li>You may discuss with your team members while submitting</li>
+            <li>Anyone on your team can submit an answer, and the most recent submission will be used.</li>
+            <li>We recommend that you prepare to also submit during the round so you get all your answers in. Teams should discuss and resolve conflicts BEFORE this window.</li>
+        </ul>
+        <span class="font-weight-bold">Proctoring</span>
+        <ul>
+            <li>Teams will be in their own zoom breakout room.</li>
+            <li>In Zoom, click on the “Ask for Help” feature to get assistance/clarification from a proctor. You will also be in a slack channel with your assigned proctor and may ask questions there, or ask your proctor to join your breakout room.</li>
+            <li>Computational tools or looking up results is NOT PERMITTED.</li>
+        </ul>
+
+        <h2>Individual Rounds</h2>
+        <p>There are three different rounds: Algebra and Number Theory, Combinatorics and Computer Science, and Geometry.</p>
+        <p>Each round has 8 problems which need to be solved in 60 minutes.</p>
+        <p>During the round NO communication with anyone will be allowed.</p>
+
+        <span class="font-weight-bold">Divisions and Scoring</span>
+        <ul>
+            <li>Contestants may choose which division to participate in individually for all 3 subjects.</li>
+            <li>Each problem will have a preset weight based on its position in the test (e.g. #1, #2). These weights will be adjusted by a factor based on the percentage of the contestants that solved each problem. For problems in division 1 only, we will assume no one in division 2 solves these problems. For problems in division 2 only, we will estimate how many division 1 contestants would solve these problems.</li>
+            <li>The total sum of these values will be multiplied by 0.5 for division 2 contestants.</li>
+        </ul>
+
+        <span class="font-weight-bold">Submitting Answers</span>
+        <ul>
+            <li>Contestants will be given a 3-minute window at the end of each 60-minute block to submit their answers.</li>
+            <li>After these 3 minutes, there will be no more writing/typing allowed.</li>
+            <li>There will be a certain amount of allowed operations that you can use in your answers.</li>
+        </ul>
+        
+        <span class="font-weight-bold">Proctoring</span>
+        <ul>
+            <li>All contestants will be in a general Zoom room (stay muted).</li>
+            <li>Camera must be on and both hands/work area visible at essentially all times</li>
+            <li>Please use the Zoom raise hand feature to ask a question, you may type once acknowledged by proctor.</li>
+            <li>Otherwise, no interaction with keyboard/mouse/electronics allowed (including calculators). Computational tools or looking up results is NOT PERMITTED.</li>
+        </ul>
+
+        <h2 id="simplification">Answer Format and Simplification Rules</h2>
+        <p>For all short-answer tests (Team Round and Individual Rounds), you will be able to submit an arbitrary math expression as your answer. Try it out here!</p>
+        <p class="mb-2 font-weight-bold">Submit an answer below</p>
+        <p><span id="mathquill-span" style="min-width: 10rem; padding: 0.7rem; font-size: 130%"></span></p>
+
+        <p>Some common expressions you might need:</p>
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Example</th>
+                    <th>What to type</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>$a+b,\ a-b,\ a \cdot b,\ \dfrac{a}{b},\ a^b$</td>
+                    <td>Addition: <code>a+b</code>, Subtraction: <code>a-b</code>, Multiplication: <code>a*b</code>, Division: <code>a/b</code>, Exponentiation: <code>a^b</code></td>
+                </tr>
+                <tr>
+                    <td>$\sqrt{x},\ \sqrt[n]{x}$</td>
+                    <td>Square roots: <code>sqrt x</code>, $n^\text{th}$ roots: <code>nthroot n x</code></td>
+                </tr>
+                <tr>
+                    <td>$\ln x,\ \log x,\ \log_n x$</td>
+                    <td>Natural (base $e$) logarithm: <code>ln x</code>, Base $10$ logarithm: <code>log x</code>, Base $n$ logarithm: <code>log_n x</code></td>
+                </tr>
+                <tr>
+                    <td>$\sin x,\ \cos x,\ \tan x$,<br/>$\csc x,\ \sec x,\ \cot x$</td>
+                    <td>Trig functions: <code>sin x</code>, <code>cos x</code>, <code>tan x</code>, <code>csc x</code>, <code>sec x</code>, <code>cot x</code></td>
+                </tr>
+                <tr>
+                    <td>$\dbinom{n}{k},\ n!$</td>
+                    <td>Binomial coefficients: <code>binom n k</code>, Factorials: <code>n!</code></td>
+                </tr>
+                <tr>
+                    <td>$|x|$</td>
+                    <td>Absolute value: <code>|x|</code></td>
+                </tr>
+                <tr>
+                    <td>$\pi,\ e$</td>
+                    <td>Constants: <code>pi</code>, <code>e</code></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>Your submitted answers will be automatically graded by a computer. In general, submissions that are mathematically equivalent to the correct answer will be considered correct. This means that for the following example problem:</p>
+
+        <p class="text-center">Evaluate the sum $\displaystyle \sum_{i=0}^5 \binom{7}{i} \binom{8}{5-i}$.</p>
+        <p class="mb-4">answers such as $\binom{15}{5}$, $\frac{15!}{5! \cdot 10!}$, and $3003$ will all
+        be considered correct.</p>
+
+        <p class="mb-4">All answers must be closed-form expressions, and there is a maximum submission length. This means that answers such as $\sum\limits_{i=0}^5 \binom{7}{i} \binom{8}{5-i}$ and
+        $\binom{7}{0} \binom{8}{5} + \binom{7}{1} \binom{8}{4} + \binom{7}{2} \binom{8}{3} + \binom{7}{3} \binom{8}{2} + \binom{7}{4} \binom{8}{1} + \binom{7}{5} \binom{8}{0}$ will be marked as incorrect (the former is not closed-form, and the latter is too long).</p>
+
+        <p>You should try to simplify your answers as much as possible, but you don't need to worry about trivial simplifications like $\frac{1}{\sqrt{3}}$ vs $\frac{\sqrt{3}}{3}$. All reasonably simplified answers will be below the maximum submission length. If you believe that your submission was graded incorrectly, ask a CMIMC organizer on Slack and we will manually grade it.</p>
+    </div>
+
+    <div class="col-12 col-md-auto">
+        {% include 'includes/important_dates.html' %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js %}
+<script>
+var span = document.getElementById('mathquill-span');
+var mathfield = MQ.MathField(span, {
+    autoCommands: 'pi sqrt binom nthroot',
+    spaceBehavesLikeTab: true,
+    maxDepth: 10,
+});
+</script>
+{% endblock %}

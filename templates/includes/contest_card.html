@@ -1,0 +1,69 @@
+<div class="card cardlink mb-5">
+<div class="card-body">
+  <h4 class="card-title">{{ t.contest.name }}</h4>
+  <p>{{ t.contest.description|safe|linebreaks }}</p>
+  {% if user.is_mathlete %}
+    {% if t.has_team %}
+    <a href="{% url 'team_info' t.team.id %}" class="btn btn-primary {% if not t.canjoin %}stretched-link{% endif %}">
+        My Team
+      </a>
+    {% elif not t.contest.locked %}
+        <a href="{% url 'new_team' t.contest.id %}" class="btn btn-success {% if not t.canjoin %}stretched-link{% endif %}">
+          Create Team
+        </a>
+    {% else %}
+      <p><b>Registration has ended.</b></p>
+    {% endif %}
+  {% elif user.is_coach %}
+    {% if t.has_team %}
+      <a href="{% url 'coach_teams' t.contest.id %}" class="btn btn-primary {% if not t.canjoin %}stretched-link{% endif %}">
+        My Teams
+      </a>
+    {% elif not t.contest.locked %}
+        <a href="{% url 'new_team' t.contest.id %}" class="btn btn-success {% if not t.canjoin %}stretched-link{% endif %}">
+          Create Team
+        </a>
+    {% else %}
+      <p><b>Registration has ended.</b></p>
+    {% endif %}
+  {% endif %}
+
+  {% if t.canjoin %}
+    <table class="table table-bordered mt-4">
+      <thead>
+        <tr>
+          <th scope="col">Round</th>
+          <th scope="col">Start Time</th>
+          <th scope="col">End Time</th> 
+          <th scope="col">Enter</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in t.exams %}
+          <tr>
+            <td>{{ e.name }}</td>
+            <td>{{ e.start_time }}</td>
+            <td>{{ e.end_time }}</td>
+            {% if e.ended %}
+                {% if t.contest.show_final_results %}
+                    <td><a href="{% url 'leaderboard' e.id %}?page=1">Results</a></td>
+                {% else %}
+                    <td>Finished</td>
+                {% endif %}
+            {% elif e.ongoing %}
+              <td><a href="{% url 'all_problems' e.id %}"
+                class="btn btn-primary">Join</a></td>
+            {% else %}
+              <td>Not Started</td>
+            {% endif %}
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if t.contest.ended %}
+      <a href="{% if t.contest.is_math %}{% url 'sweepstakes' t.contest.id %}{% else %}{% url 'contest_leaderboard' t.contest.id %}{% endif %}">Final Standings</a>
+    {% endif %}
+  {% endif %}
+</div>
+</div>
+

@@ -1,0 +1,73 @@
+{% extends 'results/results_base.html' %}
+
+{% block results_content %}
+<h1>{{ exam.name }} Results</h1>
+<hr class="red_line mb-4"/>
+
+{% if user.is_authenticated %}
+    {% if rel_rows %}
+    <h3 class="mb-3">Your Scores</h3>
+    <table class="table table-striped mb-4">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col" class="text-center">Rank</th>
+            <th scope="col">{% if exam.is_team_exam %}Team{% else %}Name{% endif %}</th>
+            {% if not exam.is_team_exam %}
+                <th scope="col">Team</th>
+            {% endif %}
+            {% for p in problems %}
+            <th scope="col" class="text-center" style="white-space: nowrap">{{ p.problem_number }}</th>
+            {% endfor %}
+            <th scope="col" class="text-center" style="white-space: nowrap">{% if exam.is_math and exam.is_team_exam %}Score{% else %}Total Score{% endif %}</th>
+        </tr>
+        </thead>
+        {% for r in rel_rows %}
+            <tr>
+                <td class="text-center align-middle">{{ r.rank }}</td>
+                <td class="align-middle" {% if exam.is_math %}style="word-wrap: break-word; max-width: 11rem"{% endif %}>{{ r.comp.name }}</td>
+                {% if not exam.is_team_exam %}
+                    <td class="align-middle" style="word-wrap: break-word; max-width: 11rem">{{ r.comp.team.team_name }}</td>
+                {% endif %}
+                {% for score in r.scores %}
+                <td class="text-center align-middle">{% if exam.is_math %}{{ score|floatformat:0 }}{% else %}{{ score|floatformat:-1 }}{% endif %}</td>
+                {% endfor %}
+                <td class="text-center align-middle">{% if exam.is_math %}{{ r.comp.total_score|floatformat:2 }}{% else %}{{ r.comp.total_score|floatformat:-1 }}{% endif %}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    {% endif %}
+{% else %}
+    <div class="mb-4">Log in to view your results!</div>
+{% endif %}
+
+<h3 class="mb-3">Top {{ all_rows|length }} {% if exam.is_team_exam %}Teams{% else %}Individuals{% endif %}</h3>
+<table class="table table-striped">
+    <thead class="table-dark">
+    <tr>
+        <th scope="col" class="text-center">Rank</th>
+        <th scope="col">{% if exam.is_team_exam %}Team{% else %}Name{% endif %}</th>
+        {% if not exam.is_team_exam %}
+            <th scope="col">Team</th>
+        {% endif %}
+        {% for p in problems %}
+        <th scope="col" class="text-center" style="white-space: nowrap">{{ p.problem_number }}</th>
+        {% endfor %}
+        <th scope="col" class="text-center" style="white-space: nowrap">{% if exam.is_math and exam.is_team_exam %}Score{% else %}Total Score{% endif %}</th>
+    </tr>
+    </thead>
+    {% for r in all_rows %}
+        <tr>
+            <td class="text-center align-middle">{{ r.rank }}</td>
+            <td class="align-middle" {% if exam.is_math %}style="word-wrap: break-word; max-width: 11rem"{% endif %}>{{ r.comp.name }}</td>
+            {% if not exam.is_team_exam %}
+                <td class="align-middle" style="word-wrap: break-word; max-width: 11rem">{{ r.comp.team.team_name }}</td>
+            {% endif %}
+            {% for score in r.scores %}
+                <td class="text-center align-middle">{% if exam.is_math %}{{ score|floatformat:0 }}{% else %}{{ score|floatformat:-1 }}{% endif %}</td>
+            {% endfor %}
+            <td class="text-center align-middle">{% if exam.is_math %}{{ r.comp.total_score|floatformat:2 }}{% else %}{{ r.comp.total_score|floatformat:-1 }}{% endif %}</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}
+

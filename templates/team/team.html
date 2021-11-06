@@ -13,24 +13,44 @@
 
         <h2 class="mb-4">Members <span {% if too_large %}class="text-danger"{% endif %}>({{ team.mathletes.all|length }}/{{ team.contest.max_team_size }})</span></h2>
         {% if team.mathletes.all %}
+            <form method="post" class="mb-3">
+            {% csrf_token %}
             <table class="table table-hover">
-                <thead class="thead-light">
+                <thead class="thead-dark">
                     <tr>
                         <th scope="col">Name</th>
-                        <th scope="col">Email</th>
+                        {% for d in exampairs %}
+                        <th scope="col">{{ d.name }}</th>
+                        {% endfor %}
                         {% if can_edit %}<th scope="col"></th>{% endif %}
                     </tr>
                 </thead>
                 <tbody>
-                {% for mathlete in team.mathletes.all %} 
+                {% for r in rows %} 
                     <tr>
-                        <td class="align-middle">{{ mathlete.user.name }}</td>
-                        <td class="align-middle">{{ mathlete.user.email }}</td>
+                        <td class="align-middle">{{ r.mathlete.user.name }}</td>
+                        {% for dc in r.divchoices %}
+                        <td class="align-middle">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="divchoice-{{ dc.id }}" value="1" id="{{ dc.id }}-1" {% if dc.division == 1 %}checked{% endif %} {% if team.contest.div_locked %}disabled{% else %}onclick="nodisable()"{% endif %}>
+                                <label class="form-check-label" for="{{ dc.id }}-1">
+                                    Division 1
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="divchoice-{{ dc.id }}" value="2" id="{{ dc.id }}-2" {% if dc.division == 2 %}checked{% endif %} {% if team.contest.div_locked %}disabled{% else %}onclick="nodisable()"{% endif %}>
+                                <label class="form-check-label" for="{{ dc.id }}-2">
+                                    Division 2
+                                </label>
+                            </div>
+                        </td>
+                        {% endfor %}
+
                         {% if can_edit %}
-                        <td>
+                        <td class="align-middle">
                             <form method="post">
                                 {% csrf_token %}
-                                <button type="submit" name="removeMember" value="{{ mathlete.id }}" class="btn btn-danger btn-sm">Remove</button>
+                                <button type="submit" name="removeMember" value="{{ mathlete.id }}" class="btn btn-danger">Remove</button>
                             </form>
                         </td>
                         {% endif %}
@@ -38,6 +58,19 @@
                 {% endfor %}
                 </tbody>
             </table>
+            {% if too_small %}
+            <p class="mb-2">Your team does not have all {{ team.contest.max_team_size }} members! If you would like to be merged with another team, check the box below.</p>
+            <div class="form-check mb-3">
+                <input class="form-check-input" type="checkbox" name="merge" id="merge" onclick="nodisable()" {% if team.wants_merge %}checked{% endif %}>
+              <label class="form-check-label" for="merge">
+                Merge with another team
+              </label>
+            </div>
+            {% endif %}
+                <button type="submit" id="savebutton" name="save" class="btn btn-primary" disabled>Save Changes</button>
+            </form>
+
+            <p>Divisions are a new system this year. You can read more info about it <a href="{% url 'math_info' %}#divisions">here</a>.</p>
         {% else %}
             <p>No team members yet</p>
         {% endif %}
@@ -46,10 +79,13 @@
         <p>You have too many members!</p>
         {% endif %}
 
+
         {% if team.is_finalized %}
-        <p class="mb-4">Your team has been finalized, and can no longer be edited. If there was a mistake, please contact <a href="mailto:contact@cmimc.info">contact@cmimc.info</a>.</p>
+        {% comment %}
+            <p class="mb-4">Your team has been finalized, and can no longer be edited. If there was a mistake, please contact <a href="mailto:contact@cmimc.info">contact@cmimc.info</a>.</p>
+        {% endcomment %}
         {% else %}
-            <p class="mb-4">All teams will be automatically finalized on <span class="font-weight-bold">{{ team.contest.reg_end_date.date }}</span>. You will no longer be able to invite new members or edit your team after that point.</p>
+            <p class="mb-4">All teams will be automatically finalized on <span class="font-weight-bold">{{ team.contest.reg_deadline|date:"l, F j" }}</span>. You will no longer be able to invite new members or edit your team after that point.</p>
 
             {% if can_edit %}
             <form method="post">
@@ -63,3 +99,11 @@
 
 {% endblock %}
 
+{% block js %}
+<script>
+function nodisable() {
+    var savebutton = document.getElementById("savebutton");
+    savebutton.removeAttribute("disabled");
+}
+</script>
+{% endblock %}

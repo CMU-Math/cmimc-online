@@ -1,23 +1,45 @@
 <div class="sidebar ml-5">
     <div class="mb-4">
-        Time remaining:<br/>
-        <span id="countdown"></span>
+        {% if exam.is_math %}
+            <p class="font-weight-bold mb-0">Time Remaining</p>
+            <p class="mb-4"><span id="submit-countdown"></span></p>
+
+            <p class="font-weight-bold mb-0">Submission Time Remaining</p>
+            <p><span id="countdown"></span></p>
+        {% else %}
+            <p class="font-weight-bold mb-0">Time Remaining</p>
+            <p><span id="countdown"></span></p>
+        {% endif %}
     </div>
 
     <ul class="nav-list">
+        {% if exam.is_optimization or exam.is_ai %}
         {% url 'all_problems' exam.id as all_problems %}
         <li><a href="{{ all_problems }}" class="no-color {% if request.get_full_path == all_problems %}active{% endif %}">All Problems</a></li>
 
-        {% for p in exam.problems.all %}
+        {% for p in exam.problem_list %}
             {% url 'view_problem' exam.id p.problem_number as p_link %}
             <li><a href="{{ p_link }}" class="no-color {% if request.get_full_path == p_link %}active{% endif %}">{{ p.problem_number }}. {{ p.name }}</a></li>
         {% endfor %}
 
         {% url 'leaderboard' exam.id as leaderboard %}
         <li><a href="{{ leaderboard }}" class="no-color {% if request.get_full_path == leaderboard %}active{% endif %}">Leaderboard</a></li>
+        {% endif %}
 
+        {% if exam.is_optimization %}
         {% url 'all_submissions' exam.id as all_submissions %}
         <li><a href="{{ all_submissions }}" class="no-color {% if request.get_full_path == all_submissions %}active{% endif %}">My Submissions</a></li>
+        {% endif %}
+
+        {% if exam.is_ai %}
+        {% comment %}
+        {% url 'miniround_scores' exam.id as mrs %}
+        <li><a href="{{ mrs }}" class="no-color {% if request.get_full_path == mrs %}active{% endif %}">Miniround Scores</a></li>
+        {% endcomment %}
+
+        {% url 'match_results' exam.id 1 as matches %}
+        <li><a href="{{ matches }}" class="no-color {% if request.get_full_path == matches %}active{% endif %}">Match Results</a></li>
+        {% endif %}
     </ul>
 </div>
 

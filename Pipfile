@@ -15,6 +15,10 @@ django-ckeditor = "*"
 django-markdownx = "*"
 django-ace = "*"
 django-background-tasks = "*"
+trueskill = "*"
+pylatexenc = "*"
+sympy = "*"
+antlr4-python3-runtime = "*"
 
 [requires]
 python_version = "3.7"
