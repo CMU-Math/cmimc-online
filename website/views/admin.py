@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.db.models import Count
 from website.models import Contest, User, Exam, Mathlete, Team, Problem
 from django.utils import timezone
 from website.tasks import init_all_tasks, check_finished_games_real, final_ai_grading
@@ -14,20 +15,23 @@ def admin_dashboard(request):
             c = Contest.objects.get(pk=request.POST['get_contest_info'])
             teams = Team.objects.filter(contest=c)
 
-            contest_emails = []
-            contest_small_teams = []
-            member_count = [0]*10
+            coach_emails = teams.exclude(coach__isnull=True).values_list('coach__email', flat=True).distinct()
+            mathlete_emails = Mathlete.objects.filter(teams__in=teams).values_list('user__email', flat=True).distinct()
 
-            
-            for team in teams:
-                member_count[min(team.mathletes.all().count(), 9)] += 1
-                for m in team.mathletes.all():
-                    contest_emails.append(m.user.email)
-                if team.coach:
-                    contest_emails.append(team.coach.email)
-                if team.mathletes.all().count() < 3:
-                    for m in team.mathletes.all():
-                        contest_small_teams.append(m.user.email)
+            team_sizes = teams.annotate(size=Count('mathletes'))
+            small_teams = team_sizes.filter(size__lt=c.max_team_size)
+
+            small_coach_emails = small_teams.exclude(coach__isnull=True).values_list('coach__email', flat=True).distinct()
+            small_mathlete_emails = Mathlete.objects.filter(teams__in=small_teams).values_list('user__email', flat=True).distinct()
+
+            contest_emails = list(coach_emails) + list(mathlete_emails)
+            contest_small_teams = list(small_coach_emails) + list(small_mathlete_emails)
+
+            member_count = [0]*(c.max_team_size + 2)
+            size_list = team_sizes.values_list('size', flat=True)
+            for sz in size_list:
+                member_count[min(sz, c.max_team_size + 1)] += 1
+
             context = {
                 'user': user,
                 'contest_emails': ', '.join(contest_emails),
