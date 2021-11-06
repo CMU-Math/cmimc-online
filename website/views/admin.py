@@ -4,6 +4,8 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Count
 from website.models import Contest, User, Exam, Mathlete, Team, Problem
 from django.utils import timezone
+from django.http import HttpResponse
+
 from website.tasks import init_all_tasks, check_finished_games_real, final_ai_grading
 from website.utils import update_contest, reset_contest, regrade_games, log, reset_exam, scores_from_csv, recompute_leaderboard, recheck_games, reset_problem, default_div1, exam_results_from_csv, calc_indiv_sweepstakes, calc_sweepstakes
 
@@ -40,7 +42,10 @@ def admin_dashboard(request):
             }    
 
 
-            return render(request, 'admin/admin_dashboard.html', context)
+            content = '\n'.join(contest_emails)
+            response = HttpResponse(content, content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename={0}emails.csv'.format(c.name)
+            return response
 
         if 'update_contest' in request.POST:
             contest = Contest.objects.get(pk=request.POST['update_contest'])
@@ -96,9 +101,12 @@ def admin_dashboard(request):
     all_exams = Exam.objects.all()
     all_contests = Contest.objects.all()
 
+    contest_ids = []
+    contest_names = []
     for contest in all_contests:
-        print(contest.id)
-        print(contest.name)
+        contest_ids.append(contest.id)
+        contest_names.append(contest.name)
+
 
     
     all_emails = []
@@ -130,6 +138,7 @@ def admin_dashboard(request):
         'contest_emails': ', '.join([]),
         'contest_small_teams': ', '.join([]),
         'member_count': [],
+        'contest_ids_names': zip(contest_ids,contest_names),
     }  
 
     return render(request, 'admin/admin_dashboard.html', context)

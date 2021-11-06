@@ -22,9 +22,35 @@
 <h3>Small Teams</h3>
 <p>{{ contest_small_teams }}</p>
 
+<table class="table table-striped">
+      <thead class="table-dark">
+      <tr>
+          <th scope="col">Contest Id</th>
+          <th scope="col">Contest Name</th>
+          <th scope="col">Get Emails</th>
+      </tr>
+      </thead>
+      {% for contest_id, contest_name in contest_ids_names %}
+          <tr>
+              <td style="word-wrap: break-word; max-width: 10rem">{{ contest_id }}</td>
+              <td>{{ contest_name}}</td>
+              <td>
+                  <form method="post" class="mb-4">
+                        {% csrf_token %}
+                        <div class="form-group">
+                          <input type="number" class="form-contest-id" name="get_contest_info" value="{{contest_id}}" hidden>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Emails</button>
+                  </form>
+              </td>
+          </tr>
+      {% endfor %}
+  </table>
 <h3>Update Contest</h3>
 <hr class="red_line mb-4"/>
 <p>(updates competitors scores, task scores, and miniround scores)</p>
+
+
 
 <form method="post" class="mb-4">
       {% csrf_token %}
