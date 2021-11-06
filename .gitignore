@@ -1,6 +1,7 @@
 problem_graders/
 media/private/
 staticfiles/
+mariadb/
 
 
 # ===== Default gitignore below =====
