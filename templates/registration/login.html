@@ -11,6 +11,7 @@
             <button type="submit" class="btn btn-primary btn-block">Log in</button>
         </form>
         <p class="text-center text-muted" style="font-size: 0.9rem">Don't have an account? <a href="{% url 'signup' %}{% if next %}?next={{ next }}{% endif %}">Register here</a>!</p>
+        <p class="text-center text-muted" style="font-size: 0.9rem">Forgot your password? <a href="{% url 'password_reset' %}{% if next %}?next={{ next }}{% endif %}">Reset password</a>!</p>
     </div>
 </div>
 {% endblock %}
