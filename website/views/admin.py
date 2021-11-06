@@ -6,7 +6,6 @@ from django.utils import timezone
 from website.tasks import init_all_tasks, check_finished_games_real, final_ai_grading
 from website.utils import update_contest, reset_contest, regrade_games, log, reset_exam, scores_from_csv, recompute_leaderboard, recheck_games, reset_problem, default_div1, exam_results_from_csv, calc_indiv_sweepstakes, calc_sweepstakes
 
-
 def admin_dashboard(request):
     user = request.user
     
@@ -35,6 +34,8 @@ def admin_dashboard(request):
                 'contest_small_teams': ', '.join(contest_small_teams),
                 'member_count': member_count,
             }    
+
+
             return render(request, 'admin/admin_dashboard.html', context)
 
         if 'update_contest' in request.POST:
