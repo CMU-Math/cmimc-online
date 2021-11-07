@@ -17,8 +17,9 @@ def admin_dashboard(request):
             c = Contest.objects.get(pk=request.POST['get_contest_info'])
             teams = Team.objects.filter(contest=c)
 
-            coach_emails = teams.exclude(coach__isnull=True).values_list('coach__email', flat=True).distinct()
-            mathlete_emails = Mathlete.objects.filter(teams__in=teams).values_list('user__email', flat=True).distinct()
+            # TODO: Access long_name
+            coach_emails = teams.exclude(coach__isnull=True).values_list('coach__email', 'coach__first_name', 'coach__last_name', 'coach__full_name').distinct()
+            mathlete_emails = Mathlete.objects.filter(teams__in=teams).values_list('user__email', 'user__first_name', 'user__last_name', 'user__full_name').distinct()
 
             team_sizes = teams.annotate(size=Count('mathletes'))
             small_teams = team_sizes.filter(size__lt=c.max_team_size)
@@ -26,7 +27,7 @@ def admin_dashboard(request):
             small_coach_emails = small_teams.exclude(coach__isnull=True).values_list('coach__email', flat=True).distinct()
             small_mathlete_emails = Mathlete.objects.filter(teams__in=small_teams).values_list('user__email', flat=True).distinct()
 
-            contest_emails = list(coach_emails) + list(mathlete_emails)
+            #contest_emails = list(coach_emails) + list(mathlete_emails)
             contest_small_teams = list(small_coach_emails) + list(small_mathlete_emails)
 
             member_count = [0]*(c.max_team_size + 2)
@@ -34,17 +35,12 @@ def admin_dashboard(request):
             for sz in size_list:
                 member_count[min(sz, c.max_team_size + 1)] += 1
 
-            context = {
-                'user': user,
-                'contest_emails': ', '.join(contest_emails),
-                'contest_small_teams': ', '.join(contest_small_teams),
-                'member_count': member_count,
-            }    
-
-
-            content = '\n'.join(contest_emails)
+            content = "email,first name,last name,full name,type\n"
+            content += '\n'.join([f'{_[0]},{_[1]},{_[2]},{_[3]},coach' for _ in coach_emails])
+            content += '\n'
+            content += '\n'.join([f'{_[0]},{_[1]},{_[2]},{_[3]},mathlete' for _ in mathlete_emails])
             response = HttpResponse(content, content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename={0}emails.csv'.format(c.name)
+            response['Content-Disposition'] = 'attachment; filename={0}_emails.csv'.format(c.name)
             return response
 
         if 'update_contest' in request.POST:
