@@ -7,7 +7,10 @@ from django.utils import timezone
 
 class ExamPair(models.Model):
     contest = models.ForeignKey(Contest, related_name='exampairs', on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'{self.name}, {self.contest}'
 
 
 class DivChoice(models.Model):

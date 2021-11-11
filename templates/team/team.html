@@ -3,18 +3,21 @@
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-10">
-        <h2 class="mb-4">Team: {{ team.team_name }}</h2>
+        <p class="display-4">Team: {{ team.team_name }}</p>
+		{% if team.coach %}
+		<h4 class="font-weight-bold text-secondary" style="opacity: 0.8">Coach: {{ team.coach }}</h4>
+		{% endif %}
+		<hr class="red_line mb-4"/>
         {% if not team.is_finalized %}
         <p>To invite new team members, send them this link: <a href="{{ invite_link }}">{{ invite_link }}</a>. They will need to log in with their own account.</p>
-        {% endif %}
-        {% if team.coach %}
-        <h2 class="mb-4">Coach: {{ team.coach }}</h2>
+		<p class="mb-4">You can make changes to your team until <span class="font-weight-bold">{{ team.contest.reg_deadline|date:"l, F j" }}</span>.</p>
+
         {% endif %}
 
         <h2 class="mb-4">Members <span {% if too_large %}class="text-danger"{% endif %}>({{ team.mathletes.all|length }}/{{ team.contest.max_team_size }})</span></h2>
+		<form method="post" class="mb-3">
+		{% csrf_token %}
         {% if team.mathletes.all %}
-            <form method="post" class="mb-3">
-            {% csrf_token %}
             <table class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
@@ -26,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                {% for r in rows %} 
+                {% for r in rows %}
                     <tr>
                         <td class="align-middle">{{ r.mathlete.user.name }}</td>
                         {% for dc in r.divchoices %}
@@ -47,53 +50,40 @@
                         {% endfor %}
 
                         {% if can_edit %}
-                        <td class="align-middle">
-                            <form method="post">
-                                {% csrf_token %}
-                                <button type="submit" name="removeMember" value="{{ mathlete.id }}" class="btn btn-danger">Remove</button>
-                            </form>
+                        <td class="align-middle pr-3">
+							<button type="submit" name="removeMember" value="{{ r.mathlete.id }}" class="btn btn-danger float-right">Remove</button>
                         </td>
                         {% endif %}
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
-            {% if too_small %}
-            <p class="mb-2">Your team does not have all {{ team.contest.max_team_size }} members! If you would like to be merged with another team, check the box below.</p>
-            <div class="form-check mb-3">
-                <input class="form-check-input" type="checkbox" name="merge" id="merge" onclick="nodisable()" {% if team.wants_merge %}checked{% endif %}>
-              <label class="form-check-label" for="merge">
-                Merge with another team
-              </label>
-            </div>
-            {% endif %}
-                <button type="submit" id="savebutton" name="save" class="btn btn-primary" disabled>Save Changes</button>
-            </form>
-
-            <p>Divisions are a new system this year. You can read more info about it <a href="{% url 'math_info' %}#divisions">here</a>.</p>
         {% else %}
-            <p>No team members yet</p>
+            <p class="mb-4">No team members yet! Invite them with the link above.</p>
         {% endif %}
 
-        {% if too_large %}
-        <p>You have too many members!</p>
-        {% endif %}
+		{% if too_small %}
+		<p class="mb-2">Need help finding {{ team.contest.max_team_size }} members? We can merge you with another small team.</p>
+		<div class="form-check mb-3">
+			<input class="form-check-input" type="checkbox" name="merge" id="merge" onclick="nodisable()" {% if team.wants_merge %}checked{% endif %}>
+		  <label class="form-check-label" for="merge">
+			Merge with another team
+		  </label>
+		</div>
+		{% elif too_large %}
+		<p>You have too many members!</p>
+		{% endif %}
 
+		<div class="d-flex justify-content-between">
+		<button type="submit" id="savebutton" name="save" class="btn btn-primary" disabled>Save Changes</button>
 
-        {% if team.is_finalized %}
-        {% comment %}
-            <p class="mb-4">Your team has been finalized, and can no longer be edited. If there was a mistake, please contact <a href="mailto:contact@cmimc.info">contact@cmimc.info</a>.</p>
-        {% endcomment %}
-        {% else %}
-            <p class="mb-4">All teams will be automatically finalized on <span class="font-weight-bold">{{ team.contest.reg_deadline|date:"l, F j" }}</span>. You will no longer be able to invite new members or edit your team after that point.</p>
-
-            {% if can_edit %}
-            <form method="post">
-                {% csrf_token %}
-                    <button type="submit" name="deleteTeam" class="btn btn-danger mr-3">Delete Team</button>
-            </form>
-            {% endif %}
-        {% endif %}
+		{% if not team.is_finalized %}
+			{% if can_edit %}
+				<button type="submit" name="deleteTeam" class="btn btn-danger mr-3">Delete Team</button>
+			{% endif %}
+		{% endif %}
+		</div>
+	</form>
   </div>
 </div>
 

@@ -86,6 +86,7 @@ def team_info(request, team_id):
             else:
                 team.wants_merge = False
                 team.save()
+            return redirect('team_info', team_id=team_id)
 
         elif 'deleteTeam' in request.POST and can_edit:
             team.delete() # cascade deletes for comps, scores, taskscores, MRscores
@@ -96,7 +97,8 @@ def team_info(request, team_id):
             team.mathletes.remove(ml)
             if team.mathletes.count() == 0 and team.coach == None:
                 team.delete()
-            update_competitors(team)
+            else:
+                update_competitors(team)
             if user == ml.user: # removed yourself from the team
                 return redirect('contest_list')
             return redirect('team_info', team_id=team_id)

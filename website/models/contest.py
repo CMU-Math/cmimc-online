@@ -11,8 +11,7 @@ class Contest(models.Model):
     max_team_size = models.IntegerField() # set min and max team size to 1
     reg_deadline = models.DateField()
     is_private = models.BooleanField(default=False)
-    locked = models.BooleanField(default=False) # either lock manually, or automatic lock
-                                                # 24 hours after the reg deadline
+    locked = models.BooleanField(default=False) # manually lock registration 24 hours after the reg deadline
     show_final_results = models.BooleanField(default=False)
     div_locked = models.BooleanField(default=False)
     show_sweepstakes = models.BooleanField(default=False, help_text="make final results public")
@@ -31,6 +30,8 @@ class Contest(models.Model):
     # Assumes there is at least one exam in each contest
     @cached_property
     def end_time(self):
+        if not self.exams.exists():
+            return self.now + timedelta(days=10001+self.id)
         temp = self.now - timedelta(days=100000) # 300 years in the past
         for e in self.exams.all():
             if e.end_time > temp:
@@ -40,6 +41,8 @@ class Contest(models.Model):
     # Assumes there is at least one exam in each contest
     @cached_property
     def start_time(self):
+        if not self.exams.exists():
+            return self.now + timedelta(days=10000+self.id)
         temp = self.now + timedelta(days=100000) # 300 years in the future
         for e in self.exams.all():
             if e.start_time < temp:

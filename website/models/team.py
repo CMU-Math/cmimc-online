@@ -51,6 +51,7 @@ class Team(models.Model):
         return ', '.join([m.user.email for m in self.mathletes.all()])
 
 
+    # TODO: add feature to manually extend registration deadline for certain teams
     @property
     def is_finalized(self):
         return self.contest.locked
