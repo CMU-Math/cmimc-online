@@ -24,19 +24,17 @@ urlpatterns = [
     path('programming/updates', views.updates, name='updates'),
 
     path('admin', admin.site.urls),
-    
+
     path('signup', views.signup, name='signup'),
-    path('login', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
-    path('logout', auth_views.LogoutView.as_view(), name='logout'),
-    path('change-password', auth_views.PasswordChangeView.as_view(template_name='change_password.html', success_url='done'), name='change_password'),
-    path('change-password/done', auth_views.PasswordChangeDoneView.as_view(template_name='change_password_done.html'), name='change_password_done'),
-#    path('reset-password/', auth_views.PasswordResetView.as_view(template_name='reset_password.html'), name='reset_password'),
+    path('accounts/', include('django.contrib.auth.urls')),
+
+    path('terms_and_conditions', views.terms_and_conditions, name='terms_and_conditions'),
 
     path('contest/<int:contest_id>/newteam', views.new_team, name='new_team'),
     path('team/<int:team_id>', views.team_info, name='team_info'),
     path('team/<int:team_id>/join/<str:invite_code>', views.join_team, name='join_team'),
     path('contest/<int:contest_id>/myteams', views.coach_teams, name='coach_teams'),
-    
+
     path('exam/<int:exam_id>', views.all_problems, name='all_problems'),
     path('exam/<int:exam_id>/leaderboard', views.leaderboard, name='leaderboard'),
     path('contest/<int:contest_id>/leaderboard', views.contest_leaderboard, name='contest_leaderboard'),
@@ -46,7 +44,7 @@ urlpatterns = [
     path('exam/<int:exam_id>/problem/<int:problem_number>', views.view_problem, name='view_problem'),
     path('exam/<int:exam_id>/problem/<int:problem_number>/submit', views.submit, name='submit'),
     path('exam/<int:exam_id>/problem/<int:problem_number>/submit/task/<int:task_number>', views.submit, name='submit'),
-    
+
     path('exam/<int:exam_id>/submissions', views.all_submissions, name='all_submissions'),
     path('exam/<int:exam_id>/admin-all-submissions', views.admin_all_submissions, name='admin_all_submissions'),
     path('submission/<int:submission_id>', views.view_submission, name='view_submission'),
@@ -62,5 +60,3 @@ urlpatterns = [
     path('download/mailinglist/<int:contest_id>', views.mailinglist, name='mailinglist'),
     path('download/subs/<int:exam_id>', views.download_subs, name='download_subs'),
 ]
-
-

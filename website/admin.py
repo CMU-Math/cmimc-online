@@ -9,10 +9,10 @@ class UserAdmin(DefaultUserAdmin):
     add_form = UserCreationForm
     form = UserChangeForm
     model = User
-    list_display = ('email', 'name', 'role', 'is_staff', 'is_tester')
+    list_display = ('email', 'name', 'role', 'is_staff', 'is_tester', 'tnc_signature')
     list_filter = ('role', 'is_staff', 'is_tester')
     fieldsets = (
-        (None, {'fields': ('first_name', 'last_name', 'email', 'full_name', 'alias', 'password', 'role')}),
+        (None, {'fields': ('first_name', 'last_name', 'email', 'full_name', 'alias', 'password', 'role', 'tnc_signature')}),
         ('Permissions', {'fields': ('is_superuser', 'is_staff', 'is_tester', 'is_active')}),
     )
     add_fieldsets = (

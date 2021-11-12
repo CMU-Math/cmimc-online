@@ -182,6 +182,9 @@ CKEDITOR_CONFIGS = {
     },
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
+EMAIL_FILE_PATH = '/tmp/app-messages'
+
 # 1-minute max run time for background tasks
 # mainly for autograding
 # doesn't seem to work though

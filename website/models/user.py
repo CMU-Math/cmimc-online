@@ -11,6 +11,7 @@ class User(AbstractUser):
     full_name = models.CharField(max_length=100, blank=True, help_text=_('full name'))
     alias = models.CharField(max_length=100, blank=True, help_text=_('preferred name'))
     is_tester = models.BooleanField(default=False, help_text=_('whether they can view private contests'))
+    tnc_signature = models.CharField(blank=True, max_length=100, help_text=_('signature from signing conditions'))
 
     MATHLETE = 'ML'
     STAFF = 'ST'
@@ -185,3 +186,7 @@ class User(AbstractUser):
                 return Competitor.objects.filter(exam=exam, team__in=teams, mathlete=self.mathlete)
         if self.is_coach:
             return Competitor.objects.filter(exam=exam, team__in=teams)
+
+    @property
+    def accepted_tnc(self):
+        return self.tnc_signature != ""
