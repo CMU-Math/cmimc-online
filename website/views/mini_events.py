@@ -27,7 +27,7 @@ math_events = [
     {
         'title': 'Virtual Escape Room', 
         'subtitle': 'Friday February 26th, 9-10pm --- Organized by Rabble Rooms',
-        'description': 'You wake up in a strange, metal bed. Your feet hurt as if you\'ve been walking for ages. A distant wail cuts through the darkness and a strange voice whispers to you from the hall: "Follow.” Welcome to Angel\'s Asylum. You will compete in teams of up to six players to escape your doom in this <a href="https://www.rabblerooms.com/" target="_blank" rel="noopener noreferrer">Rabble Rooms</a> puzzle-solving experience.',
+        'description': 'You wake up in a strange, metal bed. Your feet hurt as if you\'ve been walking for ages. A distant wail cuts through the darkness and a strange voice whispers to you from the hall: "Follow.” Welcome to Angel\'s Asylum. You will compete in teams of up to six players to escape your doom in this Rabble Rooms puzzle-solving experience.',
     },
     {
         'title': 'IMC Info Session and Market Making Game', 
