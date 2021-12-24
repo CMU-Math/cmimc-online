@@ -63,9 +63,6 @@
       <li class="nav-item">
           <a class="nav-link no-color {% if path == url_faq %}active{% endif %}" href="{% url 'faq' %}">FAQ</a>
       </li>
-      <li class="nav-item">
-          <a class="nav-link no-color {% if path == terms_and_conditions %}active{% endif %}" href="{% url 'terms_and_conditions' %}">Terms</a>
-      </li>
 		</ul>
 
       {% if user.is_authenticated %}
