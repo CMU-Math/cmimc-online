@@ -24,7 +24,7 @@ class DivChoice(models.Model):
 
 class Exam(models.Model):
     contest = models.ForeignKey(Contest, related_name='exams', on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     submit_start_time = models.DateTimeField(null=True, blank=True)
@@ -49,6 +49,9 @@ class Exam(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        unique_together = ['contest', 'name']
 
     @cached_property
     def is_optimization(self):
