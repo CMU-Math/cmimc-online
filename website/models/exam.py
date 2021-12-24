@@ -178,11 +178,13 @@ class Exam(models.Model):
 
     @property
     def num_minirounds(self):
+        return 1 # TODO: fix!
         return (self.end_time - self.miniround_start) // self.miniround_time + 1
 
     # the time that the ith miniround ends, and gets graded
     # i is 1-indexed
     def miniround_end_time(self, i):
+        return self.end_time # TODO: fix
         return self.miniround_start + (i-1) * self.miniround_time
 
     @cached_property

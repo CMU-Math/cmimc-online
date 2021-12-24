@@ -23,6 +23,9 @@ def new_team(request, contest_id):
             return render(request, 'team/new_team.html')
         else:
             team = Team.create(contest=contest, team_name=request.POST['teamName'], coach=None)
+            if user.tnc_signature == "":
+                user.tnc_signature = request.POST['signature']
+                user.save()
             team.save()
             team.mathletes.add(mathlete)
             update_competitors(team)
@@ -53,9 +56,15 @@ def join_team(request, team_id, invite_code):
         elif team.is_finalized:
             return redirect('contest_list')
         else:
-            team.mathletes.add(mathlete)
-            update_competitors(team)
-            return redirect('team_info', team_id=team.id)
+            if request.method == 'GET' and user.tnc_signature == "":
+                return render(request, 'team/join_team.html')
+            else:
+                if request.method == 'POST':
+                    user.tnc_signature = request.POST['signature']
+                    user.save()
+                team.mathletes.add(mathlete)
+                update_competitors(team)
+                return redirect('team_info', team_id=team.id)
     else:
         # temporary fix so that coaches don't see "Server Error 500"
         return redirect('team_info', team_id=team.id)

@@ -6,27 +6,16 @@
 <p class="display-4">Terms and Conditions</p>
 <hr class="red_line"/>
 
-<div class="row">
-    <p>
-        TODO: Insert terms and conditions here.
-    </p>
+<h4 class="font-italic">Carnegie Mellon University</h4>
+<h4>Carnegie Mellon Informatics and Mathematics Competition</h4>
+<h3>Understanding and Release of Liability</h3>
+<p><span class="font-weight-bold">Remote Program.</span> I understand that the Carnegie Mellon University (“CMU”) Carnegie Mellon Informatics and Mathematics Competition (the “Program”) will be an online-only remote program and that I need a computer with Internet access to participate in the Program.</p>
+<p><span class="font-weight-bold">Photo/Video Permission.</span> If I supply CMU with photos, videos or other materials containing my image and/or voice, I grant CMU permission to use such materials for archival, educational and promotional purposes.</p>
+<p><span class="font-weight-bold">Audio/Video Recording.</span> CMU will or may create audio/video recordings of online Program sessions and other activities.  I understand that these recordings may include audio/video recordings of me as a participant in the Program.  I hereby consent to all such audio/video recording.  I grant CMU permission to use such audio/video recordings for archival, educational and promotional purposes.</p>
+<p><span class="font-weight-bold">Release of Liability.</span> In consideration of the opportunity to participate in the Program, I, on behalf of myself and those acting on my behalf, irrevocably and unconditionally release, waive, and promise not to sue CMU and those acting on its behalf, from/for any and all liabilities, losses, injuries, damages, claims, demands, actions and/or causes of action arising from or connected with my participation in the Program.</p>
+<p><span class="font-weight-bold">Medical Information.</span> I have identified and explained all of my medical conditions in the section below. I have also provided correct information for my parent/guardian and an additional emergency contact.</p>
+<p><span class="font-weight-bold">Privacy.</span> {{ "I, or my parent/guardian if I am under 18, allow the Program to collect and distribute my contact information, including my name and email address, to other parties, including but not limited to Program sponsors. I, or my parent/guardian if I am under 18, also understand and approve the Program’s collection and sharing of any of my personally identifiable information with the Slack platform, which Program participants will be using. My parent/guardian and I have received, fully read, and understand completely CMU’s Privacy Policy, linked at https://www.cmu.edu/policies/student-and-student-life/privacy-rights-students.html, and Slack’s Privacy Policy, linked at https://slack.com/trust/privacy/privacy-policy. I, or my parent/guardian if I am under 18, authorize the Program to email feedback@slack.com on my behalf to state that CMU is not to be used as a reference. Also, I, or my parent/guardian if I am under 18, authorize the Program to email university-contracts@andrew.cmu.edu on my behalf affirming that I will not use any FERPA data on Slack and that I have read CMU’s guidance."|urlize }}</p>
+<p><span class="font-weight-bold">Miscellaneous.</span> The laws of Pennsylvania shall apply to this document. If any of its provisions are declared illegal, unenforceable, or ineffective, they shall be deemed severable, and all other provisions shall remain valid and binding. I am signing this release with the intent to be legally bound by it. I am an adult (18 years of age or older), competent to sign this document (or I am under 18 and my parent or guardian is co-signing below). I am signing this document voluntarily. I have read this document and I understand its contents.</p>
+<p><span class="font-weight-bold">Parent / Guardian.</span> I am the parent/guardian of the above-named minor child. I have read the foregoing document and I agree to all its terms and conditions on behalf of my minor child. In consideration of the opportunity for my child to participate in the Program, I, on behalf of myself, my child, and those acting on our behalf, irrevocably and unconditionally release, waive, and promise not to sue CMU and those acting on its behalf, from/for any and all liabilities, losses, injuries, damages, claims, demands, action.</p>
 
-</div>
-{% if user.is_authenticated %}
-{% if user.accepted_tnc %}
-<div class="row"><p><b>You have already accepted and signed these terms.</b></p></div>
-{% endif %}
-<div class="row">
-    <p>
-        TODO: Insert signature instructions here.
-    </p>
-</div>
-<div class="row">
-    <form method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-</div>
-{% endif %}
 {% endblock %}
