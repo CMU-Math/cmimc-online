@@ -23,10 +23,10 @@ def admin_dashboard(request):
 
             for team in teams:
                 if team.coach:
-                    content += f'{team.id},{team.coach.id},{team.team_name},{team.coach.long_name()},{team.coach.email},Coach\n'
+                    content += f'{team.id},{team.coach.id},{team.team_name},{team.coach.long_name},{team.coach.email},Coach\n'
             for team in teams:
                 for m in team.mathletes.all():
-                    content += f'{team.id},{m.id},{team.team_name},{m.long_name()},{m.email},Contestant\n'
+                    content += f'{team.id},{m.user.id},{team.team_name},{m.user.long_name},{m.user.email},Contestant\n'
 
             '''
             coach_emails = teams.exclude(coach__isnull=True).values_list('coach__email', 'coach__full_name').distinct()
@@ -40,12 +40,12 @@ def admin_dashboard(request):
 
             #contest_emails = list(coach_emails) + list(mathlete_emails)
             contest_small_teams = list(small_coach_emails) + list(small_mathlete_emails)
-            '''
 
             member_count = [0]*(c.max_team_size + 2)
             size_list = team_sizes.values_list('size', flat=True)
             for sz in size_list:
                 member_count[min(sz, c.max_team_size + 1)] += 1
+            '''
 
             response = HttpResponse(content, content_type='text/csv')
             response['Content-Disposition'] = 'attachment; filename={0}_emails.csv'.format(c.name)
@@ -115,7 +115,9 @@ def admin_dashboard(request):
     member_count = [0]*10
     teams = Team.objects.filter(contest=11) # id 11 = Math Contest 2022
     for team in teams:
-        sz = team.mathletes.all().count()
+        sz = team.mathletes.count()
+        if sz > 6:
+            log(bad_team=team.team_name)
         member_count[min(sz, 9)] += 1
 
     context = {
