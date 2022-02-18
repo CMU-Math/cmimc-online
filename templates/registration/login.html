@@ -10,7 +10,8 @@
             {{ form|crispy }}
             <button type="submit" class="btn btn-primary btn-block">Log in</button>
         </form>
-        <p class="text-center text-muted" style="font-size: 0.9rem">Don't have an account? <a href="{% url 'signup' %}{% if next %}?next={{ next }}{% endif %}">Register here</a>!</p>
+		<p class="text-center text-muted" style="font-size: 0.9rem; line-height: 1.8">Don't have an account? <a href="{% url 'signup' %}{% if next %}?next={{ next }}{% endif %}">Register here</a>!</br>
+		<a href="{% url 'password_reset' %}{% if next %}?next={{ next }}{% endif %}">Forgot password</a></p>
     </div>
 </div>
 {% endblock %}

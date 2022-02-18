@@ -1,18 +1,30 @@
 math_events = [
     {
-        'title': 'Function Guessing Game', 
-        'subtitle': 'Friday February 26th, 6-7pm --- Organized by Fei Peng',
-        'description': 'If $f(0) = 2$, $f(5) = 3$ and $f(2021) = 45$, what is $f(x)$? We\'ve prepared some secret functions such as $f(x) = \\frac{x^2}{x}$ and $f(x) = \\sqrt{\\left| \\lfloor \\tan(x) \\rfloor \\right|}$, and you can deduce these expressions by evaluating, plotting, and manipulating them. Collaborate with your teammates to climb up the live leaderboard! Try the <a href="https://function.academy/demo31451" target="_blank" rel="noopener noreferrer">live demo</a> to see what it\'s like.',
+        'title': 'Integration Bee', 
+        'subtitle': 'Friday February 25th, 7:30-8:30pm --- Organized by Vlad Oleksenko',
+        'description': 'You\'ll be given a number of integration problems, with the ability to submit their answers and see a live leaderboard of everyone\'s scores. The test will last ~40 minutes, and the top scorers will be recognized!',
+    },
+    {
+        'title': 'Tetris Tournament', 
+        'subtitle': 'Friday February 25th, 8:30-9:30pm --- Organized by Daniel Zeng',
+        'description': 'Compete with others in a battle royale format where everyone joins a room and plays Tetris. We will have 5 rounds, then the top 4 will compete in a 1v1 tournament for prizes! You\'ll need to create a Tetr.io account to participate, see instructions <a href="https://docs.google.com/document/d/1wure6UnXadqR7vzDj3faEGqyKU44FLwgXOBOIc69p88/edit?usp=sharing" target="_blank" rel="noopener noreferrer">here</a> (only takes 1 minute).'
     },
     {
         'title': 'Trivia Tournament', 
-        'subtitle': 'Friday February 26th, 7-8pm --- Organized by Laura Yao',
+        'subtitle': 'Friday February 25th, 7:30-8:30pm --- Organized by Laura Yao',
         'description': 'Answer open-ended trivia questions with your team of 4-6 people, formed beforehand or at the event. There will be two rounds: a picture-based round, and an identification round based on a short description. Prizes will be awarded to the top team, so be sure to register and indicate any team member preferences above!',
     },
     {
-        'title': 'Integration Bee', 
-        'subtitle': 'Friday February 26th, 7-8pm --- Organized by Vlad Oleksenko',
-        'description': 'You\'ll be given a number of integration problems, with the ability to submit their answers and see a live leaderboard of everyone\'s scores. The test will last ~40 minutes, and the top scorers will be recognized!',
+        'title': 'Guest Speaker: Clive Newstead', 
+        'subtitle': 'Saturday February 26th, 7:15-8:15pm',
+        'description': 'In this talk, <a href="https://www.math.cmu.edu/~cnewstea/" target="_blank" rel="noopener noreferrer">Clive</a> will discuss the path from being a high school student to becoming a math professor, highlighting some of his own experiences along the way and some of the challenges he has faced. There will be lots of time for Q&A, so please come with questions to ask!',
+    },
+]
+'''
+    {
+        'title': 'Function Guessing Game', 
+        'subtitle': 'Friday February 26th, 6-7pm --- Organized by Fei Peng',
+        'description': 'If $f(0) = 2$, $f(5) = 3$ and $f(2021) = 45$, what is $f(x)$? We\'ve prepared some secret functions such as $f(x) = \\frac{x^2}{x}$ and $f(x) = \\sqrt{\\left| \\lfloor \\tan(x) \\rfloor \\right|}$, and you can deduce these expressions by evaluating, plotting, and manipulating them. Collaborate with your teammates to climb up the live leaderboard! Try the <a href="https://function.academy/demo31451" target="_blank" rel="noopener noreferrer">live demo</a> to see what it\'s like.',
     },
     {
         'title': 'Bullet Chess', 
@@ -20,14 +32,9 @@ math_events = [
         'description': 'Play fast-paced chess games (2 minute, 1 second increment) against the other CMIMC competitors! This will be a live arena tournament, where you get matched nonstop against someone with a similar rating as soon as your last game ends. Make sure to create a <a href="https://www.chess.com/">chess.com</a> account and join the <a href="https://www.chess.com/club/cmimc-math-2021" target="_blank" rel="noopener noreferrer">CMIMC club</a> in order to participate!',
     },
     {
-        'title': 'Tetris Tournament', 
-        'subtitle': 'Friday February 26th, 8-9pm --- Organized by Daniel Zeng',
-        'description': 'Compete with others in a battle royale format where everyone joins a room and plays Tetris. We will have 5 rounds, then the top 4 will compete in a 1v1 tournament for prizes! You\'ll need to create a Tetr.io account to participate, see instructions <a href="https://docs.google.com/document/d/1wure6UnXadqR7vzDj3faEGqyKU44FLwgXOBOIc69p88/edit?usp=sharing" target="_blank" rel="noopener noreferrer">here</a> (only takes 1 minute).'
-    },
-    {
         'title': 'Virtual Escape Room', 
         'subtitle': 'Friday February 26th, 9-10pm --- Organized by Rabble Rooms',
-        'description': 'You wake up in a strange, metal bed. Your feet hurt as if you\'ve been walking for ages. A distant wail cuts through the darkness and a strange voice whispers to you from the hall: "Follow.” Welcome to Angel\'s Asylum. You will compete in teams of up to six players to escape your doom in this <a href="https://www.rabblerooms.com/" target="_blank" rel="noopener noreferrer">Rabble Rooms</a> puzzle-solving experience.',
+        'description': 'You wake up in a strange, metal bed. Your feet hurt as if you\'ve been walking for ages. A distant wail cuts through the darkness and a strange voice whispers to you from the hall: "Follow.” Welcome to Angel\'s Asylum. You will compete in teams of up to six players to escape your doom in this Rabble Rooms puzzle-solving experience.',
     },
     {
         'title': 'IMC Info Session and Market Making Game', 
@@ -49,4 +56,4 @@ math_events = [
         'subtitle': 'Saturday February 27th, 7:15-8:15pm --- Organized by C.J. Argue',
         'description': 'We all make decisions that seem good at the time, but later on we wish we had done something else. If we don\'t know the future, how can we make decisions that will look good even in hindsight? This talk will discuss online algorithms, the mathematics of making decisions in the face of an uncertain future.</p><p>C.J. is a 5th year PhD student in Mathematics at Carnegie Mellon University specializing in Algorithms, Combinatorics, and Optimization. His research interests are online algorithms and other information theoretic questions in algorithms, convex geometry, convex optimization, and linear algebra. C.J. has also taught courses in Discrete Mathematics, Differential and Integral calculus, 3D Calculus and more. Additionally, in his free time, C.J. enjoys coaching the Western Pennsylvania ARML Team. You can read more about him on his website at <a href="https://www.math.cmu.edu/~cargue/" target="_blank" rel="noopener noreferrer">https://www.math.cmu.edu/~cargue</a>.',
     },
-]
+'''

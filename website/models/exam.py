@@ -7,7 +7,10 @@ from django.utils import timezone
 
 class ExamPair(models.Model):
     contest = models.ForeignKey(Contest, related_name='exampairs', on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'{self.name}, {self.contest}'
 
 
 class DivChoice(models.Model):
@@ -21,7 +24,7 @@ class DivChoice(models.Model):
 
 class Exam(models.Model):
     contest = models.ForeignKey(Contest, related_name='exams', on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     submit_start_time = models.DateTimeField(null=True, blank=True)
@@ -46,6 +49,9 @@ class Exam(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        unique_together = ['contest', 'name']
 
     @cached_property
     def is_optimization(self):
@@ -175,11 +181,13 @@ class Exam(models.Model):
 
     @property
     def num_minirounds(self):
+        return 1 # TODO: fix!
         return (self.end_time - self.miniround_start) // self.miniround_time + 1
 
     # the time that the ith miniround ends, and gets graded
     # i is 1-indexed
     def miniround_end_time(self, i):
+        return self.end_time # TODO: fix
         return self.miniround_start + (i-1) * self.miniround_time
 
     @cached_property

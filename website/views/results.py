@@ -34,7 +34,7 @@ def exam_results(request, exam_id):
 
     cutoff_idx = min(comps.count()-1, 49)
     cutoff = comps.only('total_score')[cutoff_idx].total_score
-    log(exam=str(exam), cutoff=cutoff)
+    #log(exam=str(exam), cutoff=cutoff)
     all_comps = comps.filter(total_score__gte=cutoff)
     all_rows = []
     for c in all_comps:

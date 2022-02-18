@@ -1,6 +1,7 @@
 from django.contrib.auth.forms import UserCreationForm as DefaultUserCreationForm
 from django.contrib.auth.forms import UserChangeForm as DefaultUserChangeForm
 from website.models import User
+import datetime
 from django import forms
 from django_ace import AceWidget
 
@@ -11,7 +12,7 @@ class UserCreationForm(DefaultUserCreationForm):
         (User.COACH, 'Coach'),
     ]
     role = forms.ChoiceField(widget=forms.RadioSelect, choices=CHOICES, label=' ')
-    
+
     class Meta(DefaultUserCreationForm):
         model = User
         fields = ('first_name', 'last_name', 'email', 'role')
@@ -58,3 +59,9 @@ class ViewOnlyEditorForm(forms.Form):
         label='Note: Read-Only!',
         required=False,
     )
+
+class TncForm(forms.Form):
+    signature = forms.CharField(min_length = 2, max_length = 100)
+    guardian_signature = forms.CharField(required = False, min_length = 2, max_length = 100)
+    guardian_email = forms.EmailField(required = False)
+    date = forms.DateField(initial=datetime.date.today)
