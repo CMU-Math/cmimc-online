@@ -272,11 +272,7 @@ def scores_from_csv(text):
 
 def recompute_leaderboard(exam):
     log(msg='start recomputing')
-    for p in exam.problems.all():list
-	Team Balloons	Vismay Ravikumar	-	CMIMC Math 2022	vismayravikumar@gmail.com
-	South Fork Bulldogs	pete Lin	-	CMIMC Math 2022	peterrlin503123456@yahoo.com
-	Mathlete	Arav Ahluwalia	-	CMIMC Math 2022	aravahluwalia6@gmail.com
-	Apple Pi	Rohan Mallick	-	CMIMC Math 2022	rohannayakmallick@gmail.com
+    for p in exam.problems.all():
         g = p.grader
         for t in p.tasks.all():
             t.best_raw_points = None        # reset
