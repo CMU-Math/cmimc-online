@@ -8,8 +8,8 @@ class User(AbstractUser):
     email = models.EmailField(_('email address'), unique=True)
     first_name = models.CharField(_('first name'), blank=True, max_length=150)
     last_name = models.CharField(_('last name'), blank=True, max_length=150)
-    full_name = models.CharField(max_length=100, blank=True, help_text=_('full name'))
-    alias = models.CharField(max_length=100, blank=True, help_text=_('preferred name'))
+    full_name = models.CharField(_('full name'), blank=True, max_length=300, help_text=_('full name'))
+    alias = models.CharField(_('alias'), blank=True, max_length=100, help_text=_('preferred name'))
     is_tester = models.BooleanField(default=False, help_text=_('whether they can view private contests'))
     tnc_signature = models.CharField(blank=True, max_length=100, help_text=_('signature from signing conditions'))
 
@@ -24,7 +24,7 @@ class User(AbstractUser):
     role = models.CharField(max_length=2, choices=role_CHOICES, default=MATHLETE)
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = ['full_name']
 
     objects = UserManager()
 

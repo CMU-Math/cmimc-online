@@ -15,14 +15,15 @@ class UserCreationForm(DefaultUserCreationForm):
 
     class Meta(DefaultUserCreationForm):
         model = User
-        fields = ('first_name', 'last_name', 'email', 'role')
+        fields = ('full_name', 'email', 'role')
 
     def __init__(self, *args, **kwargs):
         super(UserCreationForm, self).__init__(*args, **kwargs)
         self.fields['password1'].help_text = '<ul>' \
                 '<li>8 characters minimum</li></ul>'
+        self.fields['full_name'].help_text = None
         self.fields['password2'].help_text = None
-        self.fields['first_name'].widget.attrs['autofocus'] = ''
+        self.fields['full_name'].widget.attrs['autofocus'] = ''
 
 
 class UserChangeForm(DefaultUserChangeForm):

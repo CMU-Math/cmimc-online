@@ -4,20 +4,21 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Count
 from website.models import Contest, User, Exam, Mathlete, Team, Problem
 from django.utils import timezone
+from django.http import HttpResponse
+
 from website.tasks import init_all_tasks, check_finished_games_real, final_ai_grading
 from website.utils import update_contest, reset_contest, regrade_games, log, reset_exam, scores_from_csv, recompute_leaderboard, recheck_games, reset_problem, default_div1, exam_results_from_csv, calc_indiv_sweepstakes, calc_sweepstakes
 
-
 def admin_dashboard(request):
     user = request.user
-    
+
     if request.method == 'POST':
         if 'get_contest_info' in request.POST:
             c = Contest.objects.get(pk=request.POST['get_contest_info'])
             teams = Team.objects.filter(contest=c)
 
-            coach_emails = teams.exclude(coach__isnull=True).values_list('coach__email', flat=True).distinct()
-            mathlete_emails = Mathlete.objects.filter(teams__in=teams).values_list('user__email', flat=True).distinct()
+            coach_emails = teams.exclude(coach__isnull=True).values_list('coach__email', 'coach__full_name').distinct()
+            mathlete_emails = Mathlete.objects.filter(teams__in=teams).values_list('user__email', 'user__full_name').distinct()
 
             team_sizes = teams.annotate(size=Count('mathletes'))
             small_teams = team_sizes.filter(size__lt=c.max_team_size)
@@ -25,7 +26,7 @@ def admin_dashboard(request):
             small_coach_emails = small_teams.exclude(coach__isnull=True).values_list('coach__email', flat=True).distinct()
             small_mathlete_emails = Mathlete.objects.filter(teams__in=small_teams).values_list('user__email', flat=True).distinct()
 
-            contest_emails = list(coach_emails) + list(mathlete_emails)
+            #contest_emails = list(coach_emails) + list(mathlete_emails)
             contest_small_teams = list(small_coach_emails) + list(small_mathlete_emails)
 
             member_count = [0]*(c.max_team_size + 2)
@@ -33,20 +34,20 @@ def admin_dashboard(request):
             for sz in size_list:
                 member_count[min(sz, c.max_team_size + 1)] += 1
 
-            context = {
-                'user': user,
-                'contest_emails': ', '.join(contest_emails),
-                'contest_small_teams': ', '.join(contest_small_teams),
-                'member_count': member_count,
-            }    
-            return render(request, 'admin/admin_dashboard.html', context)
+            content = "email,full name,type\n"
+            content += '\n'.join([f'{_[0]},{_[1]},coach' for _ in coach_emails])
+            content += '\n'
+            content += '\n'.join([f'{_[0]},{_[1]},mathlete' for _ in mathlete_emails])
+            response = HttpResponse(content, content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename={0}_emails.csv'.format(c.name)
+            return response
 
         if 'update_contest' in request.POST:
             contest = Contest.objects.get(pk=request.POST['update_contest'])
             update_contest(contest)
         elif 'reset_contest' in request.POST:
             contest = Contest.objects.get(pk=request.POST['reset_contest'])
-            reset_contest(contest)  
+            reset_contest(contest)
         elif 'reset_exam' in request.POST:
             exam = Exam.objects.get(pk=request.POST['reset_exam'])
             reset_exam(exam)
@@ -95,11 +96,14 @@ def admin_dashboard(request):
     all_exams = Exam.objects.all()
     all_contests = Contest.objects.all()
 
+    contest_ids = []
+    contest_names = []
     for contest in all_contests:
-        print(contest.id)
-        print(contest.name)
+        contest_ids.append(contest.id)
+        contest_names.append(contest.name)
 
-    
+
+
     all_emails = []
 
     member_count2 = [0]*10
@@ -111,7 +115,7 @@ def admin_dashboard(request):
         # for curr_user in all_users:
         #     all_emails.append(curr_user.email)
 
-        
+
 
 
         # c = Contest.objects.get(pk=2) # math contest
@@ -123,12 +127,13 @@ def admin_dashboard(request):
         #     if(counter > 10):
         #         break
         #     member_count2[min(team.mathletes.all().count(), 9)] += 1
-    
+
     context = {
         'user': user,
         'contest_emails': ', '.join([]),
         'contest_small_teams': ', '.join([]),
         'member_count': [],
-    }  
+        'contest_ids_names': zip(contest_ids,contest_names),
+    }
 
     return render(request, 'admin/admin_dashboard.html', context)

@@ -7,11 +7,8 @@
     <div class="col-md-7 col-lg-6 col-xl-5">
         <form method="post" class="row hide-asterisk mb-4">
             {% csrf_token %}
-            <div class="col-md-6">
-                {{ form.first_name|as_crispy_field }}
-            </div>
-            <div class="col-md-6">
-                {{ form.last_name|as_crispy_field }}
+            <div class="col-md-12">
+                {{ form.full_name|as_crispy_field }}
             </div>
             <div class="col-md-8">
                 {{ form.email|as_crispy_field }}
