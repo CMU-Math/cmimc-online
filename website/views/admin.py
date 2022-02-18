@@ -9,14 +9,26 @@ from django.http import HttpResponse
 from website.tasks import init_all_tasks, check_finished_games_real, final_ai_grading
 from website.utils import update_contest, reset_contest, regrade_games, log, reset_exam, scores_from_csv, recompute_leaderboard, recheck_games, reset_problem, default_div1, exam_results_from_csv, calc_indiv_sweepstakes, calc_sweepstakes
 
+
 def admin_dashboard(request):
     user = request.user
+    if not user.is_staff:
+        raise PermissionDenied("You do not have access to this page")
 
     if request.method == 'POST':
         if 'get_contest_info' in request.POST:
             c = Contest.objects.get(pk=request.POST['get_contest_info'])
             teams = Team.objects.filter(contest=c)
+            content = 'Team ID,Indiv ID,Team Name,Indiv Name,Email,Type\n'
 
+            for team in teams:
+                if team.coach:
+                    content += f'{team.id},{team.coach.id},{team.team_name},{team.coach.long_name()},{team.coach.email},Coach\n'
+            for team in teams:
+                for m in team.mathletes.all():
+                    content += f'{team.id},{m.id},{team.team_name},{m.long_name()},{m.email},Contestant\n'
+
+            '''
             coach_emails = teams.exclude(coach__isnull=True).values_list('coach__email', 'coach__full_name').distinct()
             mathlete_emails = Mathlete.objects.filter(teams__in=teams).values_list('user__email', 'user__full_name').distinct()
 
@@ -28,16 +40,13 @@ def admin_dashboard(request):
 
             #contest_emails = list(coach_emails) + list(mathlete_emails)
             contest_small_teams = list(small_coach_emails) + list(small_mathlete_emails)
+            '''
 
             member_count = [0]*(c.max_team_size + 2)
             size_list = team_sizes.values_list('size', flat=True)
             for sz in size_list:
                 member_count[min(sz, c.max_team_size + 1)] += 1
 
-            content = "email,full name,type\n"
-            content += '\n'.join([f'{_[0]},{_[1]},coach' for _ in coach_emails])
-            content += '\n'
-            content += '\n'.join([f'{_[0]},{_[1]},mathlete' for _ in mathlete_emails])
             response = HttpResponse(content, content_type='text/csv')
             response['Content-Disposition'] = 'attachment; filename={0}_emails.csv'.format(c.name)
             return response
@@ -90,9 +99,6 @@ def admin_dashboard(request):
             contest = Contest.objects.get(pk=request.POST['calc_sweepstakes'])
             calc_sweepstakes(contest)
 
-    if not user.is_staff:
-        raise PermissionDenied("You do not have access to this page")
-
     all_exams = Exam.objects.all()
     all_contests = Contest.objects.all()
 
@@ -106,33 +112,17 @@ def admin_dashboard(request):
 
     all_emails = []
 
-    member_count2 = [0]*10
-
-    # if user.is_staff:
-
-        # Temporary email list (only visible to staff)
-        # all_users = User.objects.all()
-        # for curr_user in all_users:
-        #     all_emails.append(curr_user.email)
-
-
-
-
-        # c = Contest.objects.get(pk=2) # math contest
-        # teams = Team.objects.filter(contest=c)
-        # counter = 0
-        # team_len = len(teams)
-        # for team in teams:
-        #     counter += 1
-        #     if(counter > 10):
-        #         break
-        #     member_count2[min(team.mathletes.all().count(), 9)] += 1
+    member_count = [0]*10
+    teams = Team.objects.filter(contest=11) # id 11 = Math Contest 2022
+    for team in teams:
+        sz = team.mathletes.all().count()
+        member_count[min(sz, 9)] += 1
 
     context = {
         'user': user,
         'contest_emails': ', '.join([]),
         'contest_small_teams': ', '.join([]),
-        'member_count': [],
+        'member_count': member_count,
         'contest_ids_names': zip(contest_ids,contest_names),
     }
 
