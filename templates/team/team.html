@@ -62,7 +62,7 @@
             <p class="mb-4">No team members yet! Invite them with the link above.</p>
         {% endif %}
 
-		{% if too_small %}
+		{% if too_small and can_edit %}
 		<p class="mb-2">Need help finding {{ team.contest.max_team_size }} members? We can merge you with another small team.</p>
 		<div class="form-check mb-3">
 			<input class="form-check-input" type="checkbox" name="merge" id="merge" onclick="nodisable()" {% if team.wants_merge %}checked{% endif %}>

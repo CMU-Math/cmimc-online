@@ -116,8 +116,6 @@ def admin_dashboard(request):
     teams = Team.objects.filter(contest=11) # id 11 = Math Contest 2022
     for team in teams:
         sz = team.mathletes.count()
-        if sz > 6:
-            log(bad_team=team.team_name)
         member_count[min(sz, 9)] += 1
 
     context = {
