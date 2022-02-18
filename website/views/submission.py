@@ -42,7 +42,7 @@ def admin_all_submissions(request, exam_id):
 
     if request.POST:
         if 'grade' in request.POST:
-            autograde_submissions(exam)
+            #autograde_submissions(exam)
             return redirect('admin_all_submissions', exam_id=exam.id)
         elif 'reset_problem' in request.POST:
             p = Problem.objects.get(exam=exam, problem_number=int(request.POST['reset_problem']))
