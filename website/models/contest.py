@@ -34,8 +34,8 @@ class Contest(models.Model):
             return self.now + timedelta(days=10001+self.id)
         temp = self.now - timedelta(days=100000) # 300 years in the past
         for e in self.exams.all():
-            if e.end_time > temp:
-                temp = e.end_time
+            if e.fake_end_time > temp:
+                temp = e.fake_end_time
         return temp
     
     # Assumes there is at least one exam in each contest
@@ -45,8 +45,8 @@ class Contest(models.Model):
             return self.now + timedelta(days=10000+self.id)
         temp = self.now + timedelta(days=100000) # 300 years in the future
         for e in self.exams.all():
-            if e.start_time < temp:
-                temp = e.start_time
+            if e.fake_start_time < temp:
+                temp = e.fake_start_time
         return temp
 
     @cached_property

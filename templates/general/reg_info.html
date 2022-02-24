@@ -12,11 +12,11 @@
         <h2>For Students</h2>
         <ol>
             <li><a href="{% url 'signup' %}">Create an account</a> and make sure to select 'Contestant' when signing up.</li>
-            <li>To join an existing team, use their invite link (then skip to step 6). To start your own team, follow steps 3-5.</li>
+            <li>To join an existing team, use their invite link (and skip to step 6). To start your own team, follow steps 3-5.</li>
             <li>Go to <a href="{% url 'contest_list' %}">{{ request.scheme }}://{{ request.get_host }}{% url 'contest_list' %}</a> and select the contest you want to register for.</li>
             <li>Choose a team name.</li>
             <li>Invite other members to your team with the given invite link.</li>
-            <li>Make sure each team member fills out the <a href="https://drive.google.com/uc?export=download&id=1TmXiSWRIakw2X6WD7H8MaOACds16AD0D">waiver</a> and submits it via <a href="https://docs.google.com/forms/d/e/1FAIpQLScfpAsNWhReh-JsWDQ7M8k8490jzyC65cv5h4_R9YiQ-KzBng/viewform" target='_blank' rel='noopener noreferrer'>this form</a> before February 23rd.</li>
+            <li>For the math contest, each team member will have to choose which division they want to compete in.</li>
         </ol>
 
         <h2>For Coaches</h2>
@@ -26,7 +26,7 @@
             <li>Choose a team name</li>
             <li>Invite students to your team with the given invite link.</li>
             <li>Repeat steps 2-4 for each team you want to create.</li>
-            <li>Make sure each team member fills out the <a href="https://drive.google.com/uc?export=download&id=1TmXiSWRIakw2X6WD7H8MaOACds16AD0D">waiver</a> and submits it via <a href="https://docs.google.com/forms/d/e/1FAIpQLScfpAsNWhReh-JsWDQ7M8k8490jzyC65cv5h4_R9YiQ-KzBng/viewform" target='_blank' rel='noopener noreferrer'>this form</a> before February 23rd.</li>
+            <li>For the math contest, each student will have to choose which division they want to compete in (or you as the coach can decide for them).</li>
         </ol>
     </div>
 

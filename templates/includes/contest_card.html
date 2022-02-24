@@ -26,6 +26,8 @@
     {% else %}
       <p><b>Registration has ended.</b></p>
     {% endif %}
+  {% else %}
+  	<p><b>You are not logged in with a contestant or coach account, so you cannot join any teams.</b></p>
   {% endif %}
 
   {% if t.canjoin %}
@@ -42,8 +44,8 @@
         {% for e in t.exams %}
           <tr>
             <td>{{ e.name }}</td>
-            <td>{{ e.start_time }}</td>
-            <td>{{ e.end_time }}</td>
+            <td>{{ e.fake_start_time }}</td>
+            <td>{{ e.fake_end_time }}</td>
             {% if e.ended %}
                 {% if t.contest.show_final_results %}
                     <td><a href="{% url 'leaderboard' e.id %}?page=1">Results</a></td>

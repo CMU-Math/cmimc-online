@@ -1,6 +1,7 @@
 from background_task import background
 from django.utils.timezone import localtime, now
 import math
+from datetime import timedelta
 
 # Lets you easily log things when in production, by calling
 # log(asdf='hello world') to display {'asdf': 'hello world'}
@@ -8,6 +9,13 @@ import math
 def log():
     return
 
+
+def start_round(exam):
+    exam.started = True
+    exam.real_end_time = exam._now + exam.duration
+    exam.submit_start_time = exam.real_end_time - timedelta(minutes=5)
+    exam.save()
+    return
 
 def miniround_sub(competitor, problem, miniround):
     time = problem.exam.miniround_end_time(miniround)
@@ -100,6 +108,7 @@ def update_competitors(team):
 # and exactly one taskscore for each (task, score) pair
 def update_contest(contest):
     log(starting='update_contest')
+    default_div1(contest)
     from website.models import MiniRoundQueue
     try:
         for team in contest.teams.all():

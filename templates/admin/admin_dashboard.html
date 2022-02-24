@@ -3,21 +3,40 @@
 {% block content %}
 
 {% if user.is_staff %}
-<h1 class="mt-5">Staff Info Only (regular users can't see this)</h1>
+<h1 class="mt-5">Admin Dashboard</h1>
 <hr class="red_line mb-4"/>
 <form method="post" class="mb-4">
       {% csrf_token %}
       <div class="form-group">
-        <input type="number" class="form-contest-id" name="get_contest_info">
+        <input type="number" class="form-contest-id" name="get_contest_info" placeholder="Contest ID">
       </div>
       <button type="submit" class="btn btn-primary">Get Contest Info</button>
 </form>
 
-<h3>Contest Emails</h3>
-<p>{{ contest_emails }}</p>
+<h3>Start Round</h3>
+<form method="post" class="mb-4">
+	{% csrf_token %}
+	<div class="form-group">
+		<input type="number" class="form-contest-id" name="start_round" placeholder="Exam ID">
+	</div>
+	<button type="submit" class="btn btn-primary">Start Round</button>
+</form>
+
+<h3>Get Submissions as CSV</h3>
+<form method="post" class="mb-4">
+	{% csrf_token %}
+	<div class="form-group">
+		<input type="number" class="form-contest-id" name="submission_csv" placeholder="Exam ID">
+	</div>
+	<button type="submit" class="btn btn-primary">Get Submissions</button>
+</form>
 
 <h3>Contest member count</h3>
 <p>{{ member_count }}</p>
+
+<!--
+<h3>Contest Emails</h3>
+<p>{{ contest_emails }}</p>
 
 <h3>Small Teams</h3>
 <p>{{ contest_small_teams }}</p>
@@ -46,21 +65,22 @@
           </tr>
       {% endfor %}
   </table>
+-->
+
 <h3>Update Contest</h3>
 <hr class="red_line mb-4"/>
-<p>(updates competitors scores, task scores, and miniround scores)</p>
-
-
+<p>(updates competitors scores, task scores, and miniround scores, sets div1 as default division)</p>
 
 <form method="post" class="mb-4">
       {% csrf_token %}
       <div class="form-group">
-        <input type="number" class="form-contest-id" name="update_contest" value=1>
+        <input type="number" class="form-contest-id" name="update_contest" placeholder="Contest ID">
       </div>
       <button type="submit" class="btn btn-primary">Update Contest</button>
 </form>
 
 
+<!---
 <h3>Reset Contest</h3>
 <hr class="red_line mb-4"/>
 <p>(deletes all competitors, scores, task scores, and miniround scores)</p>
@@ -225,7 +245,7 @@
       </div>
       <button type="submit" class="btn btn-primary">Calc Sweepstakes</button>
 </form>
-
+-->
 
 
 {% endif %}
