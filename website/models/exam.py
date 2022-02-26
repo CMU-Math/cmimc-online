@@ -27,10 +27,10 @@ class Exam(models.Model):
     name = models.CharField(max_length=100)
     fake_start_time = models.DateTimeField()
     fake_end_time = models.DateTimeField()
-    real_end_time = models.DateTimeField(null=True)
+    real_end_time = models.DateTimeField(null=True, blank=True)
     submit_start_time = models.DateTimeField(null=True, blank=True)
     started = models.BooleanField(default=False)
-    duration = models.DurationField(null=True)
+    duration = models.DurationField(null=True, blank=True)
 
     division = models.IntegerField(null=True, blank=True)
     exampair = models.ForeignKey(ExamPair, null=True, blank=True, related_name='exams', on_delete=models.SET_NULL)

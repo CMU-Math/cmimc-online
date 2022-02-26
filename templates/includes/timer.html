@@ -23,7 +23,7 @@
     function update() {
         {% if exam.is_math %}
         if (s2 <= 0) {
-            c2.innerHTML = "Finished";
+            c2.innerHTML = "You can submit now!";
         } else {
             c2.innerHTML = timer(s2);
             s2--;

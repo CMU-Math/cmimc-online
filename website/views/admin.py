@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from django.conf import settings
 
 from website.tasks import init_all_tasks, check_finished_games_real, final_ai_grading
-from website.utils import update_contest, reset_contest, regrade_games, log, reset_exam, scores_from_csv, recompute_leaderboard, recheck_games, reset_problem, default_div1, exam_results_from_csv, calc_indiv_sweepstakes, calc_sweepstakes, start_round
+from website.utils import update_contest, reset_contest, regrade_games, log, reset_exam, scores_from_csv, recompute_leaderboard, recheck_games, reset_problem, default_div1, exam_results_from_csv, calc_indiv_sweepstakes, calc_sweepstakes, start_round, clone_contest
 
 
 def admin_dashboard(request):
@@ -20,7 +20,9 @@ def admin_dashboard(request):
         if 'submission_csv' in request.POST:
             e = Exam.objects.get(pk=request.POST['submission_csv'])
             comps = Competitor.objects.filter(exam=e)
-            content = 'Team ID,Indiv ID'
+            content = 'Team ID'
+            if not e.is_team_exam:
+                content += ',Indiv ID'
             for p in e.problems.all():
                 content += f',P{p.problem_number} Answer'
             content += '\n'
@@ -37,7 +39,7 @@ def admin_dashboard(request):
                 content += '\n'
 
             response = HttpResponse(content, content_type='text/csv')
-            response['Content-Disposition'] = 'attachment; filename={0}_emails.csv'.format(e.name)
+            response['Content-Disposition'] = 'attachment; filename={0}_submissions.csv'.format(e.name)
             return response
 
         if 'start_round' in request.POST:
@@ -81,6 +83,9 @@ def admin_dashboard(request):
         if 'update_contest' in request.POST:
             contest = Contest.objects.get(pk=request.POST['update_contest'])
             update_contest(contest)
+        if 'clone_contest' in request.POST:
+            contest = Contest.objects.get(pk=request.POST['clone_contest'])
+            clone_contest(contest)
         elif 'reset_contest' in request.POST:
             contest = Contest.objects.get(pk=request.POST['reset_contest'])
             reset_contest(contest)

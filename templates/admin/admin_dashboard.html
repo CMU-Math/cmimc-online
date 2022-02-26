@@ -80,6 +80,19 @@
 </form>
 
 
+<h3>Clone Contest</h3>
+<hr class="red_line mb-4"/>
+
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <div class="form-group">
+        <input type="number" class="form-contest-id" name="clone_contest" placeholder="Contest ID">
+      </div>
+      <button type="submit" class="btn btn-primary">Clone Contest</button>
+</form>
+
+
+
 <!---
 <h3>Reset Contest</h3>
 <hr class="red_line mb-4"/>
