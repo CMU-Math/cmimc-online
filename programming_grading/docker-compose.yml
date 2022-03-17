@@ -1,0 +1,9 @@
+version: '3'
+services:
+  grader:
+    build: .
+    environment:
+      - CMIMC_GRPC_PASSWORD=sice
+    network_mode: "host"
+    entrypoint: ["cmimc_programming_grading_server", "localhost:7000"]
+    privileged: true

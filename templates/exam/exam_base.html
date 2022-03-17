@@ -16,7 +16,8 @@
 
 {% block js %}
 
-{% if exam.is_math %}
+{% if exam is None %}
+{% elif exam.is_math %}
     {% include 'includes/timer.html' with secs_remaining=exam.time_remaining submit_secs_remaining=exam.time_until_submit_start %}
 {% else %}
     {% include 'includes/timer.html' with secs_remaining=exam.time_remaining %}

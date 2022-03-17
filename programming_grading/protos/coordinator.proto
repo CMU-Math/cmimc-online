@@ -1,0 +1,40 @@
+/*
+ * Have graders connect to the server instead of vice-versa.  Makes running
+ * sample contests on local graders easy.
+ */
+
+syntax = "proto3";
+
+service Coordinator {
+    rpc Serve (stream GradeResponse) returns (stream GradeRequest);
+    rpc SetPassword(Password) returns (Empty); /* this needs to be changed to a proper auth eventually */
+}
+
+message Password {
+    string password = 1;
+}
+
+message Empty {}
+
+message Capabilities {
+    uint64 memory = 1; /* in KiB */    
+    uint64 cpus = 2; /* in case we end up doing multithread graders */
+}
+
+message GradeOperation {
+    bytes python_code = 1; /* single-file of python source */
+    bytes input = 2; /* sent over stdin to the grader */
+}
+
+message GradeRequest {
+    uint64 id = 1;
+    double timeout_seconds = 2; /* safety only */
+    GradeOperation op = 3;
+}
+
+message GradeResponse {
+    uint64 id = 1;
+    bytes output = 2;
+    bytes summary = 3;
+    bytes playerlogs = 4;
+}

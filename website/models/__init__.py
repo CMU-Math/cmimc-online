@@ -8,7 +8,7 @@ from .team import Team
 from .competitor import Competitor
 from .submission import Submission
 from .score import Score
-from .airound import AIGrader, AIProblem, AIGame, AISubmission
+from .airound import AIGrader, AIProblem, AIGame, AISubmission, AIVisualizer
 from .taskscore import TaskScore
 from .miniroundscore import MiniRoundScore, MiniRoundQueue, MiniRoundTotal
 from .matchresult import MatchResult

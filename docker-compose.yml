@@ -23,4 +23,21 @@ services:
       - RDS_USERNAME=${DOCKER_RDS_USERNAME}
       - RDS_PASSWORD=${DOCKER_RDS_PASSWORD}
       - DEBUG=true
+  coordinator:
+    build: .
+    depends_on:
+      - cmimc
+    volumes:
+      - .:/app
+    ports:
+      - 0.0.0.0:7000:7000
+    environment:
+      - RDS_HOSTNAME=${DOCKER_RDS_HOSTNAME}
+      - RDS_PORT=3306
+      - RDS_DB_NAME=cmimc
+      - RDS_USERNAME=${DOCKER_RDS_USERNAME}
+      - RDS_PASSWORD=${DOCKER_RDS_PASSWORD}
+      - DEBUG=true
+      - CMIMC_GRPC_PASSWORD=sice
+    entrypoint: "/app/start_grpc.sh"
 

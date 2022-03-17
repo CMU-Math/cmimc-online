@@ -6,7 +6,6 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-numpy = "*"
 django = "*"
 awsebcli = "*"
 mysqlclient = "*"
@@ -16,10 +15,15 @@ django-ckeditor = "*"
 django-markdownx = "*"
 django-ace = "*"
 django-background-tasks = "*"
+django-polymorphic = "*"
+django-extensions = "*"
 trueskill = "*"
 pylatexenc = "*"
 sympy = "*"
 antlr4-python3-runtime = "*"
+protobuf = "*"
+jinja2 = "*"
+grpcio = "*"
 
 [requires]
 python_version = "3.7"

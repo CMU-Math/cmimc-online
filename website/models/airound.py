@@ -60,3 +60,7 @@ class AISubmission(models.Model):
 
     def __str__(self):
         return '[{0}] comp={1}'.format(str(self.game), str(self.competitor))
+
+class AIVisualizer(models.Model):
+    name = models.CharField(max_length=100)
+    visualizer = models.TextField()

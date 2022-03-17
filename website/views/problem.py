@@ -18,7 +18,7 @@ def view_problem(request, exam_id, problem_number):
     if user.is_mathlete:
         mathlete = user.mathlete
         competitor = Competitor.objects.getCompetitor(exam, mathlete)
-        score = Score.objects.get(problem=problem, competitor=competitor)
+        score = Score.objects.get_or_create(problem=problem, competitor=competitor)
         context = {
             'problem': problem,
             'score': score,

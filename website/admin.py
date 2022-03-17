@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as DefaultUserAdmin
 
 from website.forms import UserCreationForm, UserChangeForm
-from website.models import Contest, Exam, Problem, User, Mathlete, Team, Competitor, Submission, Score, Task, TaskScore, AIGrader, AIProblem, AIGame, AISubmission, MiniRoundScore, MiniRoundQueue, MiniRoundTotal, MatchResult, ExamPair, DivChoice, IndivSweepstake
+from website.models import Contest, Exam, Problem, User, Mathlete, Team, Competitor, Submission, Score, Task, TaskScore, AIGrader, AIProblem, AIGame, AISubmission, MiniRoundScore, MiniRoundQueue, MiniRoundTotal, MatchResult, ExamPair, DivChoice, IndivSweepstake, AIVisualizer
 
 
 class UserAdmin(DefaultUserAdmin):
@@ -82,3 +82,4 @@ admin.site.register(MatchResult)
 admin.site.register(ExamPair)
 admin.site.register(DivChoice)
 admin.site.register(IndivSweepstake, IndivSweepstakeAdmin)
+admin.site.register(AIVisualizer)

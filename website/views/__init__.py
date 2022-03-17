@@ -5,7 +5,7 @@ from .problem import view_problem
 from .submit import submit, resubmit
 from .exam import all_problems, miniround_scores, match_results
 from .submission import all_submissions, view_submission, admin_all_submissions
-from .downloads import match_replay, ai_starter_file, ai_visualizer, mailinglist, download_subs
+from .downloads import match_replay, ai_starter_file, ai_visualizer, mailinglist, download_subs, local_visualizer
 from .signup import signup, terms_and_conditions
 from .leaderboard import leaderboard, problem_leaderboard, contest_leaderboard
 from .results import sweepstakes, indiv_sweepstakes, exam_results
