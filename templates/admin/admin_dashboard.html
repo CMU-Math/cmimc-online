@@ -92,6 +92,13 @@
 </form>
 
 
+<h3>Init all tasks</h3>
+<hr class="red_line mb-4"/>
+<form method="post" class="mb-4">
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary" name="init_all_tasks">Init All Tasks</button>
+</form>
+
 
 <!---
 <h3>Reset Contest</h3>
@@ -132,13 +139,6 @@
 </form>
 
 
-
-<h3>Init all tasks</h3>
-<hr class="red_line mb-4"/>
-<form method="post" class="mb-4">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-primary" name="init_all_tasks">Init All Tasks</button>
-</form>
 
 <h3>Regrade Games</h3>
 <hr class="red_line mb-4"/>
