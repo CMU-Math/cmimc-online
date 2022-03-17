@@ -84,24 +84,14 @@ def do_save_replay(game_name, replay_name, score, data):
 
 class OptGrader:
     def grade(self, inp, codebox):
-        def gradeone(gen, seed):
-            with codebox.of_player_config(code=inp['code'], config=self.config) as cb:
-                random.seed(seed)
-                return self.optgrade(gen, cb)
+        if inp['seed'] is None:
+            inp['seed'] = random.randrange(1 << 30)
 
-        if inp.get('gen') is not None:
-            return gradeone(inp['gen'], inp['seed'])
-        else:
+        with codebox.of_player_config(code=inp['code'], config=self.config) as cb:
             random.seed(inp['seed'])
-            gens = self.get_batch()
-            res = [gradeone(gen, seed) for gen,seed in gens]
-            return {
-                'summary': sum(r['summary'] for r in res),
-                'history': [r['history'] for r in res],
-                'playerlogs': [r['playerlogs'] for r in res],
-            }
+            return self.optgrade(inp['gen'], cb)
 
-    def test(self, source, name="", save_replay=False, gen=None, seed=None, record_logs=False):
+    def test(self, source, gen, name="", save_replay=False, seed=None, record_logs=False):
         player = {'code': open(source).read(), 'src_loc': source}
 
         if seed is None: seed = random.randrange(1 << 30)
@@ -112,9 +102,18 @@ class OptGrader:
             do_save_replay(self.name.lower(), name, result['summary'], result)
         else:
             print(result)
-        
+    
     def run(self):
-        print(json.dumps(self.grade(json.loads(input()), CodeboxClass[0])))
+        data = json.loads(input())
+        task = json.loads(data['task'])
+        gens = self.get_batch(task['gen'])
+        res = [self.grade({ 'gen': gen, 'seed': seed, 'code': data['code']}, CodeboxClass[0]) for gen,seed in gens]
+
+        print(json.dumps({
+            'summary': sum(r['summary'] for r in res),
+            'history': [r['history'] for r in res],
+            'playerlogs': [r['playerlogs'] for r in res],
+        }))
 
 class AIGrader:
     def grade(self, inp, codebox_cls):
