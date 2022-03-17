@@ -60,7 +60,7 @@ class OptJob:
                 python_code=sub.problem.grader_code.encode(),
                 input=json.dumps({
                     'code': sub.text,
-                    'task': sub.task.input_file
+                    'task': sub.task.raw_grader_data
                 }).encode()
             )
         )

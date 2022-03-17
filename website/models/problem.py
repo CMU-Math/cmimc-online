@@ -11,6 +11,7 @@ class Problem(models.Model):
     problem_text = RichTextField()
     name = models.CharField(max_length=100, unique=True,
             help_text=_('The problem title that contestants see'))
+    short_name = models.CharField(max_length=100, blank=True, null=True)
     grader_name = models.CharField(blank=True, max_length=50) # add choices?
     problem_number = models.IntegerField(validators=[MinValueValidator(1)])
     num_tasks = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(1)]) # only for optimization
