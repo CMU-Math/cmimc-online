@@ -4,57 +4,343 @@
 
 <p class="display-4">Programming Contest Sample Problems</p>
 <hr class="red_line"/>
-<h1>Greed Control (AI Round)</h1>
 
-<p>This example problem is adapted from AoPS's <a href="https://artofproblemsolving.com/greedcontrol/help">Greed Control</a> forum game.</p>
+<p>These are the 6 problems from the 2021 CMIMC Programming Contest. Starter code and input files for the optimization round can be found <a href="https://drive.google.com/drive/folders/1dvh4NiRx9Bxq4PP8ZbmDi8Y_U9AhV_8m?usp=sharing" rel="noopener noreferrer" target="_blank">here</a>. AI Round starter code can be found <a href="https://drive.google.com/drive/folders/1f21HjCxKag2BUUWI5jbjLSzSpQtEnTWX" rel="noopener noreferrer" target="_blank">here</a>.</p>
 
-<h3>Problem Setup</h3>
-<p>Greed control is an $n$-player game, played in $10$ <em>rounds</em>.</p>
-<p>In each round, you choose an integer between $0$ and $10$.</p>
-<p>You gain points equal to the number you chose divided by the number of people who chose the same number as you.</p>
-<p>To aid in your decision making, you also get the results of the previous round, so you can see what numbers people chose before.</p>
+<h1 class="mb-3 mt-4">Unique Products (2021 Optimization 1)</h1>
 
-<h3>Implementation Details</h3>
-<p>You will need to write a Python function, which takes a <em>state</em> as input, and returns an integer from $0$ to $10$.</p>
-<p>The state is a list of the $n-1$ numbers that other players picked in the previous round. If this is the first round, the list will be empty. The order of your opponents within the array will remain consistent.</p>
+<p>Given natural numbers $N$ and $M$, you must construct $N$ sets $$A_1, A_2, A_3, \dots, A_N \subseteq \{1, 2, 3, \dots, M\}$$ such that all possible products&nbsp;$a_1\, a_2\, a_3 \cdots a_N$ are distinct, where $a_i \in A_i$ for all $i$.</p>
 
-<h3>Return Format</h3>
-<p>Return a single integer between $0$ and $10$.</p>
+<p>The sets $A_1, A_2, \dots, A_N$ must have equal size, and do not need to be distinct.</p>
 
-<h3>Invalid Return</h3>
-<p>If you make an invalid return or time out, we will treat it as if you chose the number $0$.</p>
+<h3>Input Format</h3>
 
-<h2>Scoring</h2>
-<p>On any given round, if you pick the integer $k$, then your score is
-$$\frac{k}{\text{total number of people who picked }k}$$
-Your final score is the sum of your scores over the 10 rounds.</p>
+<hr />
+<p>The first line of each input file contains two integers: $N$, the total number of subsets, and $M$, the maximum allowed value in any subset.</p>
 
-<h3>Feedback</h3>
-<p>At the end of the game, you can see all total scores, and the choices that each player made for each round.</p>
+<h3>Output Format</h3>
 
-<hr class="red_line my-4"/>
+<hr />
+<p>You will output $N$ lines. On the $i^\text{th}$ line, output $k$ space-separated positive integers denoting the values in $A_i$. All integers should be in the interval $[1, M]$, and $k$ (the size of each set $A_i$) should be the same for each line.</p>
 
-<h1>Minimum Sum of Digits (Optimization Round)</h1>
+<h3>Scoring</h3>
 
-<p>Given an integer $K$, output a positive integer $N$ such that the sum of the (decimal) digits of $N \cdot K$ is minimized.</p>
+<hr />
+<p>Your score on each task will be the value of $k$ you achieved, i.e. the size of each of your subsets. Your goal is to maximize this value.</p>
 
-<h2>Input</h2>
-<p>The first line of each test-file contains a single integer $T$ denoting the number of test-cases.</p>
-<p>$T$ lines of input follow, each containing one integer $K$</p>
+<h3>Sample Input</h3>
 
-<h2>Output</h2>
-<p>Output $T$ lines, each containing a single integer $1 \le N < 10^{10^5}$</p>
+<hr />
+<pre>
+<code>2 7</code></pre>
 
-<h2>Scoring</h2>
-<p>Your score will be calculated as
-$$S(N_1 \cdot K_1) + S(N_2 \cdot K_2) + \cdots + S(N_T \cdot K_T),$$
-where $S(x)$ is the sum of the decimal digits of $x$. The goal is to minimize this value.
+<h3>Sample Output</h3>
 
-<h2>Tasks</h2>
-<p>Task 1: $T = 100$, $1 \le K \le 100$.</p>
-<p>Task 2: $T = 10$, $10^4 < K < 10^6$.</p>
-<p>Task 3: $T = 10$, $10^6 < K < 10^8$.</p>
-<p>Task 4: $T = 10$, $10^{17} < K < 10^{18}$.</p>
+<hr />
+<pre>
+<code>1 2 3 4
+1 5 6 7</code></pre>
+
+<p>Since all $16$ products $1\cdot 1, 1\cdot 5, 1\cdot 6, 1\cdot 7, 2\cdot 1, 2 \cdot 5, \dots, 4 \cdot 7$ are distinct, and all numbers are between $1$ and $7$, these sets are valid. The common size of each set is $4$, so this sample output gets $4$ points.</p>
+
+<h3>Tasks</h3>
+
+<hr />
+<ol>
+	<li>$N = 2, M = 400$</li>
+	<li>$N = 2, M = 4,000$</li>
+	<li>$N = 2, M = 40,000$</li>
+	<li>$N = 3, M = 4,000$</li>
+	<li>$N = 4, M = 1,000$</li>
+	<li>$N = 8, M = 200$</li>
+</ol>
+
+<hr class="red_line"/>
+
+<h1 class="mb-3 mt-4">Circle Covers (2021 Optimization 2)</h1>
+
+<p>Aliens, aka CMIMC Programming Organizers, are trying to abduct the contestants of CMIMC Programming! As you are all socially distancing, from the point of view of the aliens, you are just points in a plane. To abduct the contestants, the aliens will drop crop circles of varying radii on groups of you.</p>
+
+<p>Given $N$ points on a 2D plane, and $M$ lengths denoting the radii of circles, your goal is to place these $M$ circles on the plane in a way that maximizes the number of points covered by some circle.</p>
+
+<h3>Input Format</h3>
+
+<hr />
+<p>The first line contains a single integer $N$, denoting the number of points.</p>
+
+<p>$N$ lines of input follow, each containing a space-separated pair of integers <code>x y</code> denoting the coordinates of each point.</p>
+
+<p>The next line contains a single integer $M$, denoting the number of circles.</p>
+
+<p>$M$ lines of input follow, each containing a single positive integer denoting the radius of each circle.</p>
+
+<h3>Output Format</h3>
+
+<hr />
+<p>Output $M$ lines, each containing a pair of floats <code>x y</code> denoting the center of the indexed circles. The $i^\text{th}$ line of your output should correspond to the $i^\text{th}$ circle of the input.</p>
+
+<h3>Scoring</h3>
+
+<hr />
+<p>Your score is the number of points covered by the $M$ circles. Your goal is to maximize this value.</p>
+
+<h3>Sample Input</h3>
+
+<hr />
+<pre>
+<code>6
+0 1
+4 4
+2 2
+6 4
+1 0
+3 3
+2
+1
+2</code></pre>
+
+<h3>Sample Output</h3>
+
+<hr />
+<pre>
+<code>5.0 4.0
+1.6 1.6</code></pre>
+
+<p>This sample output gets a score of $6$ points, since the two circles centered at $(5.0, 4.0)$ and $(1.6, 1.6)$ will cover all $6$ points.</p>
+
+<h3>Tasks</h3>
+
+<hr />
+<ol>
+	<li>$N \le 100, M = 10$</li>
+	<li>$N \le 100, M = 20$</li>
+	<li>$N \le 11,000, M = 20$</li>
+	<li>$N \le 11,000, M = 100$</li>
+	<li>$N \le 210,000, M = 60$</li>
+	<li>$N \le 210,000, M = 15$</li>
+</ol>
+
+<hr class="red_line"/>
+
+<h1 class="mb-3 mt-4">Robot Recovery (2021 Optimization 3)</h1>
+
+<p>As another side project besides CMIMC, Carnegie the Mellon was able to build a robot army of $N$ robots, for his plan of world domination. Unfortunately on his way to CMIMC he lost them in a rectangular maze of $R$ by $C$ cells. The maze consists of cells that are either walls or empty rooms, and has one entrance. The robots quickly spread themselves out, occupying $N$ distinct rooms.</p>
+
+<p>Carnegie the Mellon is afraid of mazes and waits anxiously at the entrance, hoping for his robot&rsquo;s safety. Luckily, Carnegie the Mellon has built a remote to control his robot army, but it only has $4$ buttons, <code>U</code>, <code>D</code>, <code>L</code>, <code>R</code>. These buttons command all $N$ robots to move one cell up, down, left, or right, respectively. The robots have advanced pathing, so if the direction would cause a robot to hit a wall, it chooses to stay in place. Two or more robots may occupy the same cell simultaneously.</p>
+
+<p>Carnegie the Mellon would like to move all $N$ robots to the maze&#39;s entrance, so he can regroup with them. Once a robot reaches the entrance, Carnegie the Mellon can deactivate it, so it no longer listens to the remote&rsquo;s command. Find the shortest sequence of commands so that all $N$ robots reach the entrance of the maze.</p>
+
+<h3>Input Format</h3>
+
+<hr />
+<p>The first line contains $3$ integers: $R$, $C$, and $N$.</p>
+
+<p>The next $R$ lines contain a string of $C$ characters. The characters will either be <code>.</code>, <code>X</code>, <code>R</code>, or <code>E</code>, which correspond to an empty room, a wall, a room with a robot in it, and the entrance.</p>
+
+<p>There are guaranteed to be exactly $N$ <code>R</code>s, and exactly one <code>E</code>. Each robot can reach the entrance from their starting position, and no robot will start at the entrance.</p>
+
+<h3>Output Format</h3>
+
+<hr />
+<p>Print a string consisting of the characters <code>U</code>, <code>D</code>, <code>L</code>, <code>R</code>, corresponding to the sequence of commands Carnegie the Mellon should use.</p>
+
+<h3>Scoring</h3>
+
+<hr />
+<p>Your score is the number of commands used to move all robots to the entrance. Your goal is to minimize this value.</p>
+
+<h3>Sample Input</h3>
+
+<hr />
+<pre>
+<code>3 4 2
+..XE
+XXRR
+....</code></pre>
+
+<h3>Sample Output</h3>
+
+<hr />
+<pre>
+<code>RU</code></pre>
+
+<p>After the <code>R</code> command, both robots will occupy the cell directly below the entrance. The next <code>U</code> command moves both robots to the entrance. This output gets a score of $2$, because $2$ commands were used.</p>
+
+<h3>Tasks</h3>
+
+<hr />
+<ol>
+	<li style="list-style-type:decimal">$N = 1, 1 \le R,C \le 100$</li>
+	<li>$N = 3, 1 \le R,C \le 100$</li>
+	<li>$1 \le N \le 200, 1 \le R,C \le 200$</li>
+	<li>$1 \le N \le 200, 1 \le R,C \le 200$</li>
+	<li>$1 \le N \le 200, 1 \le R,C \le 1000$</li>
+	<li>$1 \le N \le 200, 1 \le R,C \le 1000$</li>
+</ol>
+
+<hr class="red_line"/>
+
+<h1 class="mb-3 mt-4">Bet (2021 AI 1)</h1>
+
+<p>This is a 3-player game. Initially, each of the 3 players holds 13 bidding cards worth 2 through 14 (i.e. a suit of cards with ace-high). There is also a face-down pile that contains 13 shuffled cards with point values from 2 to 14.</p>
+
+<p>On each turn, one card from the face-down pile is revealed. All three players simultaneously bid on the revealed card by using one of their remaining bidding cards. If there is a unique highest bidder, that player receives points equal to the value of the card. If there is a tie for first, no player receives points. This repeats 13 times until all cards are used.</p>
+
+<h3>Input Format</h3>
+
+<hr />
+<p>You must define the function <code>bet_bot.move(hand, others, card, scores)</code> in the starter file, where:</p>
+
+<ul>
+	<li><code>hand</code> is your current hand (a list of integers from 2 to 14)</li>
+	<li><code>others</code> is a list of the 2 other players&#39; hands (the players appear in a fixed order)</li>
+	<li><code>card</code> is the card currently being bet on (an integer from 2 to 14)</li>
+	<li><code>scores</code> is a list of current scores for all 3 players in a fixed order. Your score is displayed as the first value, and the scores of the 2 other players appear in the same order as in <code>others</code></li>
+</ul>
+
+<h3>Output Format</h3>
+
+<hr />
+<p>The function <code>bet_bot.move</code> should return an integer from 2 to 14, representing the value of a card in your hand.</p>
+
+<p>Invalid outputs will result in your lowest card being played by default.</p>
+
+<p>Your program is allotted 1 second of total runtime during a game, and 32 MB of memory. If you exceed those limits, the default move above will be used instead.</p>
+
+<h3>Sample Input</h3>
+
+<hr />
+<pre>
+<code class="language-python">hand = [2, 4, 14]
+others = [[6, 8, 9], [5, 11, 13]]
+card = 9
+scores = [34, 21, 18]</code></pre>
+
+<h3>Sample Output</h3>
+
+<hr />
+<pre>
+<code class="language-python">14</code></pre>
+
+<h3>Scoring</h3>
+
+<hr />
+<p>In each game, you will receive $5$ points for coming 1st, $2$ points for 2nd, and $1$ point for 3rd. If there are ties, all tied players will be treated as having the lower scoring rank, i.e. if 1st and 2nd tie, both will be treated as 2nd. Additionally, $1\%$ of the numerical sum of the cards you won during the game will be added to your score. For example, if you came 1st in a game with a total of $49$ points won from bids, you would receive $5.49$ points for that game.</p>
+
+<p>In each match, your bot will play against the same 2 opponents for a total of 5 games, and your match score will be the average over these 5 games. You are allowed (and encouraged) to store any information you want about previous games in the match.</p>
+
+<hr class="red_line"/>
+
+<h1 class="mb-3 mt-4">Trap the Scotty Dog (2021 AI 2)</h1>
+
+<p>This is a 2-player asymmetric game. The two players are Scotty and the Trapper.</p>
+
+<p>Initially, Scotty is at the center cell of a $15 \times 15$ grid, called the game board. On each turn, the Trapper can place a barrier on any empty cell of the board, then Scotty can either move to one of the 8 cells adjacent to it&#39;s current cell (like a chess king), or stay in it&#39;s current cell. Scotty&#39;s goal is to move off the edge of the board, while the Trapper&#39;s goal is to stop this from happenning.</p>
+
+<p>The game ends when Scotty moves off the board (and Scotty wins), or Scotty is unable to make any legal move besides staying still (and the Trapper wins). If no player has won after 200 moves, the game is considered a draw.</p>
+
+<p>To help out the Trapper, some cells will start with barriers. In particular, the board will be randomly initialized with barriers in 20-40% of its cells. It is guaranteed that the center cell never contains a barrier, and Scotty will always have a path to escape.</p>
+
+<h3>Input Format</h3>
+
+<hr />
+<p>You must define the functions <code>scotty_bot.move(board)</code> and <code>trapper_bot.move(board)</code> in the starter file, where <code>board</code> is a $15 \times 15$ 2D array of integers.</p>
+
+<p><code>board[y][x]</code> represents the cell at coordinates $(x,y)$, <strong>not</strong> $(y,x)$. It has 4 possible values:</p>
+
+<ul>
+	<li><code>board[y][x] = 0</code> if the cell $(x,y)$ is empty</li>
+	<li><code>board[y][x] = 1</code> if Scotty is currently at $(x,y)$</li>
+	<li><code>board[y][x] = 2</code> if there is a naturally generated barrier at $(x,y)$</li>
+	<li><code>board[y][x] = 3</code> if the Trapper placed a barrier at $(x,y)$</li>
+</ul>
+
+<h3>Output Format</h3>
+
+<hr />
+<p><strong>Scotty</strong></p>
+
+<p>The function <code>scotty_bot.move</code> should return a list of integers<code>[dx, dy]</code>, designating the direction for Scotty to move in. Your output must satisfy $$-1 \le dx, dy \le 1$$ and one of</p>
+
+<ul>
+	<li>$\max(x+dx, y+dy) \ge 15$ (moving off the board)</li>
+	<li>$\min(x+dx, y+dy) \le 0$ (moving off the board)</li>
+	<li><code>board[y+dy][x+dx]</code> $&lt; 2$ (moving to an empty cell or staying still)</li>
+</ul>
+
+<p>where $(x,y)$ is Scotty&#39;s current position. Any invalid output will result in Scotty staying still as the default move.</p>
+
+<p><strong>Trapper</strong></p>
+
+<p>The function <code>trapper_bot.move</code> should return a list of integers <code>[x, y]</code>, designating the location of a new barrier to construct. Your output must satisfy $$0 \le x, y \le 14,$$ and $(x,y)$ must be an empty cell, i.e. <code>board[y][x] = 0</code>.</p>
+
+<p>Any invalid output will result in no barrier being placed by default.</p>
+
+<p>Your program is allotted 1 second of total runtime during a game, and 32 MB of memory. If you exceed those limits, the default move above will be used instead.</p>
+
+<h3>Scoring</h3>
+
+<hr />
+<p>In each game, the winner receives $1$ point and the loser receives $0$ points. In the case of a draw, both players receive $0.5$ points.</p>
+
+<hr class="red_line"/>
+
+<h1 class="mb-3 mt-4">Spaceships (2021 AI 3)</h1>
+
+<p>This is an $n$-player game. Each player controls a spaceship that starts at some integer coordinates $(x,y)$. On each turn, all spaceships move simultaneously to a new position. Spaceships move in the same L-shaped pattern of a chess knight, so there are 8 possible moves to choose from.</p>
+
+<p>If two or more spaceships move to the same position at the same turn, they will crash. This is bad for all spaceships involved, and should be avoided at all costs. Additionally, the sun occupies a $5 \times 5$ square of cells centered at $(0,0)$, and any spaceships moving into this region will also crash.</p>
+
+<p>Each player is given a direction to move their spaceship: either clockwise or counterclockwise. The goal is to make the maximum number of orbits around the sun, in the given direction.</p>
+
+<p>The starting positions $(x,y)$ are such that $x + y \pmod 2$ is the same for all players. Moreover, $(x,y)$ is chosen to be a distance of approximately $n$ away from the sun, i.e. $x^2 + y^2 \approx n^2$, where $n$ is the number of players.</p>
+
+<p>The game will last for $500$ turns, but any crashed spaceships will immediately stop moving.</p>
+
+<h3>Input Format</h3>
+
+<hr />
+<p>You must define the function <code>spaceship_bot.move(ship, others)</code> in the starter file, where:</p>
+
+<ul>
+	<li><code>ship</code> is a list of 4 numbers <code>[x, y, status, score]</code>, such that
+
+	<ul>
+		<li>$(x,y)$ are the current integer coordinates of your spaceships</li>
+		<li><code>status</code> is 1 if you should move counterclockwise, -1 if you should move clockwise, and 0 if you have crashed</li>
+		<li><code>score</code> is the number of times your spaceship has orbited around the origin (represented as a float, not an integer)</li>
+	</ul>
+	</li>
+	<li><code>others</code> is a list of all other players&#39; ships, in a fixed order. Each ship is given in the same format as your ship, i.e. a list of 4 numbers</li>
+</ul>
+
+<h3>Output Format</h3>
+
+<hr />
+<p>The function <code>spaceship_bot.move</code> should return a list of two integers <code>[dx, dy]</code>, satisfying $dx^2 + dy^2 = 5$. Your spaceship will move to the square $(x+dx, y+dy)$.</p>
+
+<p>Invalid outputs result in your spaceship moving in the same direction as your previous move by default (or a randomly chosen move, if this occurs on the first turn when there is no previous move to use).</p>
+
+<p>Your program is allotted 5 seconds of total runtime during a game, and 32 MB of memory. If you exceed those limits, the default move above will be used instead.</p>
+
+<h3>Sample Input</h3>
+
+<hr />
+<pre>
+<code class="language-python">ship = [3, 5, -1, 1.1]
+others = [[4, 4, 1, -1.3], [4, 6, 0, 0.1], [4, 6, 0, -0.3]]</code></pre>
+
+<h3>Sample Output</h3>
+
+<hr />
+<pre>
+<code class="language-python">[-1, 2]</code></pre>
+
+<h3>Scoring</h3>
+
+<hr />
+<p>At the end of the game, your score will be calculated as your winding number - the total number of times your spaceship has orbited around the origin. If you are going in the wrong direction (e.g. moving counterclockwise when you are supposed to move clockwise), your score will be 0 (despite the starter file&#39;s local tester showing a negative winding number)</p>
+
 
 {% endblock %}
 

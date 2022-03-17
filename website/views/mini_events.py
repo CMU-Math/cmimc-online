@@ -1,7 +1,7 @@
 math_events = [
     {
         'title': 'Integration Bee', 
-        'subtitle': 'Friday February 25th, 7:30-8:30pm --- Organized by Vlad Oleksenko',
+        'subtitle': 'Friday February 25th, 7:30-8:30pm --- Organized by Connor Gordon',
         'description': 'You\'ll be given a number of integration problems, with the ability to submit their answers and see a live leaderboard of everyone\'s scores. The test will last ~40 minutes, and the top scorers will be recognized!',
     },
     {

@@ -1,14 +1,10 @@
 <div class="sidebar ml-5">
     <div class="mb-4">
+		<p class="font-weight-bold mb-0">Time Remaining</p>
+		<p><span id="countdown"></span></p>
         {% if exam.is_math %}
-            <p class="font-weight-bold mb-0">Time Remaining</p>
+            <p class="font-weight-bold mb-0">Submission starts in</p>
             <p class="mb-4"><span id="submit-countdown"></span></p>
-
-            <p class="font-weight-bold mb-0">Submission Time Remaining</p>
-            <p><span id="countdown"></span></p>
-        {% else %}
-            <p class="font-weight-bold mb-0">Time Remaining</p>
-            <p><span id="countdown"></span></p>
         {% endif %}
     </div>
 

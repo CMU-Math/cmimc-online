@@ -13,7 +13,7 @@ def all_problems_power(request, user, exam):
         problems = exam.problem_list
         if user.is_mathlete:
             competitor = Competitor.objects.getCompetitor(exam, user.mathlete)
-            password = competitor.team.invite_code
+            password = competitor.team.id * 599374
         else:
             password = 'N/A (You are not a contestant)'
 
@@ -25,17 +25,6 @@ def all_problems_power(request, user, exam):
         return render(request, 'exam/all_problems_power.html', context)
     except Exception as e:
         log(ERROR=str(e), during='all_problems_power')
-
-
-'''
-@background
-def eq(l1, l2):
-
-
-def handler(signum, fram):
-    print('timeout in handler')
-    raise TimeoutError()
-'''
 
 def all_problems_math(request, user, exam):
     try:
@@ -51,25 +40,6 @@ def all_problems_math(request, user, exam):
                 num = request.POST['save']
                 p = problems.get(problem_number=num)
                 latex = request.POST[f'input-{num}']
-                '''
-                print('latex: ', latex)
-                expr = parse_latex(latex)
-                print('sympy expr: ', expr)
-                print('ans latex: ', p.answer)
-                ans_expr = parse_latex(p.answer)
-                print('ans expr: ', ans_expr)
-                '''
-
-                '''
-                signal.signal(signal.SIGALRM, handler)
-                signal.alarm(5)
-                try:
-                    print(expr.equals(ans_expr))
-                except:
-                    print("timeout!")
-                signal.alarm(0)
-                '''
-
                 sub = Submission(problem=p, competitor=competitor, text=latex)
                 sub.save()
                 score = Score.objects.get(problem=p, competitor=competitor)

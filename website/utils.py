@@ -1,6 +1,8 @@
 from background_task import background
-from django.utils.timezone import localtime, now
+from django.utils import timezone
+from django.utils.timezone import localtime, now, make_aware
 import math
+from datetime import timedelta, datetime
 
 # Lets you easily log things when in production, by calling
 # log(asdf='hello world') to display {'asdf': 'hello world'}
@@ -8,10 +10,68 @@ import math
 def log():
     return
 
+def start_round(exam):
+    exam.started = True
+    exam.real_end_time = exam._now + exam.duration
+    exam.submit_start_time = exam.real_end_time - timedelta(minutes=5)
+    exam.save()
+    return
 
 def miniround_sub(competitor, problem, miniround):
     time = problem.exam.miniround_end_time(miniround)
     return competitor.submissions.filter(problem=problem, submit_time__lte=time).order_by("-submit_time").first()
+
+def clone_exam(exam, new_contest, new_ep, time):
+    from website.models import Exam, Problem
+    new_exam = Exam()
+    new_exam.contest = new_contest
+    new_exam.name = f'{exam.name} - Clone {time}'
+    # start_offset = exam.fake_start_time - exam.fake_start_time.date()
+    tz = timezone.get_default_timezone()
+    new_exam.fake_start_time = datetime.combine(time.date(), exam.fake_start_time.astimezone(tz).time())
+    new_exam.fake_end_time = datetime.combine(time.date(), exam.fake_end_time.astimezone(tz).time())
+    new_exam.duration = exam.duration
+    new_exam.division = exam.division
+    new_exam.exampair = new_ep
+    new_exam.is_team_exam = exam.is_team_exam
+    new_exam.password = exam.password
+    new_exam.exam_type = exam.exam_type
+    new_exam.save()
+
+    for p in exam.problems.all():
+        new_p = Problem()
+        new_p.exam = new_exam
+        new_p.problem_text = p.problem_text
+        new_p.name = f'{p.name} - Clone {time}'
+        new_p.problem_number = p.problem_number
+        new_p.google_form_link = p.google_form_link
+        new_p.save()
+
+
+def clone_contest(contest):
+    from website.models import Contest, ExamPair
+    time = datetime.now()
+    new_contest = Contest()
+    new_contest.name = f'{contest.name} - Clone {time}'
+    new_contest.description = contest.description
+    new_contest.min_team_size = contest.min_team_size
+    new_contest.max_team_size = contest.max_team_size
+    new_contest.reg_deadline = time
+    new_contest.is_private = True
+    new_contest.is_math = contest.is_math
+    new_contest.save()
+
+    for ep in contest.exampairs.all():
+        new_ep = ExamPair()
+        new_ep.contest = new_contest
+        new_ep.name = ep.name
+        new_ep.save()
+        for e in ep.exams.all():
+            clone_exam(e, new_contest, new_ep, time)
+
+    for e in contest.exams.all():
+        if not e.exampair:
+            clone_exam(e, new_contest, None, time)
 
 
 
@@ -59,6 +119,8 @@ def update_competitors(team):
         # (exam, team, mathlete) triple, so there are no duplicates
 
         # delete any invalid competitors
+        for c in Competitor.objects.filter(pk=None):
+            c.delete()
         comps = Competitor.objects.filter(exam=exam, team=team)
         for c in comps:
             if exam.is_team_exam:
@@ -100,6 +162,7 @@ def update_competitors(team):
 # and exactly one taskscore for each (task, score) pair
 def update_contest(contest):
     log(starting='update_contest')
+    default_div1(contest)
     from website.models import MiniRoundQueue
     try:
         for team in contest.teams.all():

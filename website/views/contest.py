@@ -7,7 +7,6 @@ from website.utils import update_contest, reset_contest, regrade_games, log, res
 
 @login_required
 def contest_list(request):
-    
 
     if request.method == 'POST':
         if 'update_contest' in request.POST:
@@ -67,13 +66,16 @@ def contest_list(request):
     tuples = []
     for contest in all_contests:
         if user.is_mathlete:
+            reg_exams = contest.reg_exams(user.mathlete)
+            reg_exams = sorted(reg_exams, key=lambda x:x.fake_start_time)
             if user.has_team(contest):
                 team = user.mathlete.get_team(contest)
-                tuples.append({'contest':contest, 'has_team':True, 'team':team, 'exams': contest.reg_exams(user.mathlete), 'canjoin': contest.started})
+                tuples.append({'contest':contest, 'has_team':True, 'team':team, 'exams': reg_exams, 'canjoin': contest.started})
             else:
-                tuples.append({'contest':contest, 'has_team':False, 'team':None, 'exams': contest.reg_exams(user.mathlete), 'canjoin': False})
+                tuples.append({'contest':contest, 'has_team':False, 'team':None, 'exams': reg_exams, 'canjoin': False})
         else:
-            tuples.append({'contest':contest, 'has_team':user.has_team(contest), 'team':None, 'exams': contest.exams.all(), 'canjoin': contest.started})
+            tuples.append({'contest':contest, 'has_team':user.has_team(contest), 'team':None, 'exams': sorted(contest.exams.all(), key=lambda x:x.fake_start_time), 'canjoin': contest.started})
+
     
     # Categorize the contests in the tuples
     ongoing_contests = []

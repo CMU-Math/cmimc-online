@@ -25,9 +25,12 @@ class DivChoice(models.Model):
 class Exam(models.Model):
     contest = models.ForeignKey(Contest, related_name='exams', on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    fake_start_time = models.DateTimeField()
+    fake_end_time = models.DateTimeField()
+    real_end_time = models.DateTimeField(null=True, blank=True)
     submit_start_time = models.DateTimeField(null=True, blank=True)
+    started = models.BooleanField(default=False)
+    duration = models.DurationField(null=True, blank=True)
 
     division = models.IntegerField(null=True, blank=True)
     exampair = models.ForeignKey(ExamPair, null=True, blank=True, related_name='exams', on_delete=models.SET_NULL)
@@ -99,69 +102,72 @@ class Exam(models.Model):
 
     @cached_property
     def ended(self):
-        return self._now > self.end_time
+        return self.started and self._now > self.real_end_time
 
+    '''
     @cached_property
     def started(self):
         return self._now >= self.start_time
+    '''
 
     @cached_property
     def ongoing(self):
         return self.started and not self.ended
 
+    # TODO: use fake_started?
     @cached_property
     def time_until_start_days(self):
         if not self.started:
-            return (self.start_time - self._now).days
+            return (self.fake_start_time - self._now).days
         else:
             return None
 
     @cached_property
     def time_until_start_hours(self):
         if not self.started:
-            return (int)((self.start_time - self._now).seconds/60/60)
+            return (int)((self.fake_start_time - self._now).seconds/60/60)
         else:
             return None
 
     @cached_property
     def time_until_start_minutes(self):
         if not self.started:
-            return (int)((self.start_time - self._now).seconds / 60)
+            return (int)((self.fake_start_time - self._now).seconds / 60)
         else:
             return None
 
     @cached_property
     def time_until_start_seconds(self):
         if not self.started:
-            return (self.start_time - self._now).seconds
+            return (self.fake_start_time - self._now).seconds
         else:
             return None
 
     @cached_property
     def time_remaining_days(self):
         if not self.ended:
-            return (self.end_time - self._now).days
+            return (self.real_end_time - self._now).days
         else:
             return None
 
     @cached_property
     def time_remaining_hours(self):
         if not self.ended:
-            return (int)((self.end_time - self._now).seconds/60/60)
+            return (int)((self.real_end_time - self._now).seconds/60/60)
         else:
             return None
 
     @cached_property
     def time_remaining_minutes(self):
         if not self.ended:
-            return (int)((self.end_time - self._now).seconds / 60)%60
+            return (int)((self.real_end_time - self._now).seconds / 60)%60
         else:
             return 0
 
     # number of seconds remaining in exam
     @cached_property
     def time_remaining(self):
-        return max((self.end_time - self._now).total_seconds(), 0)
+        return max((self.real_end_time - self._now).total_seconds(), 0)
 
     # in seconds
     @cached_property
@@ -171,7 +177,7 @@ class Exam(models.Model):
 
     def time_remaining_seconds(self):
         if not self.ended:
-            return (self.end_time - self._now).seconds%60
+            return (self.real_end_time - self._now).seconds%60
         else:
             return None
 
@@ -182,12 +188,12 @@ class Exam(models.Model):
     @property
     def num_minirounds(self):
         return 1 # TODO: fix!
-        return (self.end_time - self.miniround_start) // self.miniround_time + 1
+        return (self.real_end_time - self.miniround_start) // self.miniround_time + 1
 
     # the time that the ith miniround ends, and gets graded
     # i is 1-indexed
     def miniround_end_time(self, i):
-        return self.end_time # TODO: fix
+        return self.real_end_time # TODO: fix
         return self.miniround_start + (i-1) * self.miniround_time
 
     @cached_property

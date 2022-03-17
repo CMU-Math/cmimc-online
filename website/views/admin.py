@@ -2,12 +2,13 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count
-from website.models import Contest, User, Exam, Mathlete, Team, Problem
+from website.models import Contest, User, Exam, Mathlete, Team, Problem, Competitor, Score, Submission
 from django.utils import timezone
 from django.http import HttpResponse
+from django.conf import settings
 
 from website.tasks import init_all_tasks, check_finished_games_real, final_ai_grading
-from website.utils import update_contest, reset_contest, regrade_games, log, reset_exam, scores_from_csv, recompute_leaderboard, recheck_games, reset_problem, default_div1, exam_results_from_csv, calc_indiv_sweepstakes, calc_sweepstakes
+from website.utils import update_contest, reset_contest, regrade_games, log, reset_exam, scores_from_csv, recompute_leaderboard, recheck_games, reset_problem, default_div1, exam_results_from_csv, calc_indiv_sweepstakes, calc_sweepstakes, start_round, clone_contest
 
 
 def admin_dashboard(request):
@@ -16,6 +17,34 @@ def admin_dashboard(request):
         raise PermissionDenied("You do not have access to this page")
 
     if request.method == 'POST':
+        if 'submission_csv' in request.POST:
+            e = Exam.objects.get(pk=request.POST['submission_csv'])
+            comps = Competitor.objects.filter(exam=e)
+            content = 'Team ID'
+            if not e.is_team_exam:
+                content += ',Indiv ID'
+            for p in e.problems.all():
+                content += f',P{p.problem_number} Answer'
+            content += '\n'
+            for c in comps:
+                content += f'{c.team.id}'
+                if not e.is_team_exam:
+                    content += f',{c.mathlete.user.id}'
+                for p in e.problems.all():
+                    sub = Score.objects.get(problem=p, competitor=c).latest_sub
+                    if sub is None:
+                        content += ','
+                    else:
+                        content += f',{sub.text}'
+                content += '\n'
+
+            response = HttpResponse(content, content_type='text/csv')
+            response['Content-Disposition'] = 'attachment; filename={0}_submissions.csv'.format(e.name)
+            return response
+
+        if 'start_round' in request.POST:
+            e = Exam.objects.get(pk=request.POST['start_round'])
+            start_round(e)
         if 'get_contest_info' in request.POST:
             c = Contest.objects.get(pk=request.POST['get_contest_info'])
             teams = Team.objects.filter(contest=c)
@@ -54,6 +83,9 @@ def admin_dashboard(request):
         if 'update_contest' in request.POST:
             contest = Contest.objects.get(pk=request.POST['update_contest'])
             update_contest(contest)
+        if 'clone_contest' in request.POST:
+            contest = Contest.objects.get(pk=request.POST['clone_contest'])
+            clone_contest(contest)
         elif 'reset_contest' in request.POST:
             contest = Contest.objects.get(pk=request.POST['reset_contest'])
             reset_contest(contest)
@@ -109,14 +141,26 @@ def admin_dashboard(request):
         contest_names.append(contest.name)
 
 
+    cid = 11
+    if settings.DEBUG:
+        cid = 2
 
     all_emails = []
 
     member_count = [0]*10
-    teams = Team.objects.filter(contest=11) # id 11 = Math Contest 2022
+    teams = Team.objects.filter(contest=cid) # id 11 = Math Contest 2022
     for team in teams:
         sz = team.mathletes.count()
+        if sz == 0:
+            log(empty_team=str(team.team_name))
         member_count[min(sz, 9)] += 1
+
+    math_exams = []
+    math_contest = Contest.objects.get(pk=cid)
+    if math_contest:
+        for exam in math_contest.exams.all():
+            if exam.is_math:
+                math_exams.append(exam)
 
     context = {
         'user': user,
@@ -124,6 +168,7 @@ def admin_dashboard(request):
         'contest_small_teams': ', '.join([]),
         'member_count': member_count,
         'contest_ids_names': zip(contest_ids,contest_names),
+        'math_exams': math_exams,
     }
 
     return render(request, 'admin/admin_dashboard.html', context)
