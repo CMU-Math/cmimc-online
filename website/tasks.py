@@ -253,16 +253,15 @@ def check_graded_submissions():
         c = sub.competitor
         s = Score.objects.get(problem=p, competitor=c)
         ts = TaskScore.objects.get(task=t, score=s)
-        g = p.grader
-        if g.better(sub.points, ts.raw_points):
+        if sub.points > ts.raw_points:
             ts.raw_points = sub.points
             ts.save()
 
-            if g.better(ts.raw_points, t.best_raw_points):
+            if ts.raw_points > t.best_raw_points:
                 t.best_raw_points = ts.raw_points
                 t.save()
                 for ts2 in t.taskscores.all():
-                    ts2.norm_points = g.normalize(ts2.raw_points, t.best_raw_points)
+                    ts2.norm_points = ts2.raw_points / t.best_raw_points * 100 if t.best_raw_points else 0
                     ts2.save()
                     s2 = ts2.score
                     norms = [ts3.norm_points for ts3 in s2.taskscores.all()]
@@ -270,7 +269,7 @@ def check_graded_submissions():
                     ts2.score.save()
                     ts2.score.competitor.update_total_score()
             else:
-                ts.norm_points = g.normalize(ts.raw_points, t.best_raw_points)
+                ts.norm_points = ts.raw_points / t.best_raw_points * 100 if t.best_raw_points else 0
                 ts.save()
                 norms = [ts2.norm_points for ts2 in s.taskscores.all()]
                 s.points = sum(norms)/len(norms)
