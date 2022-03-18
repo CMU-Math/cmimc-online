@@ -7,7 +7,6 @@
 </div>
 
 {% if exam.is_ai %}
-<p>Download the starter file for {{ problem.name }} <a href="{% url 'ai_starter_file' aiprob.id %}">here</a></p>
 <a href="{% url 'submit' exam.id problem.problem_number %}" class="btn btn-primary">Submit</a>
 {% endif %}
 
