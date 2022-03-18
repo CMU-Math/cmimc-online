@@ -11,8 +11,7 @@ def match_replay(request, aisubmission_id):
     user = request.user
     aisub = get_object_or_404(AISubmission, pk=aisubmission_id)
     if not user.in_team(aisub.competitor.team) and not user.is_staff:
-        #raise PermissionDenied("You do not have access to view this match")
-        pass
+        raise PermissionDenied("You do not have access to view this match")
 
     gamedata = aisub.game.history
     replay = {"whoami": aisub.seat, "history": gamedata}
