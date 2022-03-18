@@ -56,7 +56,7 @@ urlpatterns = [
     path('results/exam/<int:exam_id>', views.exam_results, name='exam_results'),
 
     path('exam/local_visualize', views.local_visualizer, name='local_visualizer'),
-    path('exam/visualize/<int:submission_id>', views.match_replay, name='match_replay'),
+    path('exam/visualize/<int:aisubmission_id>', views.match_replay, name='match_replay'),
     path('download/starter-file/<int:aiproblem_id>', views.ai_starter_file, name='ai_starter_file'),
     path('download/visualizer/<str:aiproblem_id>', views.ai_visualizer, name='ai_visualizer'),
     path('download/mailinglist/<int:contest_id>', views.mailinglist, name='mailinglist'),
