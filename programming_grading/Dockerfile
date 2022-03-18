@@ -40,6 +40,3 @@ RUN gcc wait_on_cork.c -o /bin/wait_on_cork && chmod 755 /bin/wait_on_cork && rm
 # install cmimc_programming library
 ADD python_lib /python_lib
 RUN cd /python_lib && pip3 install . && rm -rf /python_lib
-
-# run as a client grader using creds
-ENTRYPOINT ['']
