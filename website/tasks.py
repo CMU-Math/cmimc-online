@@ -259,7 +259,7 @@ def check_graded_submissions():
             ts.raw_points = sub.points
             ts.save()
 
-            if t.best_raw_points is None ts.raw_points > t.best_raw_points:
+            if t.best_raw_points is None or ts.raw_points > t.best_raw_points:
                 t.best_raw_points = ts.raw_points
                 t.save()
                 for ts2 in t.taskscores.all():
