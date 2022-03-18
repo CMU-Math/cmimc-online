@@ -14,16 +14,16 @@ def match_replay(request, aisubmission_id):
         raise PermissionDenied("You do not have access to view this match")
 
     gamedata = aisub.game.history
-    replay = {"seat": aisub.seat, "gamedata": gamedata}
+    replay = {"whoami": aisub.seat, "history": gamedata}
     content = json.dumps(replay)
     return render(request, 'exam/run_visualizer.html', {
         'visualizer_data': content,
-        'problem_name': aisub.game.aiproblem.problem.short_name,
+        'problemid': aisub.game.aiproblem.problem.short_name,
     })
 
 def local_visualizer(request):
     return render(request, 'exam/run_visualizer.html', {
-        'problem': None,
+        'problemid': None,
     })
 
 @login_required
