@@ -7,7 +7,7 @@
 <iframe
     id="visualizer"
     style="background-color: gray;position:absolute;top:0;left:0;width:100%;height:100%;"
-    {% if problemid is not None %} src="/download/visualizer/{{ visualizer_name }}" {% endif %}
+    {% if problemid is not None %} src="/download/visualizer/{{ problemid }}" {% endif %}
 ></iframe>
 </div>
 </div>
@@ -48,6 +48,7 @@ var current_games = [];
 var port = 8080;
 /* data sent to loaded visualizer */
 var visualizer_data = "";
+var whoami = null;
 const vis = document.getElementById("visualizer");
 
 function which_visualizer(game_file) {
@@ -123,14 +124,16 @@ document.getElementById("reload_button").addEventListener("click", function() {
     port = parseInt(document.getElementById("port_input").value);
     scan_local_games();
 });
-{% else %}
-const visualizer_json = {{ visualizer_data|escapejs }};
-visualizer_data = JSON.parse(visualizer_json);
 {% endif %}
 vis.onload = function() {
+    {% if problemid is not None %}
+    const visualizer_json = {{ visualizer_data|escapejs }};
+    visualizer_data = JSON.parse(visualizer_json);
+    whoami = visualizer_data.whoami;
+    {% endif %}
     const src = vis.getAttribute("src");
     if (src !== null && src !== "") {
-        vis.contentWindow.postMessage({ history: visualizer_data.history, whoami: null }, "*");
+        vis.contentWindow.postMessage({ history: visualizer_data.history, whoami: whoami }, "*");
     }
 };
 </script>
