@@ -107,10 +107,10 @@ class OptGrader:
         data = json.loads(input())
         task = json.loads(data['task'])
         gens = self.get_batch(task['gen'])
-        res = [self.grade({ 'gen': gen, 'seed': seed, 'code': data['code']}, CodeboxClass[0]) for gen,seed in gens]
+        res = [self.grade({ 'gen': gen, 'seed': seed, 'code': { 'code': data['code'] }}, CodeboxClass[0]) for gen,seed in gens]
 
         print(json.dumps({
-            'summary': sum(r['summary'] for r in res),
+            'summary': sum(r['summary'] for r in res) / len(res),
             'history': [r['history'] for r in res],
             'playerlogs': [r['playerlogs'] for r in res],
         }))

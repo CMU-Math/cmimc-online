@@ -107,8 +107,8 @@ class Codebox(AbstractCodebox):
         try:
             t = Timer(self.config['timeout'], lambda: self.timer_kill())
             t.start()
-            self.proc.stdin.write(data)
-            self.proc.stdin.flush()
+            self.proc.p.stdin.write(data)
+            self.proc.p.stdin.flush()
         finally:
             t.cancel()
             if self.timer_killed: raise Exception("timed out")

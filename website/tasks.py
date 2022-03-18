@@ -253,11 +253,13 @@ def check_graded_submissions():
         c = sub.competitor
         s = Score.objects.get(problem=p, competitor=c)
         ts = TaskScore.objects.get(task=t, score=s)
-        if sub.points > ts.raw_points:
+        if sub.points is None:
+            continue
+        if ts.raw_points is None or sub.points > ts.raw_points:
             ts.raw_points = sub.points
             ts.save()
 
-            if ts.raw_points > t.best_raw_points:
+            if t.best_raw_points is None ts.raw_points > t.best_raw_points:
                 t.best_raw_points = ts.raw_points
                 t.save()
                 for ts2 in t.taskscores.all():
@@ -287,11 +289,10 @@ def init_all_tasks():
     exams = Exam.objects.all()
     ongoing_ai = False
     for exam in exams:
-        if exam.is_ai:
-            if not exam.ended:
-                ongoing_ai = True
-                time = max(exam.fake_start_time, timezone.now())
-                schedule_ai_games(exam.id, schedule=time, repeat=60, repeat_until=exam.fake_end_time)
+        if exam.is_ai and exam.real_end_time is not None and exam.real_end_time > exam._now:
+            ongoing_ai = True
+            time = max(exam.fake_start_time, timezone.now())
+            schedule_ai_games(exam.id, schedule=time, repeat=60, repeat_until=exam.fake_end_time)
     if ongoing_ai:
         check_finished_games(schedule=0, repeat=30)
         check_graded_submissions(schedule=0, repeat=30)
