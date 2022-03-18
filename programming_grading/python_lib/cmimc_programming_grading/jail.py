@@ -41,20 +41,21 @@ class Jail:
     def __init__(self):
         self.procs = []
         self.dir = tempfile.TemporaryDirectory()
-        self.dir.__enter__()
+        os.chmod(self.dir.name, 0o755)
     def destroy(self):
         for proc in self.procs: proc.kill()
-        self.dir.__exit__()
+        self.dir.cleanup()
     def start_process(self, argv, cputime=0, walltime=0, memlimit=0):
         #cork_fd = os.eventfd(0, flags=0) # we want the cork fd to be inheirited
         cork_fd = 0
         proc = subprocess.Popen(
             args=[nsjail_loc,
-                "-x", str(base_config_loc),
+                "-C", str(base_config_loc),
                 "-B", str(self.dir.name) + ":/app",
                 "--cgroup_mem_max", str(memlimit),
-                "--rlimit_cpu_time", str(memlimit),
+                "--rlimit_cpu", str(memlimit),
                 "-t", str(int(walltime)),
+                "-q",
                 # "--pass_fd", str(cork_fd),
                 "--"] + argv,
             stdin=subprocess.PIPE,
@@ -64,8 +65,10 @@ class Jail:
         self.procs.append(proc)
         return JailProc(proc, cork_fd=cork_fd, cputime=cputime)
     def write_file(self, name, contents):
-        with open(Path(self.dir.name) / name, 'w') as f:
+        file_ = Path(self.dir.name) / name
+        with open(file_, 'w') as f:
             f.write(contents)
+        os.chmod(file_, 0o755)
 
 # implement a codebox on top of the jail
 
@@ -92,22 +95,30 @@ class Codebox(AbstractCodebox):
         self.jail = Jail()
         self.jail.write_file("me.py", self.player)
         self.proc = self.jail.start_process(
-            argv=["python3", Path(self.jail.dir.name) / "me.py"],
+            argv=["/usr/bin/python3", "/app/me.py"],
             cputime = self.config["cputime"],
             walltime = self.config["walltime"],
             memlimit = self.config["memlimit"])
     def destroy_box(self):
         self.jail.destroy()
+    def get_stderr(self):
+        return self.proc.p.stderr.read()
     def write_raw(self, data):
-        # TODO: cgroup timeouts?
-        self.proc.unfreeze()
-        self.proc.p.stdin.write(data)
-        self.proc.p.stdin.flush()
-        self.proc.freeze()
+        try:
+            t = Timer(self.config['timeout'], lambda: self.timer_kill())
+            t.start()
+            self.proc.stdin.write(data)
+            self.proc.stdin.flush()
+        finally:
+            t.cancel()
+            if self.timer_killed: raise Exception("timed out")
     def read_raw(self):
-        self.proc.unfreeze()
-        line = self.proc.p.stdout.readline()
-        self.proc.freeze()
-        return line
+        try:
+            t = Timer(self.config['timeout'], lambda: self.timer_kill())
+            t.start()
+            return self.proc.p.stdout.readline()
+        finally:
+            t.cancel()
+            if self.timer_killed: raise Exception("timed out")
 
 CodeboxClass.append(Codebox)
