@@ -253,11 +253,13 @@ def check_graded_submissions():
         c = sub.competitor
         s = Score.objects.get(problem=p, competitor=c)
         ts = TaskScore.objects.get(task=t, score=s)
-        if sub.points > ts.raw_points:
+        if sub.points is None:
+            continue
+        if sub.points > ts.raw_points or ts_raw_points is None:
             ts.raw_points = sub.points
             ts.save()
 
-            if ts.raw_points > t.best_raw_points:
+            if ts.raw_points > t.best_raw_points or t.best_raw_points is None:
                 t.best_raw_points = ts.raw_points
                 t.save()
                 for ts2 in t.taskscores.all():
