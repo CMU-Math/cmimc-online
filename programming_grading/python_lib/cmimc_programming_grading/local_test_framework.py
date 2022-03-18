@@ -4,6 +4,7 @@ import json
 import typing as T
 from contextlib import ExitStack
 import random
+import time
 
 REPLAY_DIR = "replays" # relative to here, will be mkdired
 
@@ -150,6 +151,17 @@ class Codebox(AbstractCodebox):
         self.config = config
         self.src_loc = src_loc
         self.timer_killed = False
+        self.total_time_taken = 0
+        self.started_t = 0
+    
+    def start_xn(self):
+        self.started_t = time.time()
+    
+    def end_xn(self):
+        used = time.time() - self.started_t 
+        self.total_time_taken += used
+        if self.total_time_taken > 2 * self.config['cputime']:
+            self.timer_kill()
 
     @classmethod
     def of_player_config(cls, code, config):
@@ -161,21 +173,30 @@ class Codebox(AbstractCodebox):
 
     def write_raw(self, data):
         try:
+            self.start_xn()
             t = Timer(self.config['timeout'], lambda: self.timer_kill())
             t.start()
             self.proc.stdin.write(data)
             self.proc.stdin.flush()
+            self.end_xn()
         finally:
             t.cancel()
-            if self.timer_killed: raise Exception("timed out")
+            if self.timer_killed:
+                raise Exception("timed out")
+
     def read_raw(self):
         try:
+            self.start_xn()
             t = Timer(self.config['timeout'], lambda: self.timer_kill())
             t.start()
-            return self.proc.stdout.readline()
+            res = self.proc.stdout.readline()
+            self.end_xn()
+            return res
         finally:
             t.cancel()
-            if self.timer_killed: raise Exception("timed out")
+            if self.timer_killed:
+                raise Exception("timed out")
+
     def get_stderr(self):
         return self.proc.stderr.read()
     def initialize_box(self):
