@@ -35,7 +35,7 @@ class AIGame(models.Model):
     3 = error while grading
     4 = results saved to leaderboard
     """
-    status = models.IntegerField(default=0)
+    status = models.IntegerField(default=0,db_index=True)
     history = models.JSONField(null=True, blank=True) # after the game is played, gives the history output of the grader
     time = models.DateTimeField(db_index=True) # when the game should be played
     numplayers = models.IntegerField() # number of players
