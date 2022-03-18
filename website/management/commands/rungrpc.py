@@ -30,6 +30,10 @@ class AIJob:
     def on_graded(self, resp):
         game = AIGame.objects.get(pk=self.game)
         seats = sorted(game.aisubmissions.all(), key=lambda x: x.seat)
+        if not resp.summary:
+            game.status = 3
+            game.save()
+            return
         summary = json.loads(resp.summary)
         for i,seat in enumerate(seats):
             seat.score = summary[i]
@@ -67,6 +71,10 @@ class OptJob:
     def on_graded(self, resp):
         sub = Submission.objects.get(pk=self.id)
         sub.status = 2
+        if not resp.summary:
+            sub.status = 3
+            sub.save()
+            return
         sub.points = json.loads(resp.summary)
         sub.save()
     @classmethod
@@ -98,7 +106,6 @@ class GradeServer(coordinator_pb2_grpc.Coordinator):
                 current_request = self.request_queue.get()
                 req_pb = current_request.to_pb()
                 yield req_pb
-                print('iadsoifhadoifh')
                 grade_response = next(grade_response_iterator)
                 assert req_pb.id == grade_response.id
 
