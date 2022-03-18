@@ -1,6 +1,7 @@
 import argparse
 import time
 import queue
+import traceback
 import grpc
 import os
 import sys
@@ -14,25 +15,28 @@ from pathlib import Path
 
 def grade(request):
     print("grading", request)
-    with TemporaryDirectory() as tempd:
-        d = Path(tempd)
-        pygrader = d / "grader.py"
-        response = coordinator_pb2.GradeResponse(id=request.id)
-        with open(pygrader, "wb") as f:
-            f.write(request.op.python_code)
+    response = coordinator_pb2.GradeResponse(id=request.id)
+    try:
+        with TemporaryDirectory() as tempd:
+            d = Path(tempd)
+            pygrader = d / "grader.py"
+            with open(pygrader, "wb") as f:
+                f.write(request.op.python_code)
 
-        proc = subprocess.run(
-            args=[sys.executable, pygrader],
-            capture_output=True,
-            input=request.op.input)
-        
-        print(proc.stderr.decode())
-        data = json.loads(proc.stdout)
-        response.output = json.dumps(data['history']).encode()
-        response.summary = json.dumps(data['summary']).encode()
-        response.playerlogs = json.dumps(data['playerlogs']).encode()
-        print("got", response)
-        return response
+            proc = subprocess.run(
+                args=[sys.executable, pygrader],
+                capture_output=True,
+                input=request.op.input)
+            
+            print(proc.stderr.decode())
+            data = json.loads(proc.stdout)
+            response.output = json.dumps(data['history']).encode()
+            response.summary = json.dumps(data['summary']).encode()
+            response.playerlogs = json.dumps(data['playerlogs']).encode()
+            print("got", response)
+    except Exception as e:
+        print(traceback.print_exc(e))
+    return response
 
 import multiprocessing as mp
 
