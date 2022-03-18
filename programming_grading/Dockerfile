@@ -4,7 +4,7 @@
 # cgroups v2 rw mounted at /sys/fs/cgroup
 # nsjail permissions
 
-FROM ubuntu:latest
+FROM docker.io/library/ubuntu:latest
 
 # mostly requirements for nsjail.  could potentially include other stuff
 # for other language graders
