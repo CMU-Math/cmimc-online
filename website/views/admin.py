@@ -81,7 +81,7 @@ def admin_dashboard(request):
             return response
 
         if 'update_contest' in request.POST:
-            contest = Contest.objects.get(pk=request.POST['update_contest'])
+            contest = Contest.objects.get(pk=int(request.POST['update_contest']))
             update_contest(contest)
         if 'clone_contest' in request.POST:
             contest = Contest.objects.get(pk=request.POST['clone_contest'])
@@ -156,11 +156,13 @@ def admin_dashboard(request):
         member_count[min(sz, 9)] += 1
 
     math_exams = []
+    """
     math_contest = Contest.objects.get(pk=cid)
     if math_contest:
         for exam in math_contest.exams.all():
             if exam.is_math:
                 math_exams.append(exam)
+    """
 
     context = {
         'user': user,

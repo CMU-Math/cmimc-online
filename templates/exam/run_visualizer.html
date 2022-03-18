@@ -127,8 +127,7 @@ document.getElementById("reload_button").addEventListener("click", function() {
 {% endif %}
 vis.onload = function() {
     {% if problemid is not None %}
-    const visualizer_json = {{ visualizer_data|escapejs }};
-    visualizer_data = JSON.parse(visualizer_json);
+    visualizer_data = JSON.parse("{{ visualizer_data|escapejs }}");
     whoami = visualizer_data.whoami;
     {% endif %}
     const src = vis.getAttribute("src");
