@@ -36,6 +36,8 @@
         {% url 'match_results' exam.id 1 as matches %}
         <li><a href="{{ matches }}" class="no-color {% if request.get_full_path == matches %}active{% endif %}">Match Results</a></li>
         {% endif %}
+
+        <li><a href="/exam/local_visualize" class="no-color">Local Visualization</li>
     </ul>
 </div>
 
