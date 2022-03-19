@@ -35,7 +35,8 @@ def grade(request):
             response.playerlogs = json.dumps(data['playerlogs']).encode()
             print("got", response)
     except Exception as e:
-        print(traceback.format_exc(e))
+        #print(traceback.format_exc(e))
+        print(e)
     return response
 
 import multiprocessing as mp
