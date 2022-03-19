@@ -253,32 +253,31 @@ def check_graded_submissions():
         c = sub.competitor
         s = Score.objects.get(problem=p, competitor=c)
         ts = TaskScore.objects.get(task=t, score=s)
-        if sub.points is None:
-            continue
-        if ts.raw_points is None or sub.points > ts.raw_points:
-            ts.raw_points = sub.points
-            ts.save()
-
-            if t.best_raw_points is None or ts.raw_points > t.best_raw_points:
-                t.best_raw_points = ts.raw_points
-                t.save()
-                for ts2 in t.taskscores.all():
-                    ts2.norm_points = ts2.raw_points / t.best_raw_points * 100 if t.best_raw_points else 0
-                    ts2.save()
-                    s2 = ts2.score
-                    norms = [ts3.norm_points for ts3 in s2.taskscores.all()]
-                    s2.points = sum(norms)/len(norms)
-                    ts2.score.save()
-                    ts2.score.competitor.update_total_score()
-            else:
-                ts.norm_points = ts.raw_points / t.best_raw_points * 100 if t.best_raw_points else 0
+        if sub.points is not None:
+            if ts.raw_points is None or sub.points > ts.raw_points:
+                ts.raw_points = sub.points
                 ts.save()
-                norms = [ts2.norm_points for ts2 in s.taskscores.all()]
-                s.points = sum(norms)/len(norms)
-                s.save()
-                s.competitor.update_total_score()
-        sub.status = 4
-        sub.save()
+
+                if t.best_raw_points is None or ts.raw_points > t.best_raw_points:
+                    t.best_raw_points = ts.raw_points
+                    t.save()
+                    for ts2 in t.taskscores.all():
+                        ts2.norm_points = ts2.raw_points / t.best_raw_points * 100 if ts2.raw_points is not None and t.best_raw_points else 0
+                        ts2.save()
+                        s2 = ts2.score
+                        norms = [ts3.norm_points for ts3 in s2.taskscores.all()]
+                        s2.points = sum(norms)/len(norms)
+                        ts2.score.save()
+                        ts2.score.competitor.update_total_score()
+                else:
+                    ts.norm_points = ts.raw_points / t.best_raw_points * 100 if t.best_raw_points else 0
+                    ts.save()
+                    norms = [ts2.norm_points for ts2 in s.taskscores.all()]
+                    s.points = sum(norms)/len(norms)
+                    s.save()
+                    s.competitor.update_total_score()
+            sub.status = 4
+            sub.save()
 
 
 

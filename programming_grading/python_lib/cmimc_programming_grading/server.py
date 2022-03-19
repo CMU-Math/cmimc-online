@@ -35,7 +35,8 @@ def grade(request):
             response.playerlogs = json.dumps(data['playerlogs']).encode()
             print("got", response)
     except Exception as e:
-        traceback.print_exc(e)
+        #print(traceback.format_exc(e))
+        print(e)
     return response
 
 import multiprocessing as mp
@@ -59,7 +60,8 @@ def server_thread(args, result_queue, request_queue):
             for grade_request in stub.Serve(iter(get_next_res, None)):
                 request_queue.put(grade_request.SerializeToString())
         except Exception as e:
-            traceback.print_exc(e)
+            #print(traceback.format_exc(e))
+            print(e)
         print("Sleeping...")
         time.sleep(30)
 
