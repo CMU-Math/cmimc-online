@@ -62,7 +62,8 @@ def server_thread(args, result_queue, request_queue):
     except Exception as e:
         #print(traceback.format_exc(e))
         print(e)
-        sys.exit()
+        request_queue.put(None)
+        os._exit(1)
 
 def main():
     parser = argparse.ArgumentParser(description='CMIMC programming grading client')
@@ -76,6 +77,9 @@ def main():
 
     def get_next_req():
         req = coordinator_pb2.GradeRequest()
+        nr = request_queue.get()
+        if nr is None:
+            os._exit(1)
         req.ParseFromString(request_queue.get())
         return req
 
