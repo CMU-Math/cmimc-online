@@ -94,6 +94,7 @@ class GradeServer(coordinator_pb2_grpc.Coordinator):
         self.request_queue = queue.SimpleQueue()
         self.authed = set()
     def SetPassword(self, pw, context):
+        print('got connection from', context.peer())
         if pw.password == os.environ["CMIMC_GRPC_PASSWORD"]:
             self.authed.add(context.peer())
         return coordinator_pb2.Empty()
@@ -105,8 +106,10 @@ class GradeServer(coordinator_pb2_grpc.Coordinator):
             while True:
                 current_request = self.request_queue.get()
                 req_pb = current_request.to_pb()
+                print('sending to', context.peer())
                 yield req_pb
                 grade_response = next(grade_response_iterator)
+                print('recieved from', context.peer())
                 assert req_pb.id == grade_response.id
 
                 current_request.on_graded(grade_response)
@@ -121,7 +124,7 @@ def find_games_to_grade(startup=False):
     return AIJob.find_games(startup) + OptJob.find_games(startup)
 
 def run_coordinator(port, ivl):
-    server = grpc.server(futures.ThreadPoolExecutor(max_workers=1))
+    server = grpc.server(futures.ThreadPoolExecutor(max_workers=200))
     coordinator = GradeServer()
     coordinator_pb2_grpc.add_CoordinatorServicer_to_server(coordinator, server)
     server.add_insecure_port(port)
