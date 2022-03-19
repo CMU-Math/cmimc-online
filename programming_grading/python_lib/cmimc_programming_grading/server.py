@@ -42,30 +42,28 @@ def grade(request):
 import multiprocessing as mp
 
 def server_thread(args, result_queue, request_queue):
-    while 1:
-        print("Connecting...")
-        try:
-            channel = grpc.insecure_channel(args.host)
-            stub = coordinator_pb2_grpc.CoordinatorStub(channel)
+    print("Connecting...")
+    try:
+        channel = grpc.insecure_channel(args.host)
+        stub = coordinator_pb2_grpc.CoordinatorStub(channel)
 
-            def get_next_res():
-                res = coordinator_pb2.GradeResponse()
-                res.ParseFromString(result_queue.get())
-                print('sent', res)
-                return res
+        def get_next_res():
+            res = coordinator_pb2.GradeResponse()
+            res.ParseFromString(result_queue.get())
+            print('sent', res)
+            return res
 
-            print('Sending password...')
-            stub.SetPassword(coordinator_pb2.Password(password=os.environ["CMIMC_GRPC_PASSWORD"]))
+        print('Sending password...')
+        stub.SetPassword(coordinator_pb2.Password(password=os.environ["CMIMC_GRPC_PASSWORD"]))
 
-            print('Successfully connected...')
-            for grade_request in stub.Serve(iter(get_next_res, None)):
-                request_queue.put(grade_request.SerializeToString())
-        except Exception as e:
-            #print(traceback.format_exc(e))
-            print(e)
-        print("Sleeping...")
-        time.sleep(30)
-
+        print('Successfully connected...')
+        for grade_request in stub.Serve(iter(get_next_res, None)):
+            request_queue.put(grade_request.SerializeToString())
+    except Exception as e:
+        #print(traceback.format_exc(e))
+        print(e)
+        request_queue.put(None)
+        os._exit(1)
 
 def main():
     parser = argparse.ArgumentParser(description='CMIMC programming grading client')
@@ -79,7 +77,10 @@ def main():
 
     def get_next_req():
         req = coordinator_pb2.GradeRequest()
-        req.ParseFromString(request_queue.get())
+        nr = request_queue.get()
+        if nr is None:
+            os._exit(1)
+        req.ParseFromString(nr)
         return req
 
     for req in iter(get_next_req, None):

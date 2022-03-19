@@ -291,7 +291,7 @@ def init_all_tasks():
         if exam.is_ai and exam.real_end_time is not None and exam.real_end_time > exam._now:
             ongoing_ai = True
             time = max(exam.fake_start_time, timezone.now())
-            schedule_ai_games(exam.id, schedule=time, repeat=60, repeat_until=exam.fake_end_time)
+            schedule_ai_games(exam.id, schedule=time, repeat=240, repeat_until=exam.fake_end_time)
     if ongoing_ai:
         check_finished_games(schedule=0, repeat=30)
         check_graded_submissions(schedule=0, repeat=30)

@@ -178,8 +178,8 @@ def match_results(request, exam_id, problem_number):
         "problems": problems,
         "problem": p,
         "aiprob": p.aiproblem.first(),
-        'page_obj': page_obj,
-        'all_pages': [paginator.page(i) for i in paginator.page_range]
+        'page_obj': page_obj
+        #'all_pages': [paginator.page(i) for i in paginator.page_range]
     } 
     return render(request, 'exam/match_results.html', context)
 
