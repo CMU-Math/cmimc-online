@@ -80,7 +80,7 @@ def main():
         nr = request_queue.get()
         if nr is None:
             os._exit(1)
-        req.ParseFromString(request_queue.get())
+        req.ParseFromString(nr)
         return req
 
     for req in iter(get_next_req, None):
