@@ -99,6 +99,9 @@ class Codebox(AbstractCodebox):
             cputime = self.config["cputime"],
             walltime = self.config["walltime"],
             memlimit = self.config["memlimit"])
+    def timer_kill(self):
+        self.proc.p.kill()
+        self.timer_killed = True
     def destroy_box(self):
         self.jail.destroy()
     def get_stderr(self):
