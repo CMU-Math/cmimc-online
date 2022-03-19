@@ -112,7 +112,7 @@ class GradeServer(coordinator_pb2_grpc.Coordinator):
                 current_request.on_graded(grade_response)
                 current_request = None
         except Exception as e:
-            print(traceback.format_exc())
+            print(e)
         finally:
             if current_request is not None:
                 self.request_queue.put(current_request)

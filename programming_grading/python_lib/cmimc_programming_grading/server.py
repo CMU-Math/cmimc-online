@@ -32,7 +32,7 @@ def grade(request):
             data = json.loads(proc.stdout)
             response.output = json.dumps(data['history']).encode()
             response.summary = json.dumps(data['summary']).encode()
-            response.playerlogs = json.dumps(data['playerlogs']).encode()
+            #response.playerlogs = json.dumps(data['playerlogs']).encode()
             print("got", response)
     except Exception as e:
         #print(traceback.format_exc(e))
@@ -54,6 +54,7 @@ def server_thread(args, result_queue, request_queue):
                 print('sent', res)
                 return res
 
+            print('Sending password...')
             stub.SetPassword(coordinator_pb2.Password(password=os.environ["CMIMC_GRPC_PASSWORD"]))
 
             print('Successfully connected...')
