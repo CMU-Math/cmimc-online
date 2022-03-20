@@ -36,7 +36,7 @@ def final_ai_grading_real(exam_id):
             log(not_enough_players=n, problem=p.problem_name)
             continue                # not enough people to play matches against
         random.shuffle(subs)
-        subs.sort(key=lambda sub:sub.public_rating, reverse=True)
+        subs.sort(key=lambda sub: sub.public_rating, reverse=True)
         roundup = np * ((n + np - 1) // np)
         for i in range(roundup - n):
             subs.append(subs[roundup - np - i - 1])
@@ -132,12 +132,6 @@ def final_ai_grading(exam):
                         s.save()
                     g.status = 0    # add to queue after submissions are made
                     g.save()
-            else:
-                c = 1000
-                for _ in range(c):
-                    random.shuffle(subs)
-                    sort(subs, key: lambda sub: sub.public_rating)
-                pass
         log(grade_ai_final='ended')
     except Exception as e:
         log(error=str(e))
