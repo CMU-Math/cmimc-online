@@ -49,6 +49,32 @@ def final_ai_grading_real(exam_id):
                 s.save()
             g.status = 0        # add to queue after submissions are made
             g.save()
+    for p in exam.problems.all():
+        subs = []
+        for c in comps:
+            lastsub = c.submissions.filter(problem=p, submit_time__lte=time).order_by("-submit_time").first()
+            if lastsub is not None:
+                subs.append(lastsub)
+
+        n = len(subs)
+        ai_prob = p.aiproblem.first()
+        np = ai_prob.numplayers
+        if n < max(np, 2):
+            log(not_enough_players=n, problem=p.problem_name)
+            continue                # not enough people to play matches against
+        random.shuffle(subs)
+        roundup = np * ((n + np - 1) // np)
+        for i in range(roundup - n):
+            subs.append(subs[i])
+        for i in range(roundup // np):
+            g = AIGame(status=-1, time=time, numplayers=np, aiproblem=ai_prob, miniround=-1)
+            g.save()
+            for j in range(np):
+                idx = np*i + j
+                s = AISubmission(game=g, seat=j+1, competitor=subs[idx].competitor, submission=subs[idx])
+                s.save()
+            g.status = 0        # add to queue after submissions are made
+            g.save()
 
 def final_ai_grading(exam):
     final_ai_grading_real(exam.id, repeat=30, repeat_until=datetime.datetime.now() + datetime.timedelta(minutes=60))
@@ -323,13 +349,11 @@ def init_all_tasks():
     Task.objects.all().delete() # Clear all previous tasks
     exams = Exam.objects.all()
     ongoing_ai = False
-    """
     for exam in exams:
         if exam.is_ai and exam.real_end_time is not None and exam.real_end_time > exam._now:
             ongoing_ai = True
             time = max(exam.fake_start_time, timezone.now())
-            schedule_ai_games(exam.id, schedule=time, repeat=240, repeat_until=exam.fake_end_time)
-    """
+            schedule_ai_games(exam.id, schedule=time, repeat=60, repeat_until=exam.fake_end_time)
     if ongoing_ai or 1:
         check_finished_games(schedule=0, repeat=30)
         check_graded_submissions(schedule=0, repeat=30)
