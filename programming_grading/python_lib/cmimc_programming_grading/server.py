@@ -27,7 +27,7 @@ def grade(request):
                 args=[sys.executable, pygrader],
                 capture_output=True,
                 input=request.op.input)
-            
+
             print(proc.stderr.decode())
             data = json.loads(proc.stdout)
             response.output = json.dumps(data['history']).encode()
