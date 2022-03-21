@@ -27,6 +27,9 @@
 
 {% for table in tables %}
 <h3>{{ table.name }}</h3>
+{% if table.name == "TNTwentyXX (AI)" %}
+<a class="btn btn-primary" href="{% url 'sweepstakes_programming_2022_showmatch' %}">View Showmatch</a>
+{% endif %}
 <table class="table table-striped">
     <thead>
         <th>Place</th>
