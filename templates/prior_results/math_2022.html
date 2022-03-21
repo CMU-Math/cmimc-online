@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>CMIMC Math 2022 Results</h1>
+
+{% for table in tables %}
+<h3>{{ table.name }}</h3>
+<table class="table table-striped">
+    <thead>
+        {% for col in table.cols %}
+        <th>{{ col }}</th>
+        {% endfor %}
+    </thead>
+    <tbody>
+    {% for row in table.rows %}
+    <tr>
+        {% for value in row %}
+        <td>{{ value }}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endfor %}
+
+{% endblock %}
