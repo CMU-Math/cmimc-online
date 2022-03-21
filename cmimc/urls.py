@@ -64,4 +64,5 @@ urlpatterns = [
 
     path('sweepstakes/math-2022', views.sweepstakes_math_2022, name='sweepstakes_math_2022'),
     path('sweepstakes/programming-2022', views.sweepstakes_programming_2022, name='sweepstakes_programming_2022'),
+    path('sweepstakes/programming-2022/tntrun_showmatch', views.sweepstakes_programming_2022_showmatch, name='sweepstakes_programming_2022_showmatch'),
 ]

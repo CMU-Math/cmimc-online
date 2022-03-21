@@ -47,43 +47,116 @@ def sweepstakes_math_2022(request):
         'tables': MATH_RES
     })
 
-PROGRAMMING_RES = [{
-    "name": "Optimization Round",
-    "cols": ["Team Name", "Score"],
-    "rows": [["RedSuns", "100.00"], ["elmike", "85.41"], ["The Ducklings", "79.34"], ["Blufius", "75.60"], ["Coderlab", "52.35"], ["MN Orange", "52.01"], ["Edinasaurs", "49.10"], ["PAForces", "48.05"], ["ur mom", "46.90"], ["MAD?", "43.42"]]
-}, {
-    "name": "AI Round",
-    "cols": ["Team Name", "Score"],
-    "rows": [["CCA Team 0", "100.00"], ["HungryHippo", "97.64"], ["PRISMS 10", "96.98"], ["The Ducklings", "95.70"], ["MN Yellow", "94.30"], ["Amity Spartans", "93.30"], ["Chargers", "92.95"], ["Code Minds", "92.74"], ["MN Orange", "92.10"], ["MAD?", "91.51"]]
-}, {
-    "name": "Murder on the Panda Express (Optimization)",
-    "cols": ["Team Name", "Score"],
-    "rows": [["RedSuns", "100.00"], ["elmike", "90.71"], ["Coderlab", "68.45"], ["MN Orange", "68.37"], ["Edinasaurs", "68.37"], ["PAForces", "67.23"], ["ur mom", "67.17"], ["PRISMS 10", "64.56"], ["Blufius", "63.89"], ["The Ducklings", "62.66"]]
-}, {
-    "name": "Help I’m stuck in an IKEA and my only contact with the outside world is this problem title",
-    "cols": ["Team Name", "Score"],
-    "rows": [["RedSuns", "100.00"], ["The Ducklings", "97.13"], ["Blufius", "88.09"], ["elmike", "79.75"], ["Sleeping in Cereal 2", "73.76"], ["Coderlab", "35.17"], ["MN Orange", "34.56"], ["CarmelValleyRN", "30.56"], ["HelloAlgo", "28.87"], ["Edinasaurs", "28.53"]]
-}, {
-    "name": "TNTwentyXX",
-    "cols": ["Team Name", "Score"],
-    "rows": [["elmike", "100.00"], ["127.0.0.1", "94.90"], ["PHS Gamma", "94.63"], ["The Ducklings", "94.56"], ["Code Minds", "94.45"], ["Amity Spartans", "93.86"], ["Chargers", "93.74"], ["MN Orange", "92.99"], ["HelloAlgo", "92.70"], ["MAD?", "92.26"]]
-}, {
-    "name": "Non-fungible Greed Control",
-    "cols": ["Team Name", "Score"],
-    "rows": [["CCA Team 0", "100.00"], ["PRISMS 01", "97.36"], ["PRISMS 10", "96.48"], ["HungryHippo", "95.17"], ["Bulgaria A", "89.89"], ["MN Yellow", "88.08"], ["The Ducklings", "87.37"], ["Dogs are supiror", "86.42"], ["LexMACS Z", "86.37"], ["Pirates", "85.08"]]
-}, {
-    "name": "Murder on the Panda Express - Random Generator",
-    "cols": ["Team Name", "Score"],
-    "rows": [["RedSuns", "100.00"], ["elmike", "92.77"], ["MAD?", "85.88"], ["MN Yellow", "77.15"], ["Coderlab", "69.51"], ["HelloAlgo", "69.34"], ["MN Orange", "63.94"], ["Edinasaurs", "63.94"], ["Blufius", "63.47"], ["PRISMS 10", "61.59"]]
-}, {
-    "name": "Murder on the Panda Express - Circles Generator",
-    "cols": ["Team Name", "Score"],
-    "rows": [["elmike", "100.00"], ["RedSuns", "97.47"], ["The Ducklings", "94.78"], ["Coderlab", "87.46"], ["MN Orange", "80.44"], ["Edinasaurs", "80.44"], ["ur mom", "79.62"], ["Blufius", "67.77"], ["PAForces", "66.39"], ["MAD?", "61.49"]]
-}, {
-    "name": "Murder on the Panda Express - Path Generator",
-    "cols": ["Team Name", "Score"],
-    "rows": [["RedSuns", "100.00"], ["PRISMS 10", "87.19"], ["elmike", "77.08"], ["PAForces", "76.26"], ["MN Orange", "59.02"], ["Edinasaurs", "59.02"], ["Blufius", "58.83"], ["ur mom", "58.69"], ["nek", "57.50"], ["Pinehurst 0", "56.80"]]
-}]
+PROGRAMMING_RES = \
+[{'cols': ['Team Name', 'Score'],
+  'name': 'Optimization Round',
+  'rows': [('RedSuns', '100.00'),
+           ('elmike', '85.41'),
+           ('The Ducklings', '79.34'),
+           ('Blufius', '75.60'),
+           ('Coderlab', '52.35'),
+           ('PAForces', '48.05'),
+           ('ur mom', '46.90'),
+           ('MAD?', '43.42'),
+           ('HelloAlgo', '41.99'),
+           ('PRISMS 10', '40.84')]},
+ {'cols': ['Team Name', 'Score'],
+  'name': 'AI Round',
+  'rows': [('CCA Team 0', '100.00'),
+           ('HungryHippo', '97.64'),
+           ('PRISMS 10', '96.98'),
+           ('The Ducklings', '95.70'),
+           ('MN Yellow', '94.30'),
+           ('Amity Spartans', '93.30'),
+           ('Chargers', '92.95'),
+           ('Code Minds', '92.74'),
+           ('MN Orange', '92.10'),
+           ('MAD?', '91.51')]},
+ {'cols': ['Team Name', 'Score'],
+  'name': 'Murder on the Panda Express (Optimization)',
+  'rows': [('RedSuns', '100.00'),
+           ('elmike', '90.71'),
+           ('Coderlab', '68.45'),
+           ('PAForces', '67.23'),
+           ('ur mom', '67.17'),
+           ('PRISMS 10', '64.56'),
+           ('Blufius', '63.89'),
+           ('The Ducklings', '62.66'),
+           ('MAD?', '60.83'),
+           ('HelloAlgo', '52.42')]},
+ {'cols': ['Team Name', 'Score'],
+  'name': 'Help I’m stuck in an IKEA and my only contact with the outside '
+          'world is this problem title (Optimization)',
+  'rows': [('RedSuns', '100.00'),
+           ('The Ducklings', '97.13'),
+           ('Blufius', '88.09'),
+           ('elmike', '79.75'),
+           ('Sleeping in Cereal 2', '73.76'),
+           ('Coderlab', '35.17'),
+           ('MN Orange', '34.56'),
+           ('HelloAlgo', '30.86'),
+           ('CarmelValleyRN', '30.56'),
+           ('Edinasaurs', '28.53')]},
+ {'cols': ['Team Name', 'Score'],
+  'name': 'TNTwentyXX (AI)',
+  'rows': [('elmike', '100.00'),
+           ('127.0.0.1', '94.90'),
+           ('PHS Gamma', '94.63'),
+           ('The Ducklings', '94.56'),
+           ('Code Minds', '94.45'),
+           ('Amity Spartans', '93.86'),
+           ('Chargers', '93.74'),
+           ('MN Orange', '92.99'),
+           ('HelloAlgo', '92.70'),
+           ('MAD?', '92.26')]},
+ {'cols': ['Team Name', 'Score'],
+  'name': 'Non-fungible Greed Control (AI)',
+  'rows': [('CCA Team 0', '100.00'),
+           ('PRISMS 01', '97.36'),
+           ('PRISMS 10', '96.48'),
+           ('HungryHippo', '95.17'),
+           ('Bulgaria A', '89.89'),
+           ('MN Yellow', '88.08'),
+           ('The Ducklings', '87.37'),
+           ('Dogs are supiror', '86.42'),
+           ('LexMACS Z', '86.37'),
+           ('Pirates', '85.08')]},
+ {'cols': ['Team Name', 'Score'],
+  'name': 'Murder on the Panda Express - Random Generator',
+  'rows': [('RedSuns', '100.00'),
+           ('elmike', '92.77'),
+           ('MAD?', '85.88'),
+           ('MN Yellow', '77.15'),
+           ('Coderlab', '69.51'),
+           ('HelloAlgo', '69.34'),
+           ('Blufius', '63.47'),
+           ('PRISMS 10', '61.59'),
+           ('ur mom', '61.50'),
+           ('nek', '59.23')]},
+ {'cols': ['Team Name', 'Score'],
+  'name': 'Murder on the Panda Express - Circles Generator',
+  'rows': [('elmike', '100.00'),
+           ('RedSuns', '97.47'),
+           ('The Ducklings', '94.78'),
+           ('Coderlab', '87.46'),
+           ('ur mom', '79.62'),
+           ('Blufius', '67.77'),
+           ('PAForces', '66.39'),
+           ('MAD?', '61.49'),
+           ('HelloAlgo', '53.02'),
+           ('PRISMS 10', '43.26')]},
+ {'cols': ['Team Name', 'Score'],
+  'name': 'Murder on the Panda Express - Path Generator',
+  'rows': [('RedSuns', '100.00'),
+           ('PRISMS 10', '87.19'),
+           ('elmike', '77.08'),
+           ('PAForces', '76.26'),
+           ('Blufius', '58.83'),
+           ('ur mom', '58.69'),
+           ('nek', '57.50'),
+           ('Pinehurst 0', '56.80'),
+           ('Coderlab', '46.64'),
+           ('The Ducklings', '38.11')]}]
 
 def sweepstakes_programming_2022(request):
     return render(request, 'prior_results/programming_2022.html', {
@@ -93,5 +166,18 @@ def sweepstakes_programming_2022(request):
             "Score",
             "Competitors"
         ],
-        'sweepstakes': [["The Ducklings", "100.00", "Valerie Kwek, Eugene Kwek, Marcus Y Kwek"], ["RedSuns", "96.88", "Bala Venkataraman, Aaron Zhu, Daniel Ye"], ["elmike", "96.78", "Bhaumik Mehta, Eric Wang"], ["Blufius", "91.00", "Dylan Epstein-Gross, Prabhas Kurapati"], ["MN Orange", "82.19", "Caleb Hultmann, Linden Lee, Prithvi Kaashyap"], ["Coderlab", "79.73", "Brian Yan, Steven Gu, Elliott Cheng"], ["PRISMS 10", "78.51", "Tongyu Lu, Bomin Wei"], ["PAForces", "78.38", "Yihao Huang, Davin Jeong, Yifan Kang"], ["Edinasaurs", "77.71", "Adwin Shi, Keerthi Kaashyap"], ["MAD?", "76.90", "Martin Kopchev, Atanas Dimitrov, Deyan Hadzhi-Manich"]],
+        'sweepstakes': \
+         [('The Ducklings', '100.00', 'Valerie Kwek, Eugene Kwek, Marcus Y Kwek'),
+          ('RedSuns', '96.88', 'Bala Venkataraman, Aaron Zhu, Daniel Ye'),
+          ('elmike', '96.78', 'Bhaumik Mehta, Eric Wang'),
+          ('Blufius', '91.00', 'Dylan Epstein-Gross, Prabhas Kurapati'),
+          ('Coderlab', '79.73', 'Brian Yan, Steven Gu, Elliott Cheng'),
+          ('PRISMS 10', '78.51', 'Tongyu Lu, Bomin Wei'),
+          ('PAForces', '78.38', 'Yihao Huang, Davin Jeong, Yifan Kang'),
+          ('MAD?', '76.90', 'Martin Kopchev, Atanas Dimitrov, Deyan Hadzhi-Manich'),
+          ('ur mom', '75.87', 'Aryan Raj, Allan Yuan, Jiya Dani'),
+          ('HelloAlgo', '75.83', 'Wookho Chiang, Daniel Chang, Daniel Yoo')]
     })
+
+def sweepstakes_programming_2022_showmatch(request):
+    return render(request, 'prior_results/programming_2022_tntrun_showmatch.html')
