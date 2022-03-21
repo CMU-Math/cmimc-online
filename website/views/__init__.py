@@ -10,3 +10,4 @@ from .signup import signup, terms_and_conditions
 from .leaderboard import leaderboard, problem_leaderboard, contest_leaderboard
 from .results import sweepstakes, indiv_sweepstakes, exam_results
 from .admin import admin_dashboard
+from .prior_results import sweepstakes_math_2022, sweepstakes_programming_2022

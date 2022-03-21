@@ -61,4 +61,7 @@ urlpatterns = [
     path('download/visualizer/<str:aiproblem_id>', views.ai_visualizer, name='ai_visualizer'),
     path('download/mailinglist/<int:contest_id>', views.mailinglist, name='mailinglist'),
     path('download/subs/<int:exam_id>', views.download_subs, name='download_subs'),
+
+    path('sweepstakes/math-2022', views.sweepstakes_math_2022, name='sweepstakes_math_2022'),
+    path('sweepstakes/programming-2022', views.sweepstakes_programming_2022, name='sweepstakes_programming_2022'),
 ]
