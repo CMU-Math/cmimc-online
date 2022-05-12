@@ -397,60 +397,115 @@ def default_div1(contest):
     log(finished='default_div1')
 
 
-def exam_results_from_csv(exam, text):
-    from website.models import Team, Problem, Competitor, Score, TaskScore
-    log(start='exam_results_from_csv')
+def math_indiv_results_from_csv(exam, text):
+    from website.models import Team, Competitor, Score, User, Mathlete
+    log(start=f'math_indiv_results_from_csv, exam = {exam}')
     try:
         lines = text.splitlines()
         data = [line.split(',') for line in lines]
         n = len(data)
         problems = exam.problem_list
-        if exam.is_team_exam and exam.is_math:
-            offset = 0
-        else:
-            offset = 1
 
-        for i in range(n-1):
-            team_name = data[i][0]
-            code = data[i][1]
-            if exam.is_power:
-                team = Team.objects.filter(contest=exam.contest, invite_code=code).first()
-            else:
-                team = Team.objects.filter(contest=exam.contest, team_name=team_name).first()
-            if team is None:
-                log(error=f'could not find team with name {team_name} in exam_results_from_csv')
-                continue
-            if exam.is_team_exam:
-                c = Competitor.objects.get(exam=exam, team=team, mathlete=None)
-            else:
-                name = data[i][1]
-                c = None
-                for cc in team.competitors.filter(exam=exam):
-                    names = [cc.name.lower().strip()]
-                    if cc.mathlete is not None:
-                        names += [cc.mathlete.user.full_name.lower().strip(), cc.mathlete.user.long_name.lower().strip()]
-                    if name.lower().strip() in names:
-                        if c is not None:
-                            log(duplicate_name=name, team=team_name, during='exam_results_from_csv')
-                        else:
-                            c = cc
-                if c is None:
-                    log(error=f'could not find {name} on team {team_name} in exam_results_from_csv')
-                    continue
+        for i in range(1, n):       # ignore the first line
+            team_id = data[i][0]
+            indiv_id = data[i][1]
+            team = Team.objects.get(pk=team_id)
+            user = User.objects.get(pk=indiv_id)
+            mathlete = Mathlete.objects.get(user=user)
+            comp = Competitor.objects.get(exam=exam, team=team, mathlete=mathlete)
+            
             for p in problems:
-                s = Score.objects.get(competitor=c, problem=p)
-                s.points = float(data[i][p.problem_number + offset])
+                s = Score.objects.get(competitor=comp, problem=p)
+                s.points = float(data[i][2*p.problem_number + 1])
                 s.save()
-            c.total_score = float(data[i][-1])
-            c.save()
-        if exam.is_math:
-            for p in problems:
-                p.weight = float(data[-1][p.problem_number + offset])
-                p.save()
-    except Exception as e:
-        log(error=str(e), during='exam_results_from_csv')
-    log(finished='exam_results_from_csv')
+            comp.total_score = float(data[i][30]) # total score is the 30th column
+            comp.save()
         
+        # Set problem weights
+        for p in problems:
+            p.weight = float(data[3][p.problem_number + 18])
+            p.save()
+
+    except Exception as e:
+        log(error=str(e), during=f'math_indiv_results_from_csv, exam = {exam}')
+    log(finished=f'math_indiv_results_from_csv, exam = {exam}')
+
+
+def math_team_results_from_csv(exam, text):
+    from website.models import Team, Competitor, Score, User, Mathlete
+    log(start=f'math_team_results_from_csv, exam = {exam}')
+    try:
+        lines = text.splitlines()
+        data = [line.split(',') for line in lines]
+        n = len(data)
+        problems = exam.problem_list
+
+        for i in range(1, n):       # ignore the first line
+            team_id = data[i][0]
+            team = Team.objects.get(pk=team_id)
+            comp = Competitor.objects.get(exam=exam, team=team, mathlete=None)
+            
+            for p in problems:
+                s = Score.objects.get(competitor=comp, problem=p)
+                s.points = float(data[i][2*p.problem_number])
+                s.save()
+            comp.total_score = float(data[i][49]) # total score is the 30th column
+            comp.save()
+        
+        # Set problem weights
+        for p in problems:
+            p.weight = float(data[3][p.problem_number + 31])
+            p.save()
+
+    except Exception as e:
+        log(error=str(e), during=f'math_team_results_from_csv, exam = {exam}')
+    log(finished=f'math_team_results_from_csv, exam = {exam}')
+
+
+def math_tcs_results_from_csv(exam, text):
+    from website.models import Team, Competitor, Score, User, Mathlete
+    log(start=f'math_tcs_results_from_csv, exam = {exam}')
+    try:
+        lines = text.splitlines()
+        data = [line.split(',') for line in lines]
+        n = len(data)
+        problems = exam.problem_list
+
+        for i in range(1, n):       # ignore the first line
+            team_id = data[i][7]
+            team = Team.objects.get(pk=team_id)
+            comp = Competitor.objects.get(exam=exam, team=team, mathlete=None)
+            
+            for p in problems:
+                s = Score.objects.get(competitor=comp, problem=p)
+                try:
+                    s.points = float(data[i][p.problem_number + 8])
+                except ValueError:
+                    log(error=f'i = {i}, prob {p.problem_number}, str = {data[i][p.problem_number + 8]}')
+                s.save()
+
+            try:
+                comp.total_score = float(data[i][12]) # total score is the 30th column
+            except ValueError:
+                log(error=f'i = {i}, str = {data[i][12]}')
+            comp.save()
+       
+    except Exception as e:
+        log(error=str(e), during=f'math_tcs_results_from_csv, exam = {exam}')
+    log(finished=f'math_tcs_results_from_csv, exam = {exam}')
+
+
+def exam_results_from_csv(exam, text):
+    if exam.is_math:
+        if exam.is_team_exam:
+            math_team_results_from_csv(exam, text)
+        else:
+            math_indiv_results_from_csv(exam, text)
+    elif exam.is_power:
+        math_tcs_results_from_csv(exam, text)
+    else:
+        log(error=f'exam_results_from_csv called with bad exam {exam}')
+         
 
 def calc_indiv_sweepstakes(contest):
     from website.models import IndivSweepstake

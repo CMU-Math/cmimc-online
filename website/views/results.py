@@ -79,6 +79,10 @@ def indiv_sweepstakes(request, contest_id):
             rel_teams = user.rel_teams(contest)
             for team in rel_teams:
                 for m in team.mathletes.all():
+                    # coaches can see all indiv results,
+                    # mathletes can only see their own results
+                    if user.is_mathlete and m != user.mathlete:
+                        continue
                     scores = []
                     for ep in exampairs:
                         dc = DivChoice.objects.get(exampair=ep, mathlete=m)
