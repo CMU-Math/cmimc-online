@@ -35,8 +35,8 @@ def prog_sample_problems(request):
 def prog_schedule(request):
     return render(request, 'general/prog_schedule.html')
 
-def cmwmc_info(request):
-    return render(request, 'general/cmwmc_info.html')
+#def cmwmc_info(request):
+#    return render(request, 'general/cmwmc_info.html')
 
 def cmwmc_format(request):
     return render(request, 'general/cmwmc_format.html')

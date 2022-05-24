@@ -19,7 +19,6 @@
       {% url 'prog_info' as pi %}
       {% url 'prog_sample_problems' as psp %}
 	  {% url 'prog_schedule' as ps %}
-    {% url 'cmwmc_info' as wi %}
     {% url 'cmwmc_format' as wf %}
     {% url 'cmwmc_sample_problems' as wsp %}
   {% url 'cmwmc_schedule' as ws %}
@@ -63,11 +62,11 @@
         </ul>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link no-color dropdown-toggle {% if path == wi or path == wsp or path == ws or path == wme %}active{% endif %}" href="#" id="programmingDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+        <a class="nav-link no-color dropdown-toggle {% if path == wf or path == wsp or path == ws or path == wme %}active{% endif %}" href="#" id="programmingDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
           CMWMC
         </a>
         <ul class="dropdown-menu" aria-labelledby="programmingDropdown">
-          <li><a class="dropdown-item no-color {% if path == wi %}active{% endif %}" href="{{ wi }}">Format</a></li>
+          <li><a class="dropdown-item no-color {% if path == wf %}active{% endif %}" href="{{ wf }}">Format</a></li>
           <li><a class="dropdown-item no-color {% if path == wsp %}active{% endif %}" href="{{ wsp }}">Sample Problems</a></li>
           <li><a class="dropdown-item no-color {% if path == ws %}active{% endif %}" href="{{ ws }}">Schedule</a></li>
           <li><a class="dropdown-item no-color {% if path == wme %}active{% endif %}" href="{{ wme }}">Mini Events</a></li>
