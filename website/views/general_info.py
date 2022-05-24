@@ -2,7 +2,7 @@ from django.shortcuts import render
 from background_task import background
 import datetime
 from .faq import general_faq, math_faq, programming_faq
-from .mini_events import math_events, cmwmc_events
+from .mini_events import math_events
 from django.template import Template, Context
 
 def home(request):
@@ -48,10 +48,7 @@ def cmwmc_sample_problems(request):
     return render(request, 'general/cmwmc_sample_problems.html')
 
 def cmwmc_mini_events(request):
-    context = {
-        'cmwmc_events': cmwmc_events,
-    }
-    return render(request, 'general/cmwmc_mini_events.html', context)
+    return render(request, 'general/cmwmc_mini_events.html')
 
 
 def reg_info(request):
