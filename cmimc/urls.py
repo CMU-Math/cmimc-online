@@ -27,6 +27,8 @@ urlpatterns = [
     path('cmwmc/schedule', views.cmwmc_schedule, name='cmwmc_schedule'),
     path('cmwmc/mini-events', views.cmwmc_mini_events, name='cmwmc_mini_events'),
 
+    path('cmwmc', views.cmwmc_format, name='cmwmc_info'), # TODO: replace with better info page for publicity
+
     path('registration', views.reg_info, name='reg_info'),
     path('faq', views.faq, name='faq'),
     path('programming/updates', views.updates, name='updates'),
