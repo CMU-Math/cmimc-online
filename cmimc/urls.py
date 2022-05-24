@@ -22,6 +22,11 @@ urlpatterns = [
     path('programming/mini-events', views.prog_mini_events, name='prog_mini_events'),
     path('programming/resources', views.resources, name='resources'),
 
+    path('cmwmc/format', views.cmwmc_format, name='cmwmc_format'),
+    path('cmwmc/sample-problems', views.cmwmc_sample_problems, name='cmwmc_sample_problems'),
+    path('cmwmc/schedule', views.cmwmc_schedule, name='cmwmc_schedule'),
+    path('cmwmc/mini-events', views.cmwmc_mini_events, name='cmwmc_mini_events'),
+
     path('cmwmc', views.cmwmc_info, name='cmwmc_info'),
 
     path('registration', views.reg_info, name='reg_info'),
