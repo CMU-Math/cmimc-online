@@ -1,51 +1,25 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-<p class="display-4">CMWMC Info</p>
-<hr class="red_line"/>
 
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-sm-10 col-md-8 col-lg-6">
+		<img src="{% static 'img/cmwmc_logo.png' %}" alt="CMWMC logo" width="100%" height="auto" class="center">
+	</div>
+</div>
+		
 <div class="row mb-4">
     <div class="col">
-        <h3>About</h3>
-		<p>This year, we are also hosting <span class="font-weight-bold">Carnegie Mellon’s Womens Math Competition (CMWMC)</span>. This contest is designed for girls who are interested in mathematics, regardless of their previous experience or current skill level. Our mission is to ultimately create an encouraging environment for girls in STEM. During the contest, there will be both individual and team rounds based on Number Theory, Algebra, and Computer Science in addition to mini events and our faculty guest speaker.</p>
+		<p>This year, we are hosting a brand new contest: <span class="font-weight-bold">Carnegie Mellon’s Womens Math Competition (CMWMC)</span>. This contest is designed for any girls interested in mathematics, regardless of their previous experience or current skill level. Our mission is to ultimately create an encouraging environment for girls in STEM.</p>
 
-		<p>The contest will take place in <span class="font-weight-bold">October 29th, 2022</span> and will be <span class="font-weight-bold">in-person at Carnegie Mellon</span>. Registration will open soon.</p>
+		<p>The date of the contest is <span class="font-weight-bold">Saturday, October 29th, 2022</span>. It will be held <span class="font-weight-bold">in-person at Carnegie Mellon</span>. Registration will open in the fall - fill out the interest form to be notified when it opens!</p>
 
-        <h3>COVID-19 Mitigation Requirements</h3>
-        <p>In accordance with Carnegie Mellon’s COVID-19 mitigation policies, all visitors to the university’s campus age 12 and older are required to be either fully vaccinated against COVID-19 or, if not fully vaccinated, must have received a negative COVID-19 test result within three days prior to visiting campus.</p>
+		<a class="btn btn-primary mb-5" href="https://forms.gle/Dk31qd38LrYWyky38" target="_blank" rel="noopener noreferrer">CMWMC Interest Form</a>
 
-		<p>Facial coverings both indoors and outdoors are optional for all visitors fully vaccinated and boosted while on CMU campus. The current COVID-19 mitigation requirements are available <a href="https://www.cmu.edu/coronavirus/visitor-protocol/" target="_blank" rel="noopener noreferrer">here</a>. The university reserves the right to revise these mitigation requirements, as deemed necessary.</p>
-
-		<p>Parents, guardians, and other individuals who visit the Carnegie Mellon campus solely for the purpose of picking-up or dropping-off children are not subject to these vaccination or testing requirements.</p>
-
-		<p>If you have any questions, please contact us at {{ "contact@cmimc.info"|urlize }}.</p>
-
-        <h3>Format</h3>
-		<p class="font-italic">Format is subject to change.</p>
-
-		<p><span class="font-weight-bold">Individual Round:</span> There will be one individual round, containing problems on Algebra, Number Theory, Geometry, Combinatorics, and Computer Science.
-</p>
-
-        <p><span class="font-weight-bold">Relay Round:</span> Teams of 3 will work to solve sets of problems where each team member works on one problem of the set and passes their answer to the next team member, who will use that answer to solve their own problem (like a relay!). No other communication is allowed. You don’t have to wait for the person before you to finish before you start working on your problem. Only the last contestant’s submission will be graded.</p>
-
-        <p><span class="font-weight-bold">Guts Round:</span> Teams of 3 will work together to solve sets of problems. After completing one set, the next problem set will be given. Teams cannot return to edit answers from a previous set.</p>
-
-        <h3>Sample Problems</h3>
-		<p>Coming soon!</p>
-
-        <h3>Schedule (tentative)</h3>
-		<p>9:30  - 10:00    Opening ceremony</p>
-		<p>10:15 - 11:15    Guts Round</p>
-		<p>11:30 - 12:30    Relay Round</p>
-		<p>12:30 -  2:00    Lunch and Mini Events</p>
-		<p>2:15  -  3:15    Individual Round</p>
-		<p>3:30  -  4:30    Speaker</p>
-		<p>4:45  -  5:15    Awards</p>
-
-        <h3>Mini Events (tentative)</h3>
-		<p>Escape Room, Scavenger Hunt, Estimathon, Blotto, Guest Speakers, Sponsor Events, Campus Tours.</p>
-    </div>
+		<img src="{% static 'img/cmwmc_flyer.png' %}" alt="CMWMC flyer" width="100%" height="auto" class="center">
+	</div>
 
     <div class="col-12 col-md-auto">
         {% include 'includes/important_dates.html' %}

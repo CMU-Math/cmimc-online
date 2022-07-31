@@ -19,10 +19,11 @@
       {% url 'prog_info' as pi %}
       {% url 'prog_sample_problems' as psp %}
 	  {% url 'prog_schedule' as ps %}
-    {% url 'cmwmc_format' as wf %}
-    {% url 'cmwmc_sample_problems' as wsp %}
-  {% url 'cmwmc_schedule' as ws %}
-    {% url 'cmwmc_mini_events' as wme %}
+	  {% url 'cmwmc_info' as wi %}
+	  {% url 'cmwmc_format' as wf %}
+	  {% url 'cmwmc_sample_problems' as wsp %}
+	  {% url 'cmwmc_schedule' as ws %}
+	  {% url 'cmwmc_mini_events' as wme %}
 	  {% url 'reg_info' as url_reg_info %}
 	  {% url 'faq' as url_faq %}
       {% url 'prog_mini_events' as pme %}
@@ -66,6 +67,7 @@
           CMWMC
         </a>
         <ul class="dropdown-menu" aria-labelledby="programmingDropdown">
+          <li><a class="dropdown-item no-color {% if path == wi %}active{% endif %}" href="{{ wi }}">Info</a></li>
           <li><a class="dropdown-item no-color {% if path == wf %}active{% endif %}" href="{{ wf }}">Format</a></li>
           <li><a class="dropdown-item no-color {% if path == wsp %}active{% endif %}" href="{{ wsp }}">Sample Problems</a></li>
           <li><a class="dropdown-item no-color {% if path == ws %}active{% endif %}" href="{{ ws }}">Schedule</a></li>
