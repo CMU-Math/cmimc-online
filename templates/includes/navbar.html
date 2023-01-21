@@ -31,7 +31,7 @@
         <a class="nav-link no-color {% if path == url_contests %}active{% endif %}" href="{% url 'contest_list' %}">Contests</a>
         </li>
       {% endif %}
-      <li class="nav-item dropdown">
+      <!-- <li class="nav-item dropdown">
           <a class="nav-link no-color dropdown-toggle {% if path == mi or path == msp or path == ms or path == mme or path == mr %}active{% endif %}" href="#" id="mathDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
         Math
         </a>
@@ -43,8 +43,8 @@
         <li><a class="dropdown-item no-color {% if path == ms %}active{% endif %}" href="{{ ms }}">Schedule</a></li>
         <li><a class="dropdown-item no-color {% if path == mme %}active{% endif %}" href="{{ mme }}">Mini Events</a></li>
         </ul>
-      </li>
-      <li class="nav-item dropdown">
+      </li> -->
+      <!-- <li class="nav-item dropdown">
         <a class="nav-link no-color dropdown-toggle {% if path == pi or path == psp or path == ps or path == pme or path == pr or path == pu %}active{% endif %}" href="#" id="programmingDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
           Programming
         </a>
@@ -56,7 +56,7 @@
           <li><a class="dropdown-item no-color {% if path == pr %}active{% endif %}" href="{{ pr }}">Resources</a></li>
           <li><a class="dropdown-item no-color {% if path == pu %}active{% endif %}" href="{{ pu }}">Updates</a></li>
         </ul>
-      </li>
+      </li> -->
 
       <li class="nav-item">
           <a class="nav-link no-color {% if path == url_reg_info %}active{% endif %}" href="{% url 'reg_info' %}">Registration</a>
